@@ -34,16 +34,67 @@ $$
 
 $$
 \begin{aligned}
+\tag{1}
 f(u) = v &\Longleftrightarrow u \space\space\text{is root of}\space\space f-v\newline
          &\Longleftrightarrow (x-u) \space\space\text{divides}\space\space f-v\newline
 	     &\Longleftrightarrow \text{exists polynomial}\space\space q \space\space \text{s.t.} \space\space q(x).(x-u) = f(x)-v
 \end{aligned}
 $$
 
-- Now, the prover computes $q(x)$ and commitment of $q$, $com_q$ which serves proof, and sends it to the verifier.
-- The verifier accept if
-$(s-u).com_q = com_f - v.g$
-- The Verifier does not know $s$. so, uses pairing $e$ and only needs $g$, $h_1$ from $pp$
+- Now, the prover computes:
+    1. $q(x)$ from (1). We know $q(x)$ has at most $d-1$ degree, because $q(x)=\dfrac {f(x)-v} {x-u}$
+    2. and commitment of $q$, $com_q$ which serves proof. The $com_q$ can calculated as below: 
 $$
+\begin{aligned}
+com_q &= q(s).g\newline
+      &= (q_0 + q_1s + \dots+ q_{d-1}s^{d-1}).g\newline
+      &= q_0.g + q_1s.g + \dots+ q_{d-1}s^{d-1}.g\newline
+      &= q_0.h_0 + q_1.h_1 + \dots+ q_{d-1}.h_{d-1}
+\end{aligned}
+$$
+- The prover sends $com_q$ to the verifier as proof:
+- The verifier accept if
+$$
+\tag{2}
 e(com_q, (s-u).g) = e(com_f -v.g, g)
 $$
+- Now, we are checking that:
+    1. Is possible for the verifier compute both side of the equality (2)?
+        - The verifier have $g$ and $s.g = h_1$ from the $pp$.
+        - $v$ is the evaluation of $u$, so $v.g$ is computable by the verifier.
+        - $u \in F_n$ is the random and known by both, the verifier and the prover. So, $u.g$ is computable by the verifier.
+        - $com_f$ and $com_q$ sent by the prover to the verifier.
+        - So, the verifier can compute both side of equality (2) and if equality holds, the verifier accept the proof and if does not, then reject.
+    2. Why and how this equality holds the **correctness** and **soundness**? Or Why the equality (2) has this power to accept or reject the proof?
+        - Consider below equations:
+        ```math
+        \tag{lhs}
+        \begin{aligned}
+        e(com_q, (s-u).g) &= e(q(s).g, (s-u).g)\newline
+                        &= e(g,g)^{q(s).(s-u)}\newline
+        \end{aligned}
+        ```
+
+        $$
+        \tag{rhs}
+        \begin{aligned}
+        e(com_f -v.g, g)  &= e(f(s).g - v.g, g)\newline
+                        &= e((f(s)-v).g, g)\newline
+                        &= e(g,g)^{f(s)-v}
+        \end{aligned}
+        $$
+        - **Correctness** means that, if the prover followed the steps as we defined, they can produce a proof that will accept by the verifier.
+        - If the prover followed the steps, then we have $q(x).(x-u) = f(x)-v$ from $(1)$. This implies $q(s).(x-u) = f(s)-v$. Then, the (lhs) and 
+        (rhs) are equal and then the verifier will accept.
+        - **Soundness** is the property that they cannot produce an “incorrect” proof, If they produce incorrect proof the verifier will reject.
+        - Precisely, the soundness property means that; the prover cannot trick the verifier into believing that $f(u) = v^{\prime}$ and $v^{\prime} \neq v$.
+        - Try 1 for creating fake proof: We know, the proof is $com_q$. so the prover first should compute $q(x)$. somehow
+         divide $f(x) - v^{\prime}$ by $x- u$. But $f(u) - v^{\prime}$ is not zero (by assumption $v^{\prime} \neq v$),
+         so they cannot perform the polynomial division, as there will always be a remainder. So this clearly doesn’t work.
+        - Try 2 for creating fake proof: So then the prover can try to work directly in the group: What if, for some commitment $com_f$,
+         he could compute the group element
+        $$
+        proof_{fake} = \dfrac {1} {s-z}(com_f - v^{\prime}.g)
+        $$
+        If they could do this, they could obviously just prove anything they want. Intuitively, this is hard because you have to multiply by something that involves $s$,
+        but you don’t know anything about $s$. And that's why $s$ should be removed in **trusted setup**.
