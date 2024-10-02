@@ -1,0 +1,44 @@
+## Group
+Suppose $G$ is a set, and $*$ is a binary operator $* : G \times G \rarr G$\
+Then $(G, *)$ is a group if 
+1. $*$ is closed binary operator. So we have:
+$$
+\forall a,b \in G; \space \space a * b \in G 
+$$
+2. Associativity: 
+$$
+\forall a, b, c \in G; \space \space a * (b * c) = (a * b) * c 
+$$
+3. Identity: $G$ has identity element $e$.
+$$
+\exist e \in G \space s.t. \space \space \forall a \in G, \space \space a * e = e * a = a
+$$
+4. Inverse: Every element in $G$ have an inverse.
+$$
+\forall a \in G, \space \space \exist b \in G, \space \space s.t. \space \space a * b = b * a = e
+$$
+
+## Abelian (Commutative) Group
+$(G, *)$ is a Abelian group if satisfies the Commutativity property:
+$$
+\forall a, b \in G, \space \space a * b = b * a.
+$$ 
+
+## Notation
+We will denote the multiplicative and additive shorthand for iterated group operations by default. That is,
+- for $g \in (G, \times), \space g^2 = g * g, \space g^3 = g * g * g$, and so forth. $g^{-1}$ for inverse. $1$ instead of identity element $e$.
+- for $g \in (G, +), \space 2g = g * g, \space 3g = g * g * g$, and so forth. $-g$ for inverse. $0$ instead of identity element $e$.
+
+## Order of a group
+- The order of a group is the number of elements in it, namely $|g|$.
+- If the group $G$ has finite element we say $G$ is finite group.
+
+## Order of an element in group
+For $g \in G$, the minimum integer $n$ such that $g^n = e$ called order of g.
+
+## Generator
+- Any element $g \in G$ that is able to generate $G$ is called a generator.
+- Of course, every group G has a trivial set of generators, when we just consider every element of the group to be in the generator set
+
+## Cyclic groups
+Groups with single, not necessarily unique, generators are called cyclic groups.

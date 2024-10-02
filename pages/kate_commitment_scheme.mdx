@@ -1,0 +1,49 @@
+- $F_n$ is a finite field of large order $n$.
+- 
+- $G$ is finite cyclic group of order $p$ and $g$ is generator of $G$.
+    - If G is additive group then $G = \{0, g, 2.g, 3.g, \dots, (p-1).g\}$. denoted by $(G, +)$
+    - If G is multiplicative group then $G = \{0, g, g^2, g^3, \dots, g^{p-1}\}$. denoted by $(G, *)$
+- $G$ is under the assumption that exist an efficiently computable pairing map $e$ which bilinearity property holds.
+- $e: G * G \rightarrow G_T$ is pairing map. Consider general pairing (e: G1 * G2 => G_T). $G_T$ is some target group.
+- $f = a_0 + a_1x + \dots+ a_dx^d$ is polynomial of degree $d$.
+
+# Setup: generate $pp$ (public parameters)
+1. sample random $s$ in field $F_n$
+2. public parameters:
+    1. If G is additive group then $h_0 = g, h_1= s.g, h_2 = s^2.g, \dots, h_d = s^d.g \in G$
+    2. If G is multiplicative group then $h_0 = g, h_1= g^s, h_2 = g^{s^2}, \dots, h_d = g^{s^d} \in G$
+3. delete s !! (trusted setup)
+
+# Commit:
+- $commit(pp, f)$ => $com_f = f(s).g \in G$
+- We know $s$ is deleted. but how we can eveluate $f(s).g$?
+$$
+\begin{aligned}
+f(s).g &= (a_0 + a_1s + \dots+ a_ds^d).g\newline
+       &= a_0.g + a_1s.g + \dots+ a_ds^d.g\newline
+       &= a_0.h_0 + a_1.h_1 + \dots+ a_d.h_d
+\end{aligned}
+$$
+- We have $h_0, h_1, h_2, \dots, h_d \in G$ from $pp$
+- The prover sends $com_f$ to the verifier.
+
+# Evaluation:
+- The verifier sends $u \in F_n$ to the prover and prover goal is that prove $f(u) = v$ based on commitment $com_f$.
+- Prover algorithm: $Prover(pp,f,u,v)$
+- Verifier algorithm: $Verifier(pp, com_f, u, v)$
+
+$$
+\begin{aligned}
+f(u) = v &\Longleftrightarrow u \space\space\text{is root of}\space\space f-v\newline
+         &\Longleftrightarrow (x-u) \space\space\text{divides}\space\space f-v\newline
+	     &\Longleftrightarrow \text{exists polynomial}\space\space q \space\space \text{s.t.} \space\space q(x).(x-u) = f(x)-v
+\end{aligned}
+$$
+
+- Now, the prover computes $q(x)$ and commitment of $q$, $com_q$ which serves proof, and sends it to the verifier.
+- The verifier accept if
+$(s-u).com_q = com_f - v.g$
+- The Verifier does not know $s$. so, uses pairing $e$ and only needs $g$, $h_1$ from $pp$
+$$
+e(com_q, (s-u).g) = e(com_f -v.g, g)
+$$
