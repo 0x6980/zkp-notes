@@ -1,30 +1,30 @@
 - $F_n$ is a finite field of large order $n$.
 - 
-- $G$ is finite cyclic group of order $p$ and $g$ is generator of $G$.
-    - If G is additive group then $G = \{0, g, 2.g, 3.g, \dots, (p-1).g\}$. denoted by $(G, +)$
-    - If G is multiplicative group then $G = \{0, g, g^2, g^3, \dots, g^{p-1}\}$. denoted by $(G, *)$
-- $G$ is under the assumption that exist an efficiently computable pairing map $e$ which bilinearity property holds.
-- $e: G * G \rightarrow G_T$ is pairing map. Consider general pairing (e: G1 * G2 => G_T). $G_T$ is some target group.
-- $f = a_0 + a_1x + \dots+ a_dx^d$ is polynomial of degree $d$.
+- $G_1$, $G_2$ are finite cyclic group of order $p$ and $g_1$, $g_2$ are generators of $G_1$, $G_2$.
+    - If $G_i$ is additive group then $G_i = \{0, g_1, 2.g_1, 3.g_1, \dots, (p-1).g_1\}$. denoted by $(G_i, +)$.
+    - If $G_i$ is multiplicative group then $G_i = \{0, g_1, g_1^2, g_1^3, \dots, g_1^{p-1}\}$. denoted by $(G_i, *)$.
+- $G_1$ and $G_2$ are under the assumption that exist an efficiently computable pairing map $e$ which bilinearity property holds.
+- $e: G_1 * G_2 \rightarrow G_T$ is pairing map. $G_T$ is some target group.
+- $f = a_0 + a_1x + \dots+ a_dx^d$ is a polynomial of degree $d$.
 
 # Setup: generate $pp$ (public parameters)
 1. sample random $s$ in field $F_n$
 2. public parameters:
-    1. If G is additive group then $h_0 = g, h_1= s.g, h_2 = s^2.g, \dots, h_d = s^d.g \in G$
-    2. If G is multiplicative group then $h_0 = g, h_1= g^s, h_2 = g^{s^2}, \dots, h_d = g^{s^d} \in G$
+    1. If $G_1$ is additive group then $h_0 = g_1, h_1= s.g_1, h_2 = s^2.g_1, \dots, h_d = s^d.g_1 \in G_1$ and $g_2, s.g_2 \in G_2$ 
+    2. If $G_1$ is multiplicative group then $h_0 = g_1, h_1= g_1^s, h_2 = g_1^{s^2}, \dots, h_d = g_1^{s^d} \in G_1$ and $g_2, g_2^s \in G_2$
 3. delete s !! (trusted setup)
 
 # Commit:
-- $commit(pp, f)$ => $com_f = f(s).g \in G$
-- We know $s$ is deleted. but how we can eveluate $f(s).g$?
+- $commit(pp, f)$ => $com_f = f(s).g_1 \in G_1$
+- We know $s$ is deleted. but how we can evaluate $f(s).g_1$?
 $$
 \begin{aligned}
-f(s).g &= (a_0 + a_1s + \dots+ a_ds^d).g\newline
-       &= a_0.g + a_1s.g + \dots+ a_ds^d.g\newline
+f(s).g_1 &= (a_0 + a_1s + \dots+ a_ds^d).g_1\newline
+       &= a_0.g_1 + a_1s.g_1 + \dots+ a_ds^d.g_1\newline
        &= a_0.h_0 + a_1.h_1 + \dots+ a_d.h_d
 \end{aligned}
 $$
-- We have $h_0, h_1, h_2, \dots, h_d \in G$ from $pp$
+- We have $h_0, h_1, h_2, \dots, h_d \in G_1$ from $pp$
 - The prover sends $com_f$ to the verifier.
 
 # Evaluation:
@@ -46,9 +46,9 @@ $$
     2. and commitment of $q$, $com_q$ which serves proof. The $com_q$ can calculated as below: 
 $$
 \begin{aligned}
-com_q &= q(s).g\newline
-      &= (q_0 + q_1s + \dots+ q_{d-1}s^{d-1}).g\newline
-      &= q_0.g + q_1s.g + \dots+ q_{d-1}s^{d-1}.g\newline
+com_q &= q(s).g_1\newline
+      &= (q_0 + q_1s + \dots+ q_{d-1}s^{d-1}).g_1\newline
+      &= q_0.g_1 + q_1s.g_1 + \dots+ q_{d-1}s^{d-1}.g_1\newline
       &= q_0.h_0 + q_1.h_1 + \dots+ q_{d-1}.h_{d-1}
 \end{aligned}
 $$
@@ -56,45 +56,47 @@ $$
 - The verifier accept if
 $$
 \tag{2}
-e(com_q, (s-u).g) = e(com_f -v.g, g)
+e(com_q, (s-u).g_2) = e(com_f - v.g_1, g_2)
 $$
 - Now, we are checking that:
-    1. Is possible for the verifier compute both side of the equality (2)?
-        - The verifier have $g$ and $s.g = h_1$ from the $pp$.
-        - $v$ is the evaluation of $u$, so $v.g$ is computable by the verifier.
-        - $u \in F_n$ is the random and known by both, the verifier and the prover. So, $u.g$ is computable by the verifier.
+    1. Is possible for the verifier compute both side of (2)?
+        - The verifier have $g_2$ and $s.g_2$ from the $pp$.
+        - $u \in F_n$ is the random and known by both, the verifier and the prover. So, $u.g_2$ is computable by the verifier.
         - $com_f$ and $com_q$ sent by the prover to the verifier.
-        - So, the verifier can compute both side of equality (2) and if equality holds, the verifier accept the proof and if does not, then reject.
+        - $v$ is the evaluation of $u$, so $v.g_1$ is computable by the verifier.
+        - So, the verifier can compute both side of (2) and if equality holds, the verifier accept the proof and if does not, then reject.
     2. Why and how this equality holds the **correctness** and **soundness**? Or Why the equality (2) has this power to accept or reject the proof?
         - Consider below equations:
         ```math
         \tag{lhs}
         \begin{aligned}
-        e(com_q, (s-u).g) &= e(q(s).g, (s-u).g)\newline
-                        &= e(g,g)^{q(s).(s-u)}\newline
+        e(com_q, (s-u).g_2) &= e(q(s).g_1, (s-u).g_2)\newline
+                        &= e(g_1,g_2)^{q(s).(s-u)}\newline
         \end{aligned}
         ```
 
         $$
         \tag{rhs}
         \begin{aligned}
-        e(com_f -v.g, g)  &= e(f(s).g - v.g, g)\newline
-                        &= e((f(s)-v).g, g)\newline
-                        &= e(g,g)^{f(s)-v}
+        e(com_f -v.g_1, g_2)  &= e(f(s).g_1 - v.g_1, g_2)\newline
+                        &= e((f(s)-v).g_1, g_2)\newline
+                        &= e(g_1,g_2)^{f(s)-v}
         \end{aligned}
         $$
         - **Correctness** means that, if the prover followed the steps as we defined, they can produce a proof that will accept by the verifier.
-        - If the prover followed the steps, then we have $q(x).(x-u) = f(x)-v$ from $(1)$. This implies $q(s).(x-u) = f(s)-v$. Then, the (lhs) and 
+        - If the prover followed the steps, then we have $q(x).(x-u) = f(x)-v$ from $(1)$. This implies $q(s).(s-u) = f(s)-v$. Then, the (lhs) and 
         (rhs) are equal and then the verifier will accept.
         - **Soundness** is the property that they cannot produce an “incorrect” proof, If they produce incorrect proof the verifier will reject.
         - Precisely, the soundness property means that; the prover cannot trick the verifier into believing that $f(u) = v^{\prime}$ and $v^{\prime} \neq v$.
-        - Try 1 for creating fake proof: We know, the proof is $com_q$. so the prover first should compute $q(x)$. somehow
+        - **Try 1** for creating fake proof: We know, the proof is $com_q$. so the prover first should compute $q(x)$. somehow
          divide $f(x) - v^{\prime}$ by $x- u$. But $f(u) - v^{\prime}$ is not zero (by assumption $v^{\prime} \neq v$),
          so they cannot perform the polynomial division, as there will always be a remainder. So this clearly doesn’t work.
-        - Try 2 for creating fake proof: So then the prover can try to work directly in the group: What if, for some commitment $com_f$,
+        - **Try 2** for creating fake proof: So, the prover can try to work directly in the group: What if, for some commitment $com_f$,
          he could compute the group element
         $$
-        proof_{fake} = \dfrac {1} {s-z}(com_f - v^{\prime}.g)
+        proof_{fake} = \dfrac {1} {s-u}(com_f - v^{\prime}.g_1)
         $$
         If they could do this, they could obviously just prove anything they want. Intuitively, this is hard because you have to multiply by something that involves $s$,
         but you don’t know anything about $s$. And that's why $s$ should be removed in **trusted setup**.
+- Note that, here we used general group for kzg commitment. So, $G_1, G_2$ can be the **Elliptic Curve pairing groups** which are finite cyclic subgroups of Elliptic Curves group.
+- What are **Elliptic Curves group** and **Elliptic Curve pairing groups**? I will write and explain them in the future.
