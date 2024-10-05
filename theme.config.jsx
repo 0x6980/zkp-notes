@@ -2,7 +2,7 @@ export default {
   project: {
     link: 'https://github.com/0x6980/zkp'
   },
-  docsRepositoryBase: 'https://github.com/shuding/nextra/blob/main',
+  docsRepositoryBase: 'https://github.com/0x6980/zkp',
   logo: (
     <>
       <span className="mr-2 font-extrabold hidden md:inline">Zero Knowledge Proof</span>
