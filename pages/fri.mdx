@@ -1,0 +1,97 @@
+## Error-correcting code
+- $[n, k , \Delta]$ code:
+- $Enc(m)$: Encode a message of size $k$ to a codeword of size $n$.
+- $\Delta$ is the minimum distance (Hamming) between any two codewords.
+- Hamming distance is the number of different location between two codewords.
+- The alphabet of this code can be binary or a finite field.
+- Rate: $\frac{k}{n}$ and Relative distance:  $\frac{\Delta}{n}$
+##  Vandermonde matrix
+- A matrix $V$ with $m$ rows and $n$ columns. with the elements $v_{ij} = \alpha_i^{j-1}$. So:
+$$
+V =
+\begin{bmatrix}
+   1 & \alpha_1 & \alpha_1^2 & \dots & \alpha_1^{n-1} \\
+   1 & \alpha_2 & \alpha_2^2 & \dots & \alpha_2^{n-1} \\
+   \vdots & \vdots & \vdots & \ddots & \vdots \\
+   1 & \alpha_m & \alpha_m^2 & \dots & \alpha_m^{n-1}
+\end{bmatrix}_{m\times n}
+$$
+- A Vandermonde matrix is ​​therefore completely determined by the numbers $\alpha_{i}(i=1,2,\ldots ,n)$.
+### Polynomial evaluation
+- Consider polynomial $p(x) = p_nx^n + p_{n-1}x^{n-1}+\dots + p_0$, then we can use Vandermonde matrix for evaluating $p(x)$ in a number of points $r_0, r_1, \dots, r_m$.
+- First define the Vandermonde matrix of $r_0, r_1, \dots, r_m$:
+$$
+V =
+\begin{bmatrix}
+   1 & r_0 & r_0^2 & \dots & r_0^{n} \\
+   1 & r_1 & r_1^2 & \dots & r_1^{n} \\
+   1 & r_2 & r_2^2 & \dots & r_2^{n} \\
+   \vdots & \vdots & \vdots & \ddots & \vdots \\
+   1 & r_m & r_m^2 & \dots & r_m^{n}
+\end{bmatrix}_{(m+1) \times (n+1)}
+$$
+- Then multiply $V$ by the vector $p = (p_0, p_1, \dots,p_n)$:
+ $$
+V.p =
+\begin{bmatrix}
+   1 & r_0 & r_0^2 & \dots & r_0^{n} \\
+   1 & r_1 & r_1^2 & \dots & r_1^{n} \\
+   1 & r_2 & r_2^2 & \dots & r_2^{n} \\
+   \vdots & \vdots & \vdots & \ddots & \vdots \\
+   1 & r_m & r_m^2 & \dots & r_m^{n}
+\end{bmatrix}
+\begin{bmatrix}
+   p_0 \\
+   p_1 \\
+   p_2 \\
+   \cdots \\
+   p_n 
+\end{bmatrix}
+=
+\begin{bmatrix}
+   \displaystyle\sum_{i=0}^n {p_{i}r_0^{i}} \\
+   \displaystyle\sum_{i=0}^n {p_{i}r_1^{i}} \\
+   \vdots \\
+   \displaystyle\sum_{i=0}^n {p_{i}r_m^{i}} \\
+\end{bmatrix}
+$$
+- It is obvious the last vector is evaluation $p(x)$ on $r_0, r_1, \dots, r_m$
+
+### Interpolation of a polynomial
+## Reed-Solomon (RS)
+- The code $RS[F; S; ρ]$ is the space of functions $f : S \rarr F$ that are evaluations of polynomials of degree $d < ρN$
+- $S$ is an evaluation set of $N$ elements in a finite field $F$.
+- rate parameter $ρ \in \lparen 0; 1\rbrack$.
+
+## RS proximity problem
+- The verifier has oracle access to $f : S \rarr F$.
+- Problem: Is the verifier able with "large" confidence and "small" query complexity, determine that:
+    1. $f$ is a codeword of RS[F; S; ρ] Or
+    2. $f$ is $\delta$-far from all codewords.  (Hamming distance)
+
+## RS proximity testing
+- When no additional data is provided to the verifier, the RS proximity problem is commonly called a testing problem.
+- $d + 1$ queries are necessary and sufficient to solve the problem.
+    - codewords are accepted by their tester with probability 1 whereas 
+    - functions that are δ-far from the code rejected with probability ≥ δ.
+
+## Binary field
+The finite field $F_q$ is binary field if $q = 2^m, \space m \in \N$.
+
+## Additive Coset
+- $H$ is subgroup of group $(G, +)$.
+- $g \in G$.
+- The left and right **coset** of $H$ in $G$ are
+
+$$
+\tag{left coset}
+g + H = \{g + h \space | \space h \in H\}
+$$
+$$
+\tag{right coset}
+H + g = \{h + g \space | \space h \in H\}
+$$
+- If G is commutative group then $\forall H,\space \forall g \in G; \space\space g + H = H + g$.
+
+## Binary additive RS code
+The collection of codes $RS[F; S; ρ]$ where $F$ is a binary field and $S$ an additive coset. 
