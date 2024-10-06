@@ -3,3 +3,73 @@
 ## My mistakes
 - I thought all zkSNARK structure uses Elliptic Curve and pairing!!
 - I always used summary of zkSNARK Concepts. don’t. Dive in details.
+
+## SNARK
+**Polynomial-IOP** and **Polynomial Commitment Scheme**, mixing together generates the SNARK.
+
+### Polynomial-IOP (Interactive Oracle Proof)
+- P's first message in the protocol is a **polynomial** $h$.
+    - V does not learn $h$ in full.
+    - The description size of $h$ is as large as the circuit.
+    - V is permitted to evaluate $h$ at, say, **one** point.
+    - After that P and V execute a standard interactive proof.
+- There are several different polynomial **IOP**.
+- Three classes of polynomial-IOP
+    - Based on **interactive proofs (IPs)**.
+    - Based on **multi-prover interactive proofs (MIPs)**.
+    - Based on **constant-round polynomial IOPs**.
+        - Example: Marlin, Plonk.
+
+### Polynomial Commitment Scheme
+- P binds itself to a polynomial $h$ by sending a short string **$com_h$**.
+- V can choose $x$ and ask P to evaluate $h(x)$
+- P sends $y$, the evaluation, plus a proof $\pi$ that $y$ is consistent with $com_h$ and $x$.
+- P can not produce a convincing proof fo an incorrect evaluation.
+- $com_h$ and $\pi$ short and easy to generate.
+- $\pi$ is easy to check.
+- There are several polynomial commitments.
+- Three classes of polynomial commitments.
+    - Based on **pairing + trusted setup** (not transparent not post-quantum).
+        - Example: KZG commitment scheme.
+        - Unique property: constant sized evaluation proofs.
+        - Are homomorphic: Lead to efficient **batching/amortization** P and V costs.
+            - e.g. when proving knowledge of several different witnesses.
+            - addition under the commitment: take two commitment and derive the commitment to the sum of the two commited objects.
+            - $com_p \times com_q = com_{p+q}$
+    - Based on **discrete logarithm** (transparent, not post-quantum).
+        - Example: IPA/Bulletproofs. Hyrax, Dory. (IPA: Inner product Argument)
+        - Are homomorphic.
+    - Based on **IOP + hashing (error-correcting code)** (transparent, post-quantum).
+        - Example: FRI. Ligero, Brakedown, Orion
+
+### Mix and match
+- To get different trade-offs between P time, proof size, setup assumptions, etc.
+- Transparency and plausible post-quantum security determined entirely by the polynomial commitment scheme used.
+
+#### [Any polynomial-IOP] + IPA/Bulletproofs polynomial commitment scheme
+- Example: Plonk polynomial-IOP with IPA/Bulletproofs: Halo2-ZCach
+- Pros: Shortest proof among transparent setup.
+- Cons: Slow V
+
+#### [Any polynomial-IOP] + FRI polynomial commitment
+- Example: STARTK, Fractal, Aurora, Virgo, Ligero++
+- Pros: Shortest proofs amongst plausibly post-quantum SNARKs.
+- Cons: Proofs are still large (at least hundreds of KB depending on what security you want)
+
+#### [MIPs and IPs] + [fast-prover polynomial commitments]
+- Example: Sparten, Brakedown, Orion, Orion+.
+- Pros: Fastest P in the literature, plausibly post-quantum + transparent if polynomial commitment is.
+- Cons: Bigger proof than two category mentioned above.
+
+### Non-transparent SNARKs
+#### Linear-PCP based
+- Example: Groth16
+- Pros: Shortest proofs size (3 group elements), Fastest V.
+- Cons: Not only is there a trusted setup but it is **Circuit-specific** trusted setup, slow and space-intensive P, not post-quantum.
+
+#### Constant-round polynomial-IOP + KZG polynomial commitment
+- Examples: Marlin-KZG, Plonk-KZG
+- Pros: **Universal** trusted setup.
+- Cons: 
+    - Proofs are almost $4x-6x$ larger than Groth16, P is slower than Groth16, also not post-quantum.
+    - Counterpoint for P: can use more flexible intermediate representations than circuit and R1CS.

@@ -1,11 +1,11 @@
 # Basic
-## Error-correcting code
-- $[m, n , \Delta]$ code:
+## Codes
+- $[m, n , \delta]$ code:
 - $Enc(m)$: Encode a message of size $k$ to a codeword of size $n$.
-- $\Delta$ is the minimum distance (Hamming) between any two codewords.
+- $\delta$ is the minimum distance (Hamming) between any two codewords.
 - Hamming distance is the number of different location between two codewords.
 - The alphabet of this code can be binary or a finite field.
-- Rate: $\frac{n}{m}$ and Relative distance:  $\frac{\Delta}{m}$
+- Rate: $\frac{n}{m}$ and Relative distance:  $\frac{\delta}{m}$
 
 ##  Vandermonde matrix
 - A matrix $G \in F^{m \times n}$ ($m$ rows and $n$ columns). with the elements $G_{ij} = \alpha_i^{j-1}$. So:
@@ -67,7 +67,7 @@ $$
 - $m$ is the block length.
 
 ### Distance of code $G$.
-- $d = \min\limits_{x\in F^n\text{\textbackslash} \{0\}} \Vert Gx \Vert_0$. where $\Vert Gx \Vert_0$ denotes the number of nonzero entries in $Gx \in F^m$.
+- $\delta = \min\limits_{x\in F^n\text{\textbackslash} \{0\}} \Vert Gx \Vert_0$. where $\Vert Gx \Vert_0$ denotes the number of nonzero entries in $Gx \in F^m$.
 - $x, y \in F^n$ with $x \not = y$. Tehy will differ in at least $d$ places after being encoded.
 $$
 \Vert Gx - Gy \Vert_0 = \Vert G(x-y) \Vert_0 \geqslant d,
@@ -118,7 +118,6 @@ The collection of codes $RS[F; S; ρ]$ where $F$ is a binary field and $S$ an ad
 - $S$ is an evaluation set of $N$ elements in a finite field $F$.
 - rate parameter $ρ \in \lparen 0; 1\rbrack$.
 
-# Commitment
 ## RS proximity problem
 - The verifier has oracle access to $f : S \rarr F$.
 - Problem: Is the verifier able with "large" confidence and "small" query complexity, determine that:
