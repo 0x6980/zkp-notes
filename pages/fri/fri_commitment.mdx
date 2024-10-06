@@ -1,0 +1,20 @@
+# Polynomial Commitment
+- Suppose $q(x)$ is the polynomial with degree n that we want to commit.
+- Then, we generate Vandermonde matrix of polynomial $q(x)$: matrix $P \in F^{n \times n}$.
+- Encode each row of $P$. So each row $= x \in F^n$.
+- This encode generate a matrix of $n \times m$.
+- Commit to each column of the encoded matrix using Merkle tree.
+
+##
+- P Merkle-commit to all evaluations of the polynomial $q$
+- When V requests $q(r)$, P reveals the associated leaf along with opening information.
+- Two problems:
+    - The numbers of leaf is $\vert F\vert$, which means the time to compute the commitment is at least $\vert F\vert$.
+        - Big problem when working over large fields ($\vert F\vert = 2^{64}\space\text{or}\space 2^{128}$).
+        - Want time proportional to the degree bound d.
+    - V does not know if $q$ has degree at most $n$.
+- Fixing first problem
+    - Rather than P Merkle-committing all $n-1$ evaluations of $q$, P only Merkle-commits to evaluations $q(x)$ for those $x$ in a carefully chosen subset $\Omega$ of $F_p$.
+    - $\Omega$ has size $\rho^{-1}n$ for some constant $\rho \leq \frac{1}{2}$
+        - $\Omega^{-1} \geq 2$ is called the "FRI blowup factor".
+        - $\rho$ is called the "rate" od Reed–Solomon code used.
