@@ -1,7 +1,7 @@
 # Basic
 ## Codes
 - $[m, n , \delta]$ code:
-- $Enc(m)$: Encode a message of size $k$ to a codeword of size $n$.
+- $Enc(\text{message})$: Encode a message of size $n$ to a codeword of size $m$.
 - $\delta$ is the minimum distance (Hamming) between any two codewords.
 - Hamming distance is the number of different location between two codewords.
 - The alphabet of this code can be binary or a finite field.
@@ -61,7 +61,7 @@ $$
 
 ## Linear codes
 - Matrix $G \in F^{m \times n}$
-- Message $x \in F^{n} ($n$-vector over the field $F$)
+- Message $x \in F^{n}$ ($n$-vector over the field $F$)
 - Then $Gx$ is the encoded of message $x$ and called **codeword**. The length of $Gx$ is $m$ ($Gx \in F^m$).
 - $n$ is the message length.
 - $m$ is the block length.
@@ -108,7 +108,7 @@ since $x-y \not = 0$.
     - we can construct a polynomial of degree $n-1$ which has exactly $m-n+1$ zeros when evaluated over the points $\alpha_1,\dots, \alpha_m$, which makes the distance of this code exactly equal to $m-n+1$.(0x6980?!)
 
 ## Important
-- Choosing the elements $m, n, S, F, d$ can influence the formation of different codes.
+- Choosing the elements $m, n, S, F, \delta$ can influence the formation of different codes.
 
 ## Binary additive RS code
 The collection of codes $RS[F; S; ρ]$ where $F$ is a binary field and $S$ an additive coset. 
