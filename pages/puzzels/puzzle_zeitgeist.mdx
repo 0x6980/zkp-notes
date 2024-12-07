@@ -1,0 +1,380 @@
+# Plonk
+## Plonk Gate
+1. A full Plonk gate look like: $q_L.a+q_R.b+q_o.c+q_M.ab+q_c=0$.
+    - The $q$ vectors are called "selectors" and encode the structure of the circuit.
+    - The $a$, $b$, and $c$ vectors are "assignments" to the circuit variables and represent the Prover's **private inputs**. 
+    - **Some of $a_i, b_i$ or $c_i$ are private input for $i = 0,\dots,n-1$.**
+2. The multiplicative subgroup $H$ as containing the $n$’th roots of
+unity in $\mathbb{F}$, where $\omega$ is a primitive $n$’th root of unity and a generator of $H$. i.e:
+$H = \{1, \omega^1, \dots, \omega^{n−1}\}$. We assume that the number of gates in a circuit is no more
+than $n$.
+## Interpolating Plonk Polynomials Using the Roots of Unity
+1. Interpolating $a(x)$. Suppose $a = (a_0, a_1,\dots,a_{n-1})$ and $a(\omega^i) = a_i$ **(1)**. Then using lagrange interpolation, the prover has $a(x)$.
+    - The prover can do this because have a, b, c. But the verifier can't because at least some inputs are **private**.
+2. The prover can interpolates $b(x), c(x), q_L(x), q_R(x), q_c(x), q_M(x), q_o(x)$ like above.
+3. The permutation polynomials no need for our puzzle.
+## Challenge and Opening Evaluation
+1. In the [Plonk paper](https://eprint.iacr.org/2019/953) prover algorithm have 5 round to generate proof $\pi$.
+In the round 4 of this algorithm, the prover should:
+    1. Compute evaluation challenge $m\in \mathbb{F}$ and 
+    2. Compute opening evaluations: $a(m), b(m), c(m), S_{\sigma_1}(m), S_{\sigma_2}(m), z(mw)$
+and send this evaluations to the verifier.
+- So, we have one random challenge $m$ and one evaluation for every polynomial listed above. And There is no chance to find out what are those polynomials.
+### Solution key for our the puzzle
+- **Imagine, the prover send $n$ proof and $n$ commitments for a fixed assignments a, b, c. Then the verifier have $n$ challenges and $n$ evaluations for every polynomials listed above.**
+- Then, based on lagrange interpolation, the verifier can interpolates $a(x), b(x), c(x)$. This is enough for knowing the private inputs.**How?**
+- The verifier have $a(x), b(x), c(x)$ and based on **(1)** the verifier knows $a(\omega^i) = a_i$ for all $i$.
+- **So, there is $k$ s.t. $a(\omega^k) = a_k$ and this $a_K$ is prover secret(private input).** **(2)**
+# Our Puzzle
+## Halo2
+1. The assignments values $a, b, c$ and the assignments polynomials $a(x), b(x), c(x)$ are a little different implementation in Halo2.
+2. At the start of proof creation, the prover has a table of cell assignments that it claims satisfy the constraint system. The table has $n=2^k$ rows, and is broken into advice, instance, and fixed columns.
+3. We define $F_{ij}$ as the assignment in the $j$th row of the $i$th fixed column. Without loss of generality, similarly define $A_{ij}$​
+  to represent the advice and instance assignments.
+4. To commit to these assignments, The prover construct Lagrange polynomials of degree $n−1$ for each column, over an evaluation domain of size $n$ (where $\omega$ is the $n$th primitive root of unity):
+    - $a_i(x)$ interpolates such that $a_i(\omega^j) = A_{ij}$ **(3)**
+    - $f_i(x)$ interpolates such that $a_i(\omega^j) = F_{ij}$ 
+​5. Commitment to $f_i$ is constructed as part of key generation.
+6. Commitment to $a_i$ is constructed by the prover (as explained in Plonk section of above) and sent it to verifier.
+## Solution
+- Based on our puzzle we have one advice column. 
+- Since the prover compute and send 64 times proofs and commitments for the one secret(one private input) to the verifier. So, we have 64 challenges $d_i, i=0, \dots, 63$ and 64 evaluations $a_0(d_i)$.
+- Then, construct Lagrange polynomials on this data and we have just $a_0(x)$.
+- So far, we just interpolate the advice polynomial. **How we should find secret value?**
+- Based on **(3)** and get help from **(2)** there is k s.t. $a_0(\omega^k) = A_{0k}$. $A_{0k}$ is exactly our **secret value**
+- we can create a for loop on $H$ s.t. the assertion of our puzzle passed.
+- $\omega^2$ is the answer.
+## Code
+```rust
+// in main.rs file
+pub fn hack() {
+    let mut points: Vec<_> = vec![];
+    let mut evals: Vec<_> = vec![];
+    for i in 0..64 {
+        let (x, eval) = get_x_eval(i);
+        points.push(x);
+        evals.push(eval);
+    }
+
+    let poly = lagrange_interpolate(&points, &evals);
+    let pk = gen_pk();
+    let omega = pk.get_vk().get_domain().get_omega(); // Fr::from_str_vartime("12799441450189702121232122059226990287081568291547011007819741462284200902087").unwrap();
+    let mut point = Fr::one();
+
+    'outer: for j in 1..64 {
+        point = point.mul(&omega);
+
+        let secret = eval_polynomial(&poly, point);
+        let secret_commitment = poseidon_base::primitives::Hash::<
+            _,
+            P128Pow5T3Compact<Fr>,
+            ConstantLength<2>,
+            WIDTH,
+            RATE,
+        >::init()
+        .hash([secret, Fr::from(0u64)]);
+        'inner: for i in 0..64 {
+            let (_, _, commitment) = from_serialized(i);
+            if secret_commitment != commitment {
+                break 'inner;
+            }
+            println!("secret {:?}", secret);
+            println!("power of omega j = {:?}", j);
+            println!("point or omega^j {:?}", point);
+            break 'outer;
+        }
+    }
+}
+
+fn gen_pk() -> ProvingKey<halo2curves::bn256::G1Affine> {
+    use halo2_proofs::poly::kzg::commitment::{KZGCommitmentScheme, ParamsKZG};
+    use halo2curves::bn256::Bn256;
+
+    let setup_rng = ChaCha20Rng::from_seed([1u8; 32]);
+    let params = ParamsKZG::<Bn256>::setup(K, setup_rng);
+
+    let pk  = keygen::<KZGCommitmentScheme<_>>(&params);
+    return pk;
+}
+
+fn get_x_eval(i: usize) -> (Fr, Fr) {
+    use halo2_proofs::poly::kzg::commitment::{KZGCommitmentScheme, ParamsKZG};
+    use halo2_proofs::poly::kzg::multiopen::VerifierSHPLONK;
+    use halo2_proofs::poly::kzg::strategy::AccumulatorStrategy;
+    use halo2curves::bn256::Bn256;
+
+    let setup_rng = ChaCha20Rng::from_seed([1u8; 32]);
+    let params = ParamsKZG::<Bn256>::setup(K, setup_rng);
+
+    let pk  = keygen::<KZGCommitmentScheme<_>>(&params);
+
+    let (proofs, nullifiers, commitments) = deserialize();
+
+    let proof = proofs[i].clone();
+    let nullifier = nullifiers[i];
+    let commitment = commitments[i];
+
+    let verifier_params = params.verifier_params();
+    let (x , eval) = get_x_eval_in_verify::<
+        _,
+        VerifierSHPLONK<_>,
+        _,
+        Blake2bRead<_, _, Challenge255<_>>,
+        AccumulatorStrategy<_>,
+    >(
+        verifier_params,
+        pk.get_vk(),
+        &proof[..],
+        nullifier,
+        commitment,
+    );
+    return (x, eval);
+}
+
+pub fn get_x_eval_in_verify<
+    'a,
+    'params,
+    Scheme: CommitmentScheme<Scalar = halo2curves::bn256::Fr>,
+    V: Verifier<'params, Scheme>,
+    E: EncodedChallenge<Scheme::Curve>,
+    T: TranscriptReadBuffer<&'a [u8], Scheme::Curve, E>,
+    Strategy: VerificationStrategy<'params, Scheme, V, Output = Strategy>,
+>(
+    params_verifier: &'params Scheme::ParamsVerifier,
+    vk: &VerifyingKey<Scheme::Curve>,
+    proof: &'a [u8],
+    nullifier: Fr,
+    commitment: Fr,
+)-> (Fr, Fr) where
+    Scheme::Scalar: Ord + WithSmallOrderMulGroup<3> + FromUniformBytes<64>,
+{
+    let pubinputs = vec![nullifier, commitment];
+
+    let mut transcript = T::init(proof);
+
+    let strategy = Strategy::new(params_verifier);
+    let (x, eval): (Fr, Fr) = get_x_eval_plonk( // ./halo2/halo2_proofs/src/plonk/verifier.rs file
+        params_verifier,
+        vk,
+        strategy,
+        &[&[&pubinputs[..]]],
+        &mut transcript,
+    ).unwrap();
+    return (x, eval);
+}
+```
+And implementation of `get_x_eval_plonk` in `verifier.rs`:
+```rust
+// ./halo2/halo2_proofs/src/plonk/verifier.rs file
+pub fn get_x_eval_plonk<
+    'params,
+    Scheme: CommitmentScheme,
+    V: Verifier<'params, Scheme>,
+    E: EncodedChallenge<Scheme::Curve>,
+    T: TranscriptRead<Scheme::Curve, E>,
+    Strategy: VerificationStrategy<'params, Scheme, V>,
+>(
+    params: &'params Scheme::ParamsVerifier,
+    vk: &VerifyingKey<Scheme::Curve>,
+    strategy: Strategy,
+    instances: &[&[&[Scheme::Scalar]]],
+    transcript: &mut T,
+) -> Result<(<Scheme as CommitmentScheme>::Scalar, <Scheme as CommitmentScheme>::Scalar), Error>
+where
+    Scheme::Scalar: WithSmallOrderMulGroup<3> + FromUniformBytes<64>,
+{
+    for instances in instances.iter() {
+        if instances.len() != vk.cs.num_instance_columns {
+            return Err(Error::InvalidInstances);
+        }
+    }
+
+    let instance_commitments = if V::QUERY_INSTANCE {
+        instances
+            .iter()
+            .map(|instance| {
+                instance
+                    .iter()
+                    .map(|instance| {
+                        if instance.len() > params.n() as usize - (vk.cs.blinding_factors() + 1) {
+                            return Err(Error::InstanceTooLarge);
+                        }
+                        let mut poly = instance.to_vec();
+                        poly.resize(params.n() as usize, Scheme::Scalar::ZERO);
+                        let poly = vk.domain.lagrange_from_vec(poly);
+
+                        Ok(params.commit_lagrange(&poly, Blind::default()).to_affine())
+                    })
+                    .collect::<Result<Vec<_>, _>>()
+            })
+            .collect::<Result<Vec<_>, _>>()?
+    } else {
+        vec![vec![]; instances.len()]
+    };
+
+    let num_proofs = instance_commitments.len();
+
+    // Hash verification key into transcript
+    vk.hash_into(transcript)?;
+
+    if V::QUERY_INSTANCE {
+        for instance_commitments in instance_commitments.iter() {
+            // Hash the instance (external) commitments into the transcript
+            for commitment in instance_commitments {
+                transcript.common_point(*commitment)?
+            }
+        }
+    } else {
+        for instance in instances.iter() {
+            for instance in instance.iter() {
+                for value in instance.iter() {
+                    transcript.common_scalar(*value)?;
+                }
+            }
+        }
+    }
+
+    // Hash the prover's advice commitments into the transcript and squeeze challenges
+    let (advice_commitments, challenges) = {
+        let mut advice_commitments =
+            vec![vec![Scheme::Curve::default(); vk.cs.num_advice_columns]; num_proofs];
+        let mut challenges = vec![Scheme::Scalar::ZERO; vk.cs.num_challenges];
+
+        for current_phase in vk.cs.phases() {
+            for advice_commitments in advice_commitments.iter_mut() {
+                for (phase, commitment) in vk
+                    .cs
+                    .advice_column_phase
+                    .iter()
+                    .zip(advice_commitments.iter_mut())
+                {
+                    if current_phase == *phase {
+                        *commitment = transcript.read_point()?;
+                    }
+                }
+            }
+            for (phase, challenge) in vk.cs.challenge_phase.iter().zip(challenges.iter_mut()) {
+                if current_phase == *phase {
+                    *challenge = *transcript.squeeze_challenge_scalar::<()>();
+                }
+            }
+        }
+
+        (advice_commitments, challenges)
+    };
+
+    // Sample theta challenge for keeping lookup columns linearly independent
+    let theta: ChallengeTheta<_> = transcript.squeeze_challenge_scalar();
+
+    let lookups_prepared = (0..num_proofs)
+        .map(|_| -> Result<Vec<_>, _> {
+            // Hash each lookup prepared commitment
+            vk.cs
+                .lookups
+                .iter()
+                .map(|argument| argument.read_prepared_commitments(transcript))
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    // Sample beta challenge
+    let beta: ChallengeBeta<_> = transcript.squeeze_challenge_scalar();
+
+    // Sample gamma challenge
+    let gamma: ChallengeGamma<_> = transcript.squeeze_challenge_scalar();
+
+    let permutations_committed = (0..num_proofs)
+        .map(|_| {
+            // Hash each permutation product commitment
+            vk.cs.permutation.read_product_commitments(vk, transcript)
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    let lookups_committed = lookups_prepared
+        .into_iter()
+        .map(|lookups| {
+            // Hash each lookup sum commitment
+            lookups
+                .into_iter()
+                .map(|lookup| lookup.read_grand_sum_commitment(transcript))
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    let shuffles_committed = (0..num_proofs)
+        .map(|_| -> Result<Vec<_>, _> {
+            // Hash each shuffle product commitment
+            vk.cs
+                .shuffles
+                .iter()
+                .map(|argument| argument.read_product_commitment(transcript))
+                .collect::<Result<Vec<_>, _>>()
+        })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    let vanishing = vanishing::Argument::read_commitments_before_y(transcript)?;
+
+    // Sample y challenge, which keeps the gates linearly independent.
+    let y: ChallengeY<_> = transcript.squeeze_challenge_scalar();
+
+    let vanishing = vanishing.read_commitments_after_y(vk, transcript)?;
+
+    // Sample x challenge, which is used to ensure the circuit is
+    // satisfied with high probability.
+    let x: ChallengeX<_> = transcript.squeeze_challenge_scalar();
+    let instance_evals = if V::QUERY_INSTANCE {
+        (0..num_proofs)
+            .map(|_| -> Result<Vec<_>, _> {
+                read_n_scalars(transcript, vk.cs.instance_queries.len())
+            })
+            .collect::<Result<Vec<_>, _>>()?
+    } else {
+        let xn = x.pow([params.n()]);
+        let (min_rotation, max_rotation) =
+            vk.cs
+                .instance_queries
+                .iter()
+                .fold((0, 0), |(min, max), (_, rotation)| {
+                    if rotation.0 < min {
+                        (rotation.0, max)
+                    } else if rotation.0 > max {
+                        (min, rotation.0)
+                    } else {
+                        (min, max)
+                    }
+                });
+        let max_instance_len = instances
+            .iter()
+            .flat_map(|instance| instance.iter().map(|instance| instance.len()))
+            .max_by(Ord::cmp)
+            .unwrap_or_default();
+        let l_i_s = &vk.domain.l_i_range(
+            *x,
+            xn,
+            -max_rotation..max_instance_len as i32 + min_rotation.abs(),
+        );
+        instances
+            .iter()
+            .map(|instances| {
+                vk.cs
+                    .instance_queries
+                    .iter()
+                    .map(|(column, rotation)| {
+                        let instances = instances[column.index()];
+                        let offset = (max_rotation - rotation.0) as usize;
+                        compute_inner_product(instances, &l_i_s[offset..offset + instances.len()])
+                    })
+                    .collect::<Vec<_>>()
+            })
+            .collect::<Vec<_>>()
+    };
+
+    let advice_evals = (0..num_proofs)
+        .map(|_| -> Result<Vec<_>, _> { read_n_scalars(transcript, vk.cs.advice_queries.len()) })
+        .collect::<Result<Vec<_>, _>>()?;
+
+    return Ok((*x, advice_evals[0][1]));
+}
+
+
+```
