@@ -1,0 +1,49 @@
+# Logup
+
+## Lookup relation
+### Definition
+Given configuration $C_{LK} := \left(T, l, t\right)$ where $l$ is the number of lookups and $t\in\mathbb{F}^{T}$ is the lookup table. the relation $R_{LK}$ is the set of tuples $w\in\mathbb{F}^l$ such that $w_i\in t$ for all $i = 1, \dots, l$.
+### Lemma
+Let $\mathbb{F}$ be a field of characteristic $p>\max(l, T)$. Given two sequence of field elements $[w_i]_{i=1}^{l}$ and $[t_j]_{j=1}^{T}$ we have $\{w_i\}\subseteq \{t_j\}$ as sets (with multiples of values removed) if and only if there exist a sequence $[m_j]_{j=1}^{T}$ of field elements such that
+$$
+\begin{equation}
+\sum_{i=1}^{l}\frac{1}{x+w_i} = \sum_{j=1}^{T}\frac{m_j}{x+t_j}
+\end{equation}
+$$
+- In the proof of this lemma we construct $m_j = \text{number of}\: i\: \text{s.t.} \: w_i = t_j$ (number of repetition $w_i$)
+
+
+
+## Our puzzle
+### Intro
+We've implemented a range check for $[0, 2^6-1]$ using the special-sound
+lookup protocol of [ProtoStar]([url](https://eprint.iacr.org/2023/620))
+(see Section 4.3, p. 34) which itself is a variant of [LogUp]([url](https://eprint.iacr.org/2022/1530)).
+To make this faster, we use a ≈16-bit prime field and take challenges
+from a larger extension to have roughly 100 bits of security.
+- We should submit a passing proof that $2^{15}$ is in the expected range.
+- Based on code the characteristic is `let p = 70937;` and the table is:
+```rust
+    let mut table = vec![];
+    for i in 0..1 << 6 {
+        table.push(FieldElement::new(vec![i], p, irr.clone()));
+    }
+```
+### Solution
+- We want to prove that $2^{15}$ is in the table.
+- **We put $2^{15}$, $p$ times in the $w$**.
+```rust
+    let invalid_witness = FieldElement::new(vec![1<<15], p, irr.clone()); 
+
+    /* BEGIN HACK */
+    let mut witness = vec![];
+    for _ in 0..70937  {
+        witness.push(invalid_witness.clone());
+    }
+```
+- Then, in the rhs of **(1)** this sum will be cancel out because in the field $\mathbb{F}_p$, $p$ is equal $0$.
+- So, in fact, we add zero times $2^{15}$ in the witness.
+- **Since in the verifier part any functions not check this variant, So we easily can cheat on proof.**
+- **I mean in the verifier side should check that $m_i \neq 0.$**
+- So, We create a $w$ (witness) and $m$ which is invalid but passed in the verification. 
+- and Done.
