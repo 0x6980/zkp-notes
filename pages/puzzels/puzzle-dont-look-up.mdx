@@ -29,6 +29,10 @@ from a larger extension to have roughly 100 bits of security.
         table.push(FieldElement::new(vec![i], p, irr.clone()));
     }
 ```
+### Definition of Characteristic
+- The characteristic of a ring $mathbb{R}$, often denoted $\text{char}(\mathbb{R})$, is defined to be the smallest positive number of copies of the ring's multiplicative identity (1) that will sum to the additive identity (0). If no such number exists, the ring is said to have characteristic zero.
+- $\underbrace{1 + \dots + 1}_\textrm{p summands} = 0$
+- So, for any field element $a\in\mathbb{F}$ we have $p.a = 0$
 ### Solution
 - We want to prove that $2^{15}$ is in the table.
 - **We put $2^{15}$, $p$ times in the $w$**.
@@ -41,7 +45,7 @@ from a larger extension to have roughly 100 bits of security.
         witness.push(invalid_witness.clone());
     }
 ```
-- Then, in the rhs of **(1)** this sum will be cancel out because in the field $\mathbb{F}_p$, $p$ is equal $0$.
+- Then, in the rhs of **(1)** this sum will be cancel out because in the field $\mathbb{F}$, the characteristic is $p$.
 - So, in fact, we add zero times $2^{15}$ in the witness.
 - **Since in the verifier part any functions not check this variant, So we easily can cheat on proof.**
 - **I mean in the verifier side should check that $m_i \neq 0.$**
