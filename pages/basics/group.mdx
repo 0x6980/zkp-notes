@@ -1,28 +1,31 @@
 ## Group
-Suppose $G$ is a set, and $*$ is a binary operator $* : G \times G \rarr G$\
+Suppose $G$ is a set, and $*$ is a binary operator $* : G \times G \rightarrow G$\
 Then $(G, *)$ is a group if 
 1. $*$ is closed binary operator. So we have:
-$$
+```math
 \forall a,b \in G; \space \space a * b \in G 
-$$
+```
+
 2. Associativity: 
-$$
+```math
 \forall a, b, c \in G; \space \space a * (b * c) = (a * b) * c 
-$$
+```
+
 3. Identity: $G$ has identity element $e$.
-$$
-\exist e \in G \space s.t. \space \space \forall a \in G, \space \space a * e = e * a = a
-$$
+```math
+\exists e \in G \space s.t. \space \space \forall a \in G, \space \space a * e = e * a = a
+```
+
 4. Inverse: Every element in $G$ have an inverse.
-$$
-\forall a \in G, \space \space \exist b \in G, \space \space s.t. \space \space a * b = b * a = e
-$$
+```math
+\forall a \in G, \space \space \exists b \in G, \space \space s.t. \space \space a * b = b * a = e
+```
 
 ## Abelian (Commutative) Group
 $(G, *)$ is a Abelian group if satisfies the Commutativity property:
-$$
+```math
 \forall a, b \in G, \space \space a * b = b * a.
-$$ 
+```
 
 ## Notation
 We will denote the multiplicative and additive shorthand for iterated group operations by default. That is,

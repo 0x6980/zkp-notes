@@ -14,14 +14,16 @@
 - $P(x) = p_0 + p_1x + p_2x^2 + \dots + p_dx^d$
 - Evaluate at $n \geqslant d +1$ points.
 - I pick $1, 2,\dots , n$ as $n$ points. So we have:
-$$
+
+```math
 \begin{aligned}
 (1, P(1)) = (1, p_0 + p_1.1 + p_2.1^2 + \dots + p_d.1^d)\space\space\space\text{take}\space O(d)\space\text{operations}\\
 (2, P(2)) = (2, p_0 + p_1.2 + p_2.2^2 + \dots + p_d.2^d)\space\space\space\text{take}\space O(d)\space\text{operations}\\
 \vdots\\
 (n, P(n)) = (n, p_0 + p_1.n + p_2.n^2 + \dots + p_d.n^d)\space\space\space\text{take}\space O(d)\space\text{operations}
 \end{aligned}
-$$
+```
+
 - Each evaluation will take $O(d)$ operations, then all evaluations take $O(nd)$ which ends up being $o(d^2)$ to evaluate all $n$ points.
 - **Question**: Can we find a way to optimize this?
 - Instead of considering $P(x)$, we wanted to instead just evaluate a simple polynomials like $p(x) = x^2$ and $p(x) = x^3$ and evaluate at 8 points.
@@ -29,27 +31,31 @@ $$
 - Is there any set of points when knowing value of one point **immediately** implies the value of another?
 - **In fact there is**:
     - If we pick $x=1$ we immediately know the value of the point $x=-1$. Similarly:
-    $$
+
+    ```math
     \begin{aligned}
     (1, 1) \space\space&\text{immediately know the value} \space\space (-1, 1)\\
     (2, 4) \space\space&\text{immediately know the value} \space\space (-2, 4)\\
     (3, 9) \space\space&\text{immediately know the value} \space\space (-3, 9)\\
     (4, 16) \space\space&\text{immediately know the value} \space\space (-4, 16)
     \end{aligned}
-    $$
+    ```
+
     - Extending this idea the key property we want here is that our eight points should be **positive** and **negative** pairs
     - The reason this works is due to property of even functions where a function evaluated a $-x$ is going to equal the function evaluated at positive $x$
     - So $P(-x) = P(x)$.
     - What about $P(x) = x^3$? Dose the same trick work?
     - It actually kind of does but one caveat. Each positive $x$ value will have the same value as negative $x$ value but with sign flipped
-    $$
+    
+    ```math
     \begin{aligned}
     (1, 1) \space\space&\text{immediately know the value} \space\space (-1, -1)\\
     (2, 8) \space\space&\text{immediately know the value} \space\space (-2, -8)\\
     (3, 27) \space\space&\text{immediately know the value} \space\space (-3, -27)\\
     (4, 64) \space\space&\text{immediately know the value} \space\space (-4, -64)
     \end{aligned}
-    $$
+    ```
+
     - So, $P(-x) = -P(x)$.
 - So, in these two cases of odd and even degree single term polynomials **instead of evaluating 8 individual points we can actually get away with evaluating exactly 4 positive points**, which we immediately know the value of the respective negative points
 - More general example:
@@ -62,13 +68,15 @@ $$
     - We have two new polynomials have only even degree terms: $P_e(x^2), P_o(x^2)$.
     - $P(x) = P_e(x^2) + xP_o(x^2)$.
     - $P_e(x^2), P_o(x^2)$ have degree 2.
-    $$
+    
+    ```math
     \begin{aligned}
     P(x_i) &= P_e(x_i^2) + x_iP_o(x_i^2)\\
     P(-x_i) &= P_e(x_i^2) - x_iP_o(x_i^2)
     \end{aligned}
-    $$
-## Generalization the observation to a polynomial with degree $n-1$
+    ```
+
+## Generalization the observation to a polynomial with degree n-1
 - We want evaluate at $n$ points.
 - We can split the polynomial into even and odd terms with smaller polynomials $P_e(x^2), P_o(x^2)$ with degree $\frac{n}{2}-1$.
 - So how do we evaluate these polynomials with half the degree of our original polynomial?
@@ -87,17 +95,21 @@ $$
     - $P_o(x^2): [p_1, p_3, p_5,\dots,p_{n-1}]$ and $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$.
         - $[P_o(x_1^2), P_o(x_2^2), P_o(x_4^2), \dots, P_o(x_{\frac{n}{2}}^2)]$.
 - Once we recursively evaluate these smaller polynomials we can then go through every point in our original set of $n$ points and calculate the respective values by utilizing the relationship between the positive and negative paired points.
-$$
+
+```math
 \begin{aligned}
 &P(x_i) = P_e(x_i^2) + x_iP_o(x_i^2)\\
 &P(-x_i) = P_e(x_i^2) - x_iP_o(x_i^2)\\
 &i = {1, 2, \dots, \frac{n}{2}}
 \end{aligned}
-$$
+```
+
 - This gives us the **value representation** of our original polynomial $P(x)$
-$$
+
+```math
 [P(x_1),P(-x_1), P(x_2),P(-x_2),\dots,P(x_{\frac{n}{2}}),P(-x_{\frac{n}{2}})]
-$$
+```
+
 - So, we have **$O(n \log n)$ Recursive Algorithm**. Since the two recursive sub problems have half the size of the original problem and take linear time to evaluate $n$ points.
 - This would be huge improvement from our earlier quadratic running time. But
 ## One major problem:
@@ -105,18 +117,21 @@ $$
     - The entire scheme relies on the fact that the polynomial will have positive and negative paired points for evaluation.
     - This works at the top level but next level we are evaluating $\frac{n}{2}$ points where each point is squared value.
     - These all end up being positive so the recursion breaks.
-    $$
+    
+    ```math
     [\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}] \space\space\space\space \text{are} \pm\space\text{paired.}
-    $$
-    $$
+    ```
+    
+    ```math
     [x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2] \space\space\space\space \text{are not} \pm\space\text{paired.}
-    $$
+    ```
+    
     - **The natural question is can we make these new set of points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$, $\pm$ paired?**
     - **Ingenious Idea behind FFT**: The only way this is possible is if we expand the domain of possible initial points include **complex number**.
     - For special choice of complex numbers the recursive relation works perfectly where every subsequence set of points will contain $\pm$ pairs.
     - What possible set of initial $n$ points has this property?
 
-### What possible set of initial $n$ points has this property?
+### What possible set of initial n points has this property?
 - This is a hard question and to answer it we're going to do a little bit of reverse engineering with an example.
 - Let $P(x) = x^3 + x^2 - x - 1$.
 - Which requires at least $n = 4$ points for its **value representation**.
@@ -125,7 +140,7 @@ $$
 - Key constraint here is that for the recursion to work these two points also have to be $\pm$ pairs.
 - So we have an equivalence between $x_2^2$ and $-x_1^2$.
 - At the bottom level of the recursion will have single point $x_1^4$
-- $x_1 = 1$ then $-x_1$ = -1$ implies $x_1^2 = 1. Then $x_2^2$ should be -1. Then we have to choose, $x_2 = i, -x_2 = -i$. then  $x_1^4 = 1$
+- $x_1 = 1$ then $-x_1 = -1$ implies $x_1^2 = 1. Then $x_2^2$ should be -1. Then we have to choose, $x_2 = i, -x_2 = -i$. then  $x_1^4 = 1$
 - **Alternative Perspective** is Solution $x^4 = 1$. Since the bottom layer of the recursion the value of any of our original points to the power 4 was 1.
 - We know this equation has 4 solutions. All of which are encompassed by a special set of points called the 4th roots of unity.
 - Generalization..
@@ -140,7 +155,8 @@ $$
 - The result $x_i^n = 1$
 - The points are $n^{\text{th}}$ roots of unity.
 
-### Visualize $n^{th}$ roots of unity
+### Visualize roots of unity
+- $n^{th}$ roots of unity
 - $n$ roots of unity
     - $z^n = 1$.
     - Evaluate $P(x)$ at $[1, \omega^1, \omega^2, \dots, \omega^{n-1}]$.
@@ -150,9 +166,9 @@ $$
 
 ## Code FFT
 - Let $P: [p_0,p_1,\dots, p_{n-1}]$ and $n$ in power of 2.
-```jsx
 
-$\text{def FFT}(P):&&&&&&&&\\$
+```math
+\text{def FFT}(P):&&&&&&&&\\
     n = \text{len}(P)\\
     \text{if}\space n == 1:\\
        \text{return}\space P\\
@@ -166,6 +182,3 @@ $\text{def FFT}(P):&&&&&&&&\\$
         y[j] = y_e[j] + \omega^j y_o[j]\\
         y[j+ \frac{n}{2}] = y_e[j] + -\omega^j y_o[j]\\
 ```
-
-
-![]()

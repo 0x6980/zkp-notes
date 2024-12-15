@@ -7,7 +7,7 @@ export default {
     <>
       <span className="mr-2 font-extrabold hidden md:inline">Zero Knowledge Proof</span>
       <span className="text-gray-600 font-normal hidden md:inline">
-      - Tutorial
+      - Notes
       </span>
     </>
   ),
@@ -17,13 +17,13 @@ export default {
       <meta name="theme-color" content="#ffffff" />
       <meta name="viewport" content="width=device-width, initial-scale=1.0" />
       <meta httpEquiv="Content-Language" content="en" />
-      <meta name="description" content="0x6980: ZKP journey" />
-      <meta name="og:description" content="0x6980: ZKP journey" />
+      <meta name="description" content="0x6980: ZKP notes" />
+      <meta name="og:description" content="0x6980: ZKP notes" />
       <meta name="twitter:card" content="summary_large_image" />
       <meta name="twitter:image" content="https://0x6980.github.io/zkp/0x6980.jpg" />
       <meta name="twitter:site:domain" content="0x6980.github.io" />
       <meta name="twitter:url" content="https://0x6980.github.io/zkp/index" />
-      <meta name="og:title" content="0x6980: ZKP journey" />
+      <meta name="og:title" content="0x6980: ZKP notes" />
       <meta name="og:image" content="https://0x6980.github.io/zkp/0x6980.jpg" />
       <meta name="apple-mobile-web-app-title" content="0x6980" />
       <link

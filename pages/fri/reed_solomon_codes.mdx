@@ -9,7 +9,7 @@
 
 ##  Vandermonde matrix
 - A matrix $G \in F^{m \times n}$ ($m$ rows and $n$ columns). with the elements $G_{ij} = \alpha_i^{j-1}$. So:
-$$
+```math
 G =
 \begin{bmatrix}
    1 & \alpha_1 & \alpha_1^2 & \dots & \alpha_1^{n-1} \\
@@ -17,12 +17,14 @@ G =
    \vdots & \vdots & \vdots & \ddots & \vdots \\
    1 & \alpha_m & \alpha_m^2 & \dots & \alpha_m^{n-1}
 \end{bmatrix}_{m\times n}
-$$
+```
+
 - A Vandermonde matrix is ​​therefore completely determined by the numbers $\alpha_{i}(i=1,2,\ldots ,m)$.
 ### Polynomial evaluation
 - Consider polynomial $p(x) = p_nx^n + p_{n-1}x^{n-1}+\dots + p_0$, then we can use Vandermonde matrix for evaluating $p(x)$ in a number of points $r_0, r_1, \dots, r_m$.
 - First define the Vandermonde matrix of $r_0, r_1, \dots, r_m$:
-$$
+
+```math
 G =
 \begin{bmatrix}
    1 & r_0 & r_0^2 & \dots & r_0^{n} \\
@@ -31,9 +33,11 @@ G =
    \vdots & \vdots & \vdots & \ddots & \vdots \\
    1 & r_m & r_m^2 & \dots & r_m^{n}
 \end{bmatrix}_{(m+1) \times (n+1)}
-$$
+```
+
 - Then multiply $G$ by the vector $p = (p_0, p_1, \dots,p_n)$:
- $$
+
+```math
 G.p =
 \begin{bmatrix}
    1 & r_0 & r_0^2 & \dots & r_0^{n} \\
@@ -56,7 +60,8 @@ G.p =
    \vdots \\
    \displaystyle\sum_{i=0}^n {p_{i}r_m^{i}} \\
 \end{bmatrix}
-$$
+```
+
 - It is obvious the last vector is evaluation $p(x)$ on $r_0, r_1, \dots, r_m$
 
 ## Linear codes
@@ -66,12 +71,12 @@ $$
 - $n$ is the message length.
 - $m$ is the block length.
 
-### Distance of code $G$.
+### Distance of code
 - $\delta = \min\limits_{x\in F^n\text{\textbackslash} \{0\}} \Vert Gx \Vert_0$. where $\Vert Gx \Vert_0$ denotes the number of nonzero entries in $Gx \in F^m$.
-- $x, y \in F^n$ with $x \not = y$. Tehy will differ in at least $d$ places after being encoded.
-$$
+- $x, y \in F^n$ with $x \not = y$. They will differ in at least $d$ places after being encoded.
+```math
 \Vert Gx - Gy \Vert_0 = \Vert G(x-y) \Vert_0 \geqslant d,
-$$
+```
 since $x-y \not = 0$.
 
 ### Reed–Solomon codes
@@ -81,7 +86,7 @@ since $x-y \not = 0$.
 - We want to generate $Gx$ in definition of linear codes with Reed–Solomon definition:
     - Based on Reed–Solomon: $G \in F^{m×n}$ and $G_{ij} = α_{i}^{j−1}$
     - $Gx$ is the encoded message $x$, and called codeword.
-    $$
+    ```math
     Gx = 
     \begin{bmatrix}
         1 & \alpha_1 & \alpha_1^2 & \dots & \alpha_1^{n-1} \\
@@ -101,7 +106,7 @@ since $x-y \not = 0$.
         \vdots \\
         \displaystyle\sum_{j=1}^n {x_{j} \alpha_m^{j-1}}
     \end{bmatrix}
-    $$
+    ```
     - So, $(Gx)_i = \displaystyle\sum_{j=1}^n {x_{j} \alpha_i^{j-1}}$ is a degree at most $n-1$ polynomial with coefficients $x_j$, evaluated at each of the $\alpha_i$
     - So, this polynomial has at most $n-1$ roots.
     - Then the distance of this code is at least m − n + 1 since. (**0x6980 uderestanding:** Because we can create a polynomial where $\alpha_1, \dots, \alpha_{n-1}$ are the roots, we then use the coefficients of this polynomial instead of $x_j$. By doing so, we make an $x$ such that $m-n+1$ of the coordinates of $Gx$ are zero.)
@@ -114,12 +119,12 @@ since $x-y \not = 0$.
 The collection of codes $RS[F; S; ρ]$ where $F$ is a binary field and $S$ an additive coset. 
 
 ## Reed-Solomon (RS)
-- The code $RS[F; S; ρ]$ is the space of functions $f : S \rarr F$ that are evaluations of polynomials of degree $d < ρN$
+- The code $RS[F; S; ρ]$ is the space of functions $f : S \rightarrow F$ that are evaluations of polynomials of degree $d < ρN$
 - $S$ is an evaluation set of $N$ elements in a finite field $F$.
-- rate parameter $ρ \in \lparen 0; 1\rbrack$.
+- rate parameter $ρ \in ( 0; 1\rbrack$.
 
 ## RS proximity problem
-- The verifier has oracle access to $f : S \rarr F$.
+- The verifier has oracle access to $f : S \rightarrow F$.
 - Problem: Is the verifier able with "large" confidence and "small" query complexity, determine that:
     1. $f$ is a codeword of RS[F; S; ρ] Or
     2. $f$ is $\delta$-far from all codewords.  (Hamming distance)
@@ -131,19 +136,20 @@ The collection of codes $RS[F; S; ρ]$ where $F$ is a binary field and $S$ an ad
     - functions that are δ-far from the code rejected with probability ≥ δ.
 
 ## Binary field
-The finite field $F_q$ is binary field if $q = 2^m, \space m \in \N$.
+The finite field $F_q$ is binary field if $q = 2^m, \space m \in \mathbb{N}$.
 
 ## Additive Coset
 - $H$ is subgroup of group $(G, +)$.
 - $g \in G$.
 - The left and right **coset** of $H$ in $G$ are
 
-$$
+```math
 \tag{left coset}
 g + H = \{g + h \space | \space h \in H\}
-$$
-$$
+```
+
+```math
 \tag{right coset}
 H + g = \{h + g \space | \space h \in H\}
-$$
+```
 - If G is commutative group then $\forall H,\space \forall g \in G; \space\space g + H = H + g$.

@@ -17,13 +17,14 @@
 # Commit:
 - $commit(pp, f)$ => $com_f = f(s).g_1 \in G_1$
 - We know $s$ is deleted. but how we can evaluate $f(s).g_1$?
-$$
+```math
 \begin{aligned}
 f(s).g_1 &= (a_0 + a_1s + \dots+ a_ds^d).g_1\newline
        &= a_0.g_1 + a_1s.g_1 + \dots+ a_ds^d.g_1\newline
        &= a_0.h_0 + a_1.h_1 + \dots+ a_d.h_d
 \end{aligned}
-$$
+```
+
 - We have $h_0, h_1, h_2, \dots, h_d \in G_1$ from $pp$
 - The prover sends $com_f$ to the verifier.
 
@@ -32,32 +33,33 @@ $$
 - Prover algorithm: $Prover(pp,f,u,v)$
 - Verifier algorithm: $Verifier(pp, com_f, u, v)$
 
-$$
+```math
 \begin{aligned}
-\tag{1}
 f(u) = v &\Longleftrightarrow u \space\space\text{is root of}\space\space f-v\newline
          &\Longleftrightarrow (x-u) \space\space\text{divides}\space\space f-v\newline
 	     &\Longleftrightarrow \text{exists polynomial}\space\space q \space\space \text{s.t.} \space\space q(x).(x-u) = f(x)-v
 \end{aligned}
-$$
+```
 
 - Now, the prover computes:
     1. $q(x)$ from (1). We know $q(x)$ has at most $d-1$ degree, because $q(x)=\dfrac {f(x)-v} {x-u}$
     2. and commitment of $q$, $com_q$ which serves proof. The $com_q$ can calculated as below: 
-$$
+```math
 \begin{aligned}
 com_q &= q(s).g_1\newline
       &= (q_0 + q_1s + \dots+ q_{d-1}s^{d-1}).g_1\newline
       &= q_0.g_1 + q_1s.g_1 + \dots+ q_{d-1}s^{d-1}.g_1\newline
       &= q_0.h_0 + q_1.h_1 + \dots+ q_{d-1}.h_{d-1}
 \end{aligned}
-$$
+```
+
 - The prover sends $com_q$ to the verifier as proof:
 - The verifier accept if
-$$
+```math
 \tag{2}
 e(com_q, (s-u).g_2) = e(com_f - v.g_1, g_2)
-$$
+```
+
 - Now, we are checking that:
     1. Is possible for the verifier compute both side of (2)?
         - The verifier have $g_2$ and $s.g_2$ from the $pp$.
@@ -75,14 +77,15 @@ $$
         \end{aligned}
         ```
 
-        $$
+        ```math
         \tag{rhs}
         \begin{aligned}
         e(com_f -v.g_1, g_2)  &= e(f(s).g_1 - v.g_1, g_2)\newline
                         &= e((f(s)-v).g_1, g_2)\newline
                         &= e(g_1,g_2)^{f(s)-v}
         \end{aligned}
-        $$
+        ```
+
         - **Correctness** means that, if the prover followed the steps as we defined, they can produce a proof that will accept by the verifier.
         - If the prover followed the steps, then we have $q(x).(x-u) = f(x)-v$ from $(1)$. This implies $q(s).(s-u) = f(s)-v$. Then, the (lhs) and 
         (rhs) are equal and then the verifier will accept.
@@ -93,9 +96,10 @@ $$
          so they cannot perform the polynomial division, as there will always be a remainder. So this clearly doesn’t work.
         - **Try 2** for creating fake proof: So, the prover can try to work directly in the group: What if, for some commitment $com_f$,
          he could compute the group element
-        $$
+        ```math
         proof_{fake} = \dfrac {1} {s-u}(com_f - v^{\prime}.g_1)
-        $$
+        ```
+        
         If they could do this, they could obviously just prove anything they want. Intuitively, this is hard because you have to multiply by something that involves $s$,
         but you don’t know anything about $s$. And that's why $s$ should be removed in **trusted setup**.
 - Note that, here we used general group for kzg commitment. So, $G_1, G_2$ can be the **Elliptic Curve pairing groups** which are finite cyclic subgroups of Elliptic Curves group.
