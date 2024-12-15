@@ -5,11 +5,11 @@
 Given configuration $C_{LK} := \left(T, l, t\right)$ where $l$ is the number of lookups and $t\in\mathbb{F}^{T}$ is the lookup table. the relation $R_{LK}$ is the set of tuples $w\in\mathbb{F}^l$ such that $w_i\in t$ for all $i = 1, \dots, l$.
 ### Lemma
 Let $\mathbb{F}$ be a field of characteristic $p>\max(l, T)$. Given two sequence of field elements $[w_i]_{i=1}^{l}$ and $[t_j]_{j=1}^{T}$ we have $\{w_i\}\subseteq \{t_j\}$ as sets (with multiples of values removed) if and only if there exist a sequence $[m_j]_{j=1}^{T}$ of field elements such that
-$$
+```math
 \begin{equation}
 \sum_{i=1}^{l}\frac{1}{x+w_i} = \sum_{j=1}^{T}\frac{m_j}{x+t_j}
 \end{equation}
-$$
+```
 - In the proof of this lemma we construct $m_j = \text{number of}\: i\: \text{s.t.} \: w_i = t_j$ (number of repetition $w_i$)
 
 

@@ -1,0 +1,149 @@
+## Noir lang
+- Based on [Noir lang](
+    https://noir-lang.org/docs/dev/getting_started/quick_start)
+
+### `BoundedVec<T, MaxLen>`
+- A `BoundedVec<T, MaxLen>` is a growable storage similar to a `Vec<T>` except that it is bounded with a maximum possible length.
+- Example:
+```rust
+let mut vector: BoundedVec<Field, 10> = BoundedVec::new();
+for i in 0..5 {
+    vector.push(i);
+}
+assert(vector.len() == 5);
+assert(vector.max_len() == 10);
+```
+
+### `max_len()`
+- Returns the maximum length of the vector. This is always equal to the MaxLen parameter this vector was initialized with.
+- In the example above `assert(vector.max_len() == 10);` shows that max length is 10.
+- Also, it is abvouis because in the declaring of vector we simply used 10 as `MaxLen`.
+### `len()`
+- Returns the current length of the vector.
+- In the example above we pushed 5 items in the `vector` and the another 5 items is still zero.
+- As you can see, `assert(vector.len() == 5);` shows that the length of vector is 5.
+
+### `sha256_var`
+- Given an array of bytes, returns the resulting sha256 hash. Specify a `message_size` to **hash only the first `message_size` bytes of the input**.
+- [link for more details](https://noir-lang.org/docs/noir/standard_library/cryptographic_primitives/hashes)
+
+## Puzzle
+### Intro
+A cutting-edge crypto company unveiled HTTP://JWT.PK, a revolutionary identity 
+infrastructure platform designed to simplify private key management. By allowing 
+users to register seamlessly with existing keys, the service promised to redefine convenience and 
+security in the digital world. It allows users to send amounts up to $100 without having access to their 
+private keys.
+
+The registration process goes as follows: Users sign up with their existing 
+public keys [pk](HTTP://JWT.PK) then samples a secret value called “pepper” and computes an identifier 
+of the form: `{pub_key}_{pepper}`. SHA256 of the identifier is then added to the set of registered identifiers.
+
+Users can later authenticate a transaction by simply providing a proof 
+of knowledge of the whitelisted identifier formed by the (pk, pepper) pair without needing to use 
+their private key at any step of the process.
+
+Alice found out that Bob registered to HTTP://JWT.PK with a 
+public key “BOB_pk”. She then registered using “ALICE_pk” and 
+obtained “ALICE_pepper” from HTTP://JWT.PK.
+
+### Code
+- Here are the code in puzzle:
+```rust
+1: // THIS FILE CANNOT BE CHANGED
+2: 
+3: use noir_string_search::{StringBody, StringBody128, SubString, SubString32};
+4:
+5: // alice_pk = [155, 143, 27, 66, 87, 125, 33, 110, 57, 153, 93, 228, 167, 76, 120, 220, 178, 200, 187, 35, 211, 175, 104, 63, 140, 208, 36, 184, 88, 1, 203, 62]
+6: // alice_pepper = [213, 231, 76, 105, 105, 96, 199, 183, 106, 26, 29, 7, 28, 234, 145, 69, 48, 9, 254, 205, 79, 21, 90, 13, 39, 172, 114, 59, 131, 15, 78, 118]
+7:
+8: fn main(identifier: BoundedVec<u8, 128>, pub_key: pub [u8; 32], whitelist: pub [[u8; 32]; 10]) {
+9:     // the identifier hashes to a digest that is in the public whitelist
+10:    let digest = std::hash::sha256_var(identifier.storage(), identifier.len() as u64);
+11:    let mut present = false;
+12:    for i in 0..whitelist.len() {
+13:        if whitelist[i] == digest {
+14:            present = true;
+15:        }
+16:    }
+17:    assert(present);
+18:
+19:    // the specified public key is in the identifier
+20:    let id_haystack: StringBody128 = StringBody::new(identifier.storage(), 128);
+21:    let pk_needle: SubString32 = SubString::new(pub_key, 32);
+22:    let (result, _): (bool, u32) = id_haystack.substring_match(pk_needle);
+23:    assert(result);
+24: }
+
+```
+- Line [5] is `alice_pk` and line [6] is `alice_pepper`.
+- The `main` function have 3 parameters: 
+    - `identifier` is type of `BoundedVec<u8, 128>`, and considered as private input constraint system,
+    - `pub_key` is array of `u8` with size 32, and considered as public input constraint system,
+    - `whitelist` is array of array of `u8` with size 32 and considered as public input constraint system.
+- In line, [10]() the `sha256_var` method hashes the `identifier`.
+- In lines, [11-17]() the `main` function wants to ensure that the `identifier` hash is in the `whitelist`.
+- In lines, [20-23]() the `main` function wants to ensure that the `pub_key` is appear in the `identifier`.
+- Based on puzzle instruction the `identifier` is equal to `{pub_key}_{pepper}`.
+
+### `Prover.toml`
+- In Noir lang, the `Prover.toml` file is where our input values will be specified.
+- `nargo execute` command, compile and execute our Noir program. and generate the witness that we need to feed to our proving backend.
+- Here is our `Prover.toml`:
+```rust
+# BEGIN DON'T CHANGE THIS SECTION
+
+pub_key = [157, 133, 167, 136, 43, 161, 75, 166, 33, 14, 35, 106, 238, 18, 60, 56, 93, 209, 205, 52, 247, 110, 174, 192, 20, 58, 70, 42, 215, 98, 195, 150]
+whitelist = [
+    [235, 220, 189, 130, 58, 65, 55, 20, 75, 101, 34, 52, 87, 237, 210, 230, 97, 44, 199, 54, 139, 184, 61, 103, 40, 41, 177, 255, 90, 133, 243, 162],
+    [104, 166, 62, 181, 1, 228, 244, 115, 180, 141, 231, 245, 235, 232, 254, 20, 44, 223, 11, 8, 122, 250, 202, 224, 78, 198, 165, 211, 249, 86, 201, 161],
+    [131, 135, 86, 204, 58, 1, 220, 226, 90, 219, 112, 36, 1, 32, 243, 102, 219, 56, 119, 222, 191, 237, 192, 62, 176, 73, 50, 160, 23, 243, 250, 21],
+    [14, 246, 194, 80, 125, 192, 12, 37, 168, 229, 132, 71, 41, 218, 184, 95, 126, 140, 231, 73, 188, 67, 87, 30, 31, 2, 72, 186, 89, 254, 138, 174],
+    [197, 93, 46, 57, 214, 23, 120, 199, 214, 34, 1, 202, 41, 227, 230, 122, 177, 5, 179, 4, 197, 95, 230, 61, 152, 120, 106, 49, 96, 175, 169, 154],
+    [32, 197, 4, 79, 137, 124, 121, 121, 120, 190, 124, 73, 155, 106, 147, 81, 49, 138, 184, 149, 43, 22, 108, 75, 134, 0, 97, 84, 145, 114, 198, 230],
+    [60, 38, 50, 20, 10, 157, 111, 208, 222, 231, 6, 226, 147, 32, 50, 158, 54, 253, 120, 103, 17, 99, 147, 1, 14, 52, 229, 120, 229, 115, 252, 197],
+    [185, 43, 209, 227, 198, 215, 98, 164, 22, 119, 133, 252, 151, 141, 83, 27, 200, 38, 148, 139, 71, 213, 35, 250, 108, 23, 172, 249, 62, 248, 222, 152],
+    [190, 80, 189, 89, 178, 25, 7, 226, 190, 11, 159, 71, 247, 207, 103, 179, 22, 156, 195, 99, 232, 20, 61, 170, 214, 81, 246, 35, 211, 184, 77, 152],
+    [190, 109, 123, 228, 174, 32, 60, 171, 12, 164, 196, 218, 12, 200, 191, 101, 28, 15, 130, 203, 4, 165, 3, 157, 68, 159, 122, 209, 184, 103, 215, 149]
+]
+
+# END DON'T CHANGE THIS SECTION
+
+# BEGIN HACK
+
+[identifier]
+len = "128"
+storage = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+# END HACK
+```
+## Solution
+- Alice want to construct the `identifier` in such a way that it pretends to be logged in as Bob.
+    - First, the `identifier` hash should be in `whitelist`.
+    - Second, the `identifier` should include Bob's public key.
+### First: the `identifier` hash should be in `whitelist`
+- As below shows the byte of underline char(_) is 95.
+```rust
+fn main() {
+    let underline = [95].as_str_unchecked();
+    assert_eq(underline, "_");
+}
+```
+- Now we want to construct the `identifier`, which is `{pub_key}_{pepper}`: 
+```rust
+5: // alice_pk = [155, 143, 27, 66, 87, 125, 33, 110, 57, 153, 93, 228, 167, 76, 120, 220, 178, 200, 187, 35, 211, 175, 104, 63, 140, 208, 36, 184, 88, 1, 203, 62]
+6: // alice_pepper = [213, 231, 76, 105, 105, 96, 199, 183, 106, 26, 29, 7, 28, 234, 145, 69, 48, 9, 254, 205, 79, 21, 90, 13, 39, 172, 114, 59, 131, 15, 78, 118]
+```
+- So, By placing the `alice_pk` first, followed by the `95` as byte of "_", and finally adding the `alice_pepper`, we have created a 65-byte array as below:
+
+storage = [155, 143, 27, 66, 87, 125, 33, 110, 57, 153, 93, 228, 167, 76, 120, 220, 178, 200, 187, 35, 211, 175, 104, 63, 140, 208, 36, 184, 88, 1, 203, 62, **95**, 213, 231, 76, 105, 105, 96, 199, 183, 106, 26, 29, 7, 28, 234, 145, 69, 48, 9, 254, 205, 79, 21, 90, 13, 39, 172, 114, 59, 131, 15, 78, 118, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+- In the `Prover.toml` file, by changing the `len = "128"` to `len = "65"` we can pass the **First** part of HACK.
+- **Because the `sha256_var` take `identifier` and hash only the first `identifier.len()` bytes of the input.**
+### Second: the `identifier` should include Bob's public key
+- It is sufficient to place `BOB_pk` after 65th byte in the `storage` array. With this 32 bytes, the `storage` will have 97 bytes. This will satisfy the *Second* section which is "checking that the Bob's public key is appear in the identifier".
+```rust
+pub_key = [157, 133, 167, 136, 43, 161, 75, 166, 33, 14, 35, 106, 238, 18, 60, 56, 93, 209, 205, 52, 247, 110, 174, 192, 20, 58, 70, 42, 215, 98, 195, 150]
+```
+storage = [155, 143, 27, 66, 87, 125, 33, 110, 57, 153, 93, 228, 167, 76, 120, 220, 178, 200, 187, 35, 211, 175, 104, 63, 140, 208, 36, 184, 88, 1, 203, 62, **95**, 213, 231, 76, 105, 105, 96, 199, 183, 106, 26, 29, 7, 28, 234, 145, 69, 48, 9, 254, 205, 79, 21, 90, 13, 39, 172, 114, 59, 131, 15, 78, 118, **157, 133, 167, 136, 43, 161, 75, 166, 33, 14, 35, 106, 238, 18, 60, 56, 93, 209, 205, 52, 247, 110, 174, 192, 20, 58, 70, 42, 215, 98, 195, 150**, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+
+- **It is important to note that `identifier.len()` will not change with adding the 32 byte for `pub_key` and will return exactly the `len` that we specified in the `Prover.toml` file as input.**

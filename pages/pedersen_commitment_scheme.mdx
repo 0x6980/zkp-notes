@@ -1,22 +1,22 @@
 - $G = \{0, g, g^2, g^3, \dots, g^{p-1}\}$ is a finite cyclic group of prime order $p$ and $g$ is generator of $G$ where
-$$
+```math
 g^i  *  g^j = g^{i+j \bmod p}
-$$
+```
 
 - Fix $g, h \in G$ and let $R = \{0, 1, 2, \dots, p-1\}$.
 - For $m, r \in R$ define $H(m, r) = g^m * h^r$
 - FACT: For a "cryptographic" group G, this H is Collision resistance, So
 
-$$
+```math
 commit(m, r) = H(m,r) = g^m * h^r
-$$
+```
 
 - This commitment has interesting property called "Homomorphic" that is:
-$$
+```math
 \begin{aligned}
 commit(m_1, r_1) * commit(m_2, r_2) &= g^m_1 * h^r_1 * g^m_2 * h^r_2\newline
             &= g^m_1 * g^m_2 * h^r_1 * h^r_2\newline
             &= g^{m_1+m_2} * h^{r_1+r_2}\newline
             &= commit(m_1+m_2, r_1+r_2)
 \end{aligned}
-$$
+```
