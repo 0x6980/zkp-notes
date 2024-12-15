@@ -1,5 +1,5 @@
 ## Polynomial
-- $P(x) = p_0 + p_1x + p_2x^2 + \dots + p_dx^d$
+- Let $P(x) = p_0 + p_1x + p_2x^2 + \dots + p_dx^d$
 ## Coefficients representations
 - $P(x): [p_0, p_1,\dots,p_d]$
 ## Value representations
@@ -129,5 +129,43 @@ $$
 - **Alternative Perspective** is Solution $x^4 = 1$. Since the bottom layer of the recursion the value of any of our original points to the power 4 was 1.
 - We know this equation has 4 solutions. All of which are encompassed by a special set of points called the 4th roots of unity.
 - Generalization..
-
+### Another example
+- Let $P(x) = x^5 + 2x^4 - x^3 + x^2+ 1$.
+- Need $n \geq 6$ points. It is convenient choose power of 2. So, let $n = 8$.
+- The result $x_i^8 = 1$
+- The points are $8^{\text{th}}$ roots of unity.
 ### Generalization of n'th roots of unity
+- Let $P(x) = p_0 + p_1x + p_2x^2 + \dots + p_dx^d$
+- Need $n \geq d+1$ points, $n = 2^k,\space k\in\Z$.
+- The result $x_i^n = 1$
+- The points are $n^{\text{th}}$ roots of unity.
+
+### Visualize $n^{th}$ roots of unity
+- $n$ roots of unity
+    - $z^n = 1$.
+    - Evaluate $P(x)$ at $[1, \omega^1, \omega^2, \dots, \omega^{n-1}]$.
+    - $(\omega^j, \omega^{j+\frac{n}{2}})$ are $\pm$ paired. Because $-\omega^j = \omega^{j+\frac{n}{2}}$.
+- $\frac{n}{2}$ roots of unity.
+    - Then evaluate $P_e(x^2), P_o(x^2)$ at $[1, \omega^2, \omega^4, \dots, \omega^{\frac{n}{2}-1}]$.
+
+## Code FFT
+- Let $P: [p_0,p_1,\dots, p_{n-1}]$ and $n$ in power of 2.
+```jsx
+
+$\text{def FFT}(P):&&&&&&&&\\$
+    n = \text{len}(P)\\
+    \text{if}\space n == 1:\\
+       \text{return}\space P\\
+    \omega = e^{\frac{2\pi i}{n}}\\
+    P_e = [p_0,p_2,\dots, p_{n-2}]\\
+    P_o = [p_1,p_3,\dots, p_{n-1}]\\
+    y_e = FFT(P_e)\\
+    y_o = FFT(P_o)\\
+    y = [0] * n\\
+    \text{for}\space\space j \space\space\text{in}\space\space \text{range}(\frac{n}{2}):\\
+        y[j] = y_e[j] + \omega^j y_o[j]\\
+        y[j+ \frac{n}{2}] = y_e[j] + -\omega^j y_o[j]\\
+```
+
+
+![]()
