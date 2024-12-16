@@ -1,6 +1,6 @@
 export default {
   index: 'List',
-  puzzle_zeitgeist: 'write-up-puzzle-zeitgeist',
-  puzzle_dont_look_up: 'write-up-puzzle-dont-look-up',
-  puzzle_shadow: 'write-up-puzzle-shadow',
+  puzzle_zeitgeist: 'zeitgeist-write-up',
+  puzzle_dont_look_up: 'dont-look-up-write-up',
+  puzzle_shadow: 'shadow-write-up',
 }

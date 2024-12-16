@@ -8,9 +8,9 @@ export default {
     basics: 'Basics',
     pedersen_commitment_scheme: 'Pedersen Commitment',
     kate_commitment_scheme: 'Kate Commitment Scheme (KZG)',
-    // fri: 'Fast Reed-Solomon Interactive Oracle Proof of Proximity (FRI)',
     fri: {
       title: 'FRI',
+      // title: 'Fast Reed-Solomon Interactive Oracle Proof of Proximity (FRI)',
       // display: 'hidden',
       // href: 'https://github.com/shuding/nextra',
       // newWindow: true,
@@ -22,5 +22,13 @@ export default {
         pagination: true
       }
     },
-    puzzles: 'Puzzles'
+    puzzles: {
+      title:'Puzzles',
+      theme: {
+        footer: false,
+        sidebar: true,
+        toc: false,
+        pagination: true
+      }
+    }
   }
