@@ -11,6 +11,7 @@ export default {
       </span>
     </>
   ),
+  // feedback: { content: null },
   chat: {
     link: 'https://twitter.com/0x6980',
     icon: (
