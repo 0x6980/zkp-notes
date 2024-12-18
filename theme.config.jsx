@@ -5,9 +5,9 @@ export default {
   docsRepositoryBase: 'https://github.com/0x6980/zkp-notes',
   logo: (
     <>
-      <span className="mr-2 font-extrabold hidden md:inline">zkp-notes</span>
+      <span className="mr-2 font-extrabold hidden md:inline">Zero Knowledge Proof</span>
       <span className="text-gray-600 font-normal hidden md:inline">
-      ZKP - Notes
+      - Notes
       </span>
     </>
   ),
