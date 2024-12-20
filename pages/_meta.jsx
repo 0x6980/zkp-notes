@@ -30,5 +30,6 @@ export default {
         toc: false,
         pagination: true
       }
-    }
+    },
+    papers: "Papers"
   }
