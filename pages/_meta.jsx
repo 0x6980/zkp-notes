@@ -31,5 +31,13 @@ export default {
         pagination: true
       }
     },
-    papers: "Papers"
+    papers: {
+      title: 'Papers',
+      theme: {
+        footer: false,
+        sidebar: true,
+        toc: false,
+        pagination: false
+      }
+    }
   }
