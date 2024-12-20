@@ -2,5 +2,6 @@ export default {
   group: 'Group',
   polynomial: 'Polynomial',
   collision_resistance: 'Collision Resistance',
-  pairings: 'Pairings'
+  pairings: 'Pairings',
+  public_coin: 'Public Coin',
 }
