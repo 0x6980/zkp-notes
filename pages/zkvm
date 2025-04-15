@@ -1,0 +1,9 @@
+ZKVM : Generalizing ZKP (generating ZKPs for any program or computation)
+1. A Program 
+2. Machine code dictated by ISA
+3. Execute machine code in arithmetized format(r1cs, plonkish, AIR)
+4. Execution trace (Tables) 
+5. Tables into polynomial and commitment to polynomials
+6. Collection of commitment polynomials ==> Evaluation claims and opening proofs
+7. Verify proofs
+ 
