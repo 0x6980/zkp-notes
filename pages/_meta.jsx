@@ -31,6 +31,15 @@ export default {
         pagination: true
       }
     },
+    rareskills: {
+      title:'RareSkills',
+      theme: {
+        footer: false,
+        sidebar: true,
+        toc: false,
+        pagination: true
+      }
+    },
     papers: {
       title: 'Papers',
       theme: {
