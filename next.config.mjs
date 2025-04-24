@@ -10,10 +10,10 @@ const withNextra = nextra({
  
 export default withNextra(
   {
-      basePath: '/zkp-notes',
-      output: "export",  // <=== enables static exports
-      reactStrictMode: true,
-      images: { unoptimized: true}
+    basePath: '/zkp-notes',
+    output: "export",  // <=== enables static exports
+    reactStrictMode: true,
+    images: { unoptimized: true}
   }
 )
  

@@ -1,0 +1,1 @@
+# Polynomial is zero everywhere on a subdomain
