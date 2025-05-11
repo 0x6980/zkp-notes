@@ -8,6 +8,133 @@
 - Fan-in: The number of inputs a gate has is known as fan-in.
 - Multilinear extension
 
+# Sum-check Protocol
+Suppose we are given a $v$-variate polynomial $g$ defined over a finite field $\mathbb{F}$. The purpose of the sum-check protocol is for prover to provide the verifier with the following sum:
+$$
+\begin{equation}
+\begin{split}
+    H:&= \sum_{\substack{(b_1, b_2, \dots,b_v)\in\{0,1\}^{v}}} g(b_1, b_2, \dots,b_v)\\
+    &\\
+    &=\sum_{\substack{b_1\in\{0,1\}}}\sum_{\substack{b_2\in\{0,1\}}}\dots\sum_{\substack{b_v\in\{0,1\}}}g(b_1, b_2, \dots,b_v)
+\end{split}
+\end{equation}
+$$
+
+### Example 1 
+Let $g(x_1, x_2, x_3, x_4) = 2x_1^3 +x_1x_3 +x_2x_3 + x_4$, The sum of $g$'s evaluations over the Boolean hypercube is $H = 26$.
+
+Note that $H$ is a calculated amount and not a polynomial.
+## Some facts for above summation
+Without use of generality consider the above summation in 4-variant polynomial $g(x_1, x_2, x_3, x_4)$ and we want to define a polynomial named $s_1(x_1)$ as follow:
+$$
+\begin{aligned}
+    s_1(x_1) &=\sum_{\substack{(b_2, b_3, b_4)\in\{0,1\}^{3}}} g(x_1, b_2, b_3, b_4)\\
+    &=\sum_{\substack{b_2\in\{0,1\}}}\sum_{\substack{b_3\in\{0,1\}}}\sum_{\substack{b_4\in\{0,1\}}}g(x_1, b_2, b_3, b_4)\\
+    &= \sum_{\substack{b_2\in\{0,1\}}}\sum_{\substack{b_3\in\{0,1\}}}\big(g(x_1, b_2, b_3, 0) + g(x_1, b_2, b_3, 1)\big)\\
+    &= \sum_{\substack{b_2\in\{0,1\}}}\big((x_1, b_2, 0, 0) + g(x_1, b_2, 0, 1) + g(x_1, b_2, 1, 0) + g(x_1, b_2, 1, 1)\big)\\
+    &= \big(g(x_1, 0, 0, 0) + g(x_1, 0, 0, 1) + g(x_1, 0, 1, 0) + g(x_1, 0, 1, 1)\big)\\
+    &+ \big((x_1, 1, 0, 0) + g(x_1, 1, 0, 1) + g(x_1, 1, 1, 0) + g(x_1, 1, 1, 1)\big)\\
+\end{aligned}
+$$
+which is a univariate polynomial. Now it is obvious that 
+$$
+\begin{equation}
+    \begin{split}
+        H = s_1(0) + s_1(1)
+    \end{split}
+\end{equation}
+$$
+because
+$$
+\begin{aligned}
+    s_1(0) + s_1(1) &= \sum_{\substack{b_1\in\{0,1\}}}s_1(b_1)\\
+    &= \sum_{\substack{b_1\in\{0,1\}}}\sum_{\substack{(b_2, b_3, b_4)\in\{0,1\}^{3}}} g(b_1, b_2, b_3, b_4)\\
+    &=\sum_{\substack{(b_1, b_2, b_3, b_4)\in\{0,1\}^{4}}} g(b_1, b_2, b_3, b_4)\\
+    &= H
+\end{aligned}
+$$
+
+### Example 1
+Suppose $g(x_1, x_2, x_3, x_4) = 2x_1^3 +x_1x_3 +x_2x_3 + x_4$, then $s_1(x_1)$ is as follow:
+$$
+\begin{aligned}
+    s_1(x_1)&=\sum_{\substack{(b_2, b_3, b_4)\in\{0,1\}^{3}}} g(x_1, b_2, b_3, b_4)\\
+            &= 2x_1^3&\text{because $g(x_1, 0, 0, 0)$}\\
+            &+ (2x_1^3 + 1)&\text{because $g(x_1, 0, 0, 1)$}\\ 
+            &+ (2x_1^3 + x_1)&\text{because $g(x_1, 0, 1, 0)$}\\ 
+            &+ (2x_1^3 +x_1 + 1)&\text{because $g(x_1, 0, 1, 1)$}\\
+            &+ (2x_1^3)&\text{because $g(x_1, 1, 0, 0)$}\\
+            &+ (2x_1^3 + 1)&\text{because $g(x_1, 1, 0, 1)$}\\
+            &+ (2x_1^3 + x_1 + 1)&\text{because $g(x_1, 1, 1, 0)$}\\
+            &+ (2x_1^3 + x_1 + 1 + 1)&\text{because $g(x_1, 1, 1, 1)$}\\
+            &= 14x_1^3 + 4x_1 + 6&
+\end{aligned}
+$$
+**Notation.** Let $\mathrm{deg}_i(g)$ denote the degree of variable $x_i$ in $g$. For example in polynomial $2x_1^3 +x_1x_3 +x_2x_3 + x_4$
+$$
+\begin{aligned}
+    &\mathrm{deg}_1(g) = \mathrm{deg}(2x_1^3) = 3\\
+    &\mathrm{deg}_2(g) = \mathrm{deg}(x_2x_3) = 1\\
+    &\mathrm{deg}_3(g) = \mathrm{deg}(x_1x_3) = 1\\
+    &\mathrm{deg}_4(g) = \mathrm{deg}(x_4) = 1\\
+\end{aligned}
+$$
+
+## Description of the Start of the Protocol
+Without use of generality consider $g(x_1, x_2, x_3, x_4)$ is a 4-variant polynomial.
+
+At the start of the sum-check protocol, the prover sends a value
+$C_1$ claimed to equal the true answer (i.e., the quantity $H$ defined in Equation (1)). The sum-check protocol proceeds in $v$ rounds, one for each variable of $g$. 
+### Description of Round 1
+At the start of the first round, the prover sends a polynomial $g_1(x_1)$ claimed to equal the polynomial $s_1(x_1)$.
+
+1. Accordingly, the verifier checks that $C_1 = g_1(0) + g_1(1)$, i.e., the verifier checks that $g_1$ and the claimed answer $C_1$ are consistent with Equation (2).
+
+2. If the prover is honest, the polynomial $g_1(x_1)$ has degree $\mathrm{deg}_1(g)$.
+
+#### Example
+In Example 1 we calculated $g_1(x_1)$ which is $14x_1^3 + 4x_1 + 6$. In round 1, $\mathcal{V}$ should check 2 conditions:
+1. $C_1 = g_1(0) + g_1(1)$
+2. $\mathrm{deg}_1(g) = \mathrm{deg}(g_1)$
+
+
+The idea of the sum-check protocol is that $\mathcal{V}$ will
+probabilistically check this equality of polynomials holds by picking a random field element $r_1\in\mathcal{F}$, and confirming that
+$$
+    g_1(r_1) = s_1(r_1)
+$$
+Clearly, if $g_1$ is as claimed, then this equality holds for all $r_1\in\mathbb{F}$
+
+The remaining issue is the following: can $\mathcal{V}$ efficiently compute both $g_1(r_1)$ and $s_1(r_1)$, in order to check that Equation holds? Since $\mathcal{P}$ sends $\mathcal{V}$ an explicit description of the polynomial $g_1$, it is possible for $\mathcal{V}$ to evaluate $g_1(r_1)$ in $\mathrm{O}(deg_1(g))$ time. In contrast, evaluating $s_1(r_1)$ is not an easy task for $\mathcal{V}$, as $s_1$ is defined as a sum over $2^{v−1}$ evaluations of $g$. This is only a factor of two smaller than the number of terms in the sum defining $H$ (Equation (1)). Fortunately, Equation (2) expresses $s_1$ as the sum of the evaluations of a ($v − 1$)-variate polynomial over the Boolean hypercube (the polynomial being $g(r_1,x_2,\dots,x_v)$ that is  defined over the variables $x_2,\dots,x_v$). This is exactly the type of expression that the sum-check protocol
+is designed to check. Hence, rather than evaluating $s_1(r_1)$ on her own, $\mathcal{V}$ instead recursively applies the
+sum-check protocol to evaluate $s_1(r_1)$.
+
+### Description of Rounds 2
+At the start of round 2, variable $x_1$ have already been bound to random field element $r_1$. The prover sends a polynomial $g_2(x_2)$, and claims that
+$$
+g_2(x_2) = \sum_{\substack{(b_3, b_4)\in\{0,1\}^{2}}} g(r_1, x_2, b_3, b_4)\\
+$$
+The verifier compares the two most recent polynomials by checking
+$$
+g_1(r_1) = g_2(0) + g_2(1)
+$$
+and rejecting otherwise. The verifier also rejects if the degree of $g_2$ is too high: $g_2$ should have degree at most $deg_2(g)$, the degree of variable $x_2$ in $g$. If these checks pass $\mathcal{V}$ chooses a value $r_2$ uniformly at random from
+$\mathbb{F}$ and sends $r_2 to $\mathcal{P}$.
+
+### Description of Rounds 3
+At the start of round 3, variables $x_1, x_2$ have already been bound to random field elements $r_1, r_2$. The prover sends a polynomial $g_3(x_3)$, and claims that
+$$
+g_3(x_3) = \sum_{\substack{b_4\in\{0,1\}}} g(r_1, r_2, x_3, b_4)\\
+$$
+The verifier compares the two most recent polynomials by checking
+$$
+g_2(r_2) = g_3(0) + g_3(1)
+$$
+and rejecting otherwise. The verifier also rejects if the degree of $g_3$ is too high: $g_3$ should have degree at most $deg_3(g)$, the degree of variable $x_3$ in $g$. If these checks pass $\mathcal{V}$ chooses a value $r_3$ uniformly at random from
+$\mathbb{F}$ and sends $r_3 to $\mathcal{P}$.
+
+### Description of Rounds 4, the final round
+In the final round, the prover has sent $g_4(x_4) which is claimed to be $g(r1, r_2, r_3, x_4)$. $\mathcal{V}$ now checks that $g_4(r_4) = g(r1, r_2, r_3, r4)$ (recall that we assumed $\mathcal{V}$ has oracle access to $g$). If this check succeeds, and so do all previous checks, then the verifier is convinced that $H = g_1(0)+g_1(1)$.
 # Arithmetic Circuit
 An Arithmetic circuit $\mathcal{C}$ over field $\mathbb{F}$ is a directed graph whose nodes are labeled $+$, $*$, computing field element addition and multiplication respectively, for the values on the incoming wires.
 
@@ -196,6 +323,38 @@ at layer $i + 1$ of the circuit, and unless $i + 1$ is the input layer, the veri
 because, until the final round, the sum-check protocol does not require the verifier to know anything about the polynomial other than its degree in each variable ([ee Remark 4.2]()). However, there remains the issue that $\mathcal{V}$ can only execute the final check in the sum-check protocol if she can evaluate the polynomial $f^{(i)}_{r_i}(b,c)$ at a random point. This is handled as follows.
 
 Let us denote the random point at which $\mathcal{V}$ must evaluate $f^{(i)}_{r_i}(b,c)$ by $(b^*,c^*)$, where $b^* \in \mathbb{F}^{k_{i+1}}$ is the first $k_{i+1}$ entries and $c^*\in \mathbb{F}^{k_{i+1}}$ the last $k_{i+1}$ entries. Note that $b^*$, and $c^*$ may have non-Boolean entries. Evaluating $f^{(i)}_{r_i}(b^*,c^*)$ requires evaluating $\widetilde{\mathrm{add}}_i(r_i, b^*, c^*)$, $\widetilde{\mathrm{mult}}_i(r_i, b^*, c^*)$, $\widetilde{W}_{i+1}(b^*)$, and $\widetilde{W}_{i+1}(c^*)$.
+
+$\mathcal{V}$ cannot however evaluate $\widetilde{W}_{i+1}(b^*)$, and $\widetilde{W}_{i+1}(c^*)$ on her own without evaluating the circuit. Instead, $\mathcal{V}$ asks $\mathcal{P}$ to simply provide these two values, say, $z_1$ and $z_2$, and uses iteration $i + 1$ to verify that these values are as claimed. However, one complication remains: the precondition for iteration $i + 1$ is that $\mathcal{P}$ claims a value for $\widetilde{W}_{i+1}(r_{i+1})$ for a single point $r_{i+1}\in\mathbb{F}^{k_{i+1}}$. So $\mathcal{V}$ needs to reduce verifying both $\widetilde{W}_{i+1}(b^*) = z_1$ and $\widetilde{W}_{i+1}(c^*) = z_2$ to verifying $\widetilde{W}_{i+1}(r_{i+1})$ at a single point $r_{i+1}\in\mathbb{F}^{k_{i+1}}$, in the sense that it is safe for $\mathcal{V}$ to accept the claimed values of $\widetilde{W}_{i+1}(b^*)$ and $\widetilde{W}_{i+1}(c^*)$ as long as the value of $\widetilde{W}_{i+1}(r_{i+1})$ is as claimed. As per [Section 4.5.2]() this is done as follows.
+
+**Reducing to Verification of a Single Point.** Let $\mathscr{l}: \mathbb{F}\rightarrow\mathbb{F}^{k_{i+1}}$ be the unique line such that $\mathscr{l}(0) = b^∗$ and $\mathscr{l}(1) = c^∗$. $\mathcal{P}$ sends a univariate polynomial $q$ of degree at most $k_{i+1}$ that is claimed to be $\widetilde{W}_{i+1}\circ\mathscr{l}$, the restriction of $\widetilde{W}_{i+1}$ to the line $\mathscr{l}$. $\mathcal{V}$ checks that $q(0) = z_1$ and $q(1) = z_2$ (rejecting if this is not the case),
+picks a random point $r^∗\in\mathbb{F}$, and asks $\mathcal{P}$ to prove that $\widetilde{W}_{i+1}(\mathscr{l}(r^∗)) = q(r^∗)$. By [Claim 4.6](), as long as $\mathcal{V}$ is
+convinced that $\widetilde{W}_{i+1}(\mathscr{l}(r^∗)) = q(r^∗)$, it is safe for $\mathcal{V}$ to believe that $q$ does in fact equal $\widetilde{W}_{i+1}\circ\mathscr{l}$, and hence that $\widetilde{W}_{i+1}(b^*) = z_1$ and $\widetilde{W}_{i+1}(c^*) = z_2$ as claimed by $\mathcal{P}$. See [Section 4.5.2]() for a picture and example of this sub-protocol.
+This completes iteration $i$; $\mathcal{P}$ and $\mathcal{V}$ then move on to the iteration for layer $i + 1$ of the circuit, whose purpose is to verify that $\widetilde{W}_{i+1}(r_{i+1})$ has the claimed value, where $r_{i+1} := \mathscr{l}(r^∗)$.
+
+**The Final Iteration.** At the final iteration $d$, $\mathcal{V}$ must evaluate $\widetilde{W}_{d}(r_{d})$ on her own. But the vector of gate values at layer $d$ of $\mathcal{C}$ is simply the input $x$ to $\mathcal{C}$. By [Lemma 3.8](), $\mathcal{V}$ can compute $\widetilde{W}_{d}(r_{d})$ on her own in $\mathrm{O}(n)$ time, where recall that $n$ is the size of the input $x$ to $\mathcal{C}$.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ## Claim
