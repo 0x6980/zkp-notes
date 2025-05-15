@@ -12,7 +12,7 @@ $$
 In other words, there exists an positive integer $n$ such that $a$ raised to the power $n$ is 1. We can think of the 2nd root of unity ($n = 2$) as the square root of 1 and the 3rd root of unity ($n = 3$) as the cube root. "unity" just means "1".
 
 ### Example 1
-Consider field $F_7 =\{0, 1, 2, 3, 4, 5, 6\}$. First we try to check every element in $F_7$ belong to which ($n$-th) roots of unity? but you can see we will try another point of view and calculate the all $n$-th roots of unity for $1\le n\le 6$ in $F_7$. Both way have same result but these ways help us for clarification and better understanding.
+Consider field $F_7 =\{0, 1, 2, 3, 4, 5, 6\}$. First, for each element in $F_7$, we determine for which $n$ this element is an $n$-th root? For example element $1$ belong to $i$-th roots of unity for all $1\le i\le 6$. Second, in another point of view for a fixed $n$ we find all elements that are $n$-th roots of unity. Both way have same result but these ways help us for clarification and better understanding.
 
 Since $1^i\equiv 1$ for all $1\le i\le 6$ then, the element $1$ is 1-st, 2-nd, 3-rd, 4-th, 5-th and 6-th roots of unity.
 
@@ -130,7 +130,7 @@ print(f"Number of {n}-th roots of unity in F{field_size}: {num_roots}")
 ```
 
 ## Primitive Roots Of Unity
-In set of $n$-th roots of unity those element are primitive $n$-th root of unity which the [order of that element](https://hackmd.io/6ipdFFwPTTqHkDsSMwSeAw?view#Order-of-element) is equal to $n$. 
+In set of $n$-th roots of unity those elements like $a$ are primitive $n$-th root of unity which there exists smallest $n\in\mathbb{Z}$ such that  $a^n \equiv 1$. 
 
 For example in $F_7$:
 - $6$ is 2-nd root of unity because $6^2\equiv 1$. Since 2 is smallest positive integer such that $6^2\equiv 1$, then $6$ is primitive $2$-nd root of unity.
