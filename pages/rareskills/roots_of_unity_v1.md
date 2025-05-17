@@ -1,6 +1,6 @@
 
 # Roots of unity and Primitive roots of unity
-In the [previous article]() we talked about multiplicative subgroups and how to find them in a finite field.
+In the [previous article](https://hackmd.io/6ipdFFwPTTqHkDsSMwSeAw) we talked about multiplicative subgroups and how to find them in a finite field.
 
 In this article we want to introduce concept of *roots of unity* and *primitive roots of unity*, both of which are tightly linked to multiplicative subgroups.
 
@@ -12,7 +12,7 @@ $$
 In other words, there exists an positive integer $n$ such that $a$ raised to the power $n$ is 1. We can think of the 2nd root of unity ($n = 2$) as the square root of 1 and the 3rd root of unity ($n = 3$) as the cube root. "unity" just means "1".
 
 ### Example 1
-Consider field $F_7 =\{0, 1, 2, 3, 4, 5, 6\}$. First we try to check every element in $F_7$ belong to which ($n$-th) roots of unity but you can see we will try another point of view and calculate the all $n$-th roots of unity for $1\le n\le 6$ in $F_7$. Both way have same result but these ways help us for clarification and better understanding.
+Consider field $F_7 =\{0, 1, 2, 3, 4, 5, 6\}$. First, for each element in $F_7$, we determine for which $n$ this element is an $n$-th root? For example element $1$ belong to $i$-th roots of unity for all $1\le i\le 6$. Second, in another point of view for a fixed $n$ we find all elements that are $n$-th roots of unity. Both way have same result but these ways help us for clarification and better understanding.
 
 Since $1^i\equiv 1$ for all $1\le i\le 6$ then, the element $1$ is 1-st, 2-nd, 3-rd, 4-th, 5-th and 6-th roots of unity.
 
@@ -95,10 +95,8 @@ print("3rd roots of unity in GF(7):", roots)
 ### The number of $n$-th roots of unity
 The number of $n$-th roots of unity in $F_q$ is **greatest common divisor**: $\mathrm {gcd} (n,q-1)$.
 
-For example, In $F_7$, $q - 1$ is 6. If $n = 3$ then we have $\mathrm {gcd} (3,6) = 3$ roots of unity. The 3-rd roots of unity has three elements and is $\{1, 2, 4\}$. Recall from Example 4, Example 5 and Example 6, since $3 | 6$, so we have a subgroup of order 3
-$$
-\langle 3^{\frac{n}{k}} = 3^{\frac{6}{3}} = 3^{2} \equiv 2 \rangle =\{1, 2, 4\}
-$$
+For example, In $F_7$, $q - 1$ is 6. If $n = 3$ then we have $\mathrm {gcd} (3,6) = 3$ roots of unity. The 3-rd roots of unity has three elements and is $\{1, 2, 4\}$.
+
 If $n = 4$ then we have $\mathrm {gcd} (4,6) = 2$ roots of unity. The 4-th roots of unity has two elements and is $\{1, 6\}$
 $$
 \begin{aligned}
@@ -132,7 +130,7 @@ print(f"Number of {n}-th roots of unity in F{field_size}: {num_roots}")
 ```
 
 ## Primitive Roots Of Unity
-In set of $n$-th roots of unity those element are primitive $n$-th root of unity which the order of that element is equal to $n$. 
+In set of $n$-th roots of unity those elements like $a$ are primitive $n$-th root of unity which there exists smallest $n\in\mathbb{Z}$ such that  $a^n \equiv 1$. 
 
 For example in $F_7$:
 - $6$ is 2-nd root of unity because $6^2\equiv 1$. Since 2 is smallest positive integer such that $6^2\equiv 1$, then $6$ is primitive $2$-nd root of unity.
@@ -154,21 +152,21 @@ Consider above examples and we want to calculate the powers of primitive $n$-th 
     \{6^{1} = 6, 6^{2}\equiv 1, 6^3 \equiv 6, 6^4 \equiv 1, \dots\}
   \end{aligned}
   $$
-  You can see for all $i$ the $6^i$ is equal to $6$ or equal to $1$. Then, the powers of $6$ is $\{1, 6\}$. So, the powers of $6$ is the 2-nd roots of unity.
+  You can see for all $i$ the $6^i$ is equal to $6$ or equal to $1$. Then, the powers of $6$ is $\{1, 6\}$. The powers of $6$ is the 2-nd roots of unity.
 - $4$ is a primitive 3-rd root of unity, then
   $$
   \begin{aligned}
     \{4^{1} = 4, 4^{2}\equiv 2, 4^3 \equiv 1, 4^4 \equiv 4, \dots\}
   \end{aligned}
   $$
-  You can see for all $i$ the $4^i$ is equal to one of $1, 2, 4$. Then, the powers of $4$ is $\{1, 2, 4\}$. So, the powers of $4$ is the 3-rd roots of unity.
+  You can see for all $i$ the $4^i$ is equal to one of $1, 2, 4$. Then, the powers of $4$ is $\{1, 2, 4\}$. The powers of $4$ is the 3-rd roots of unity.
 - $2$ is a primitive 3-rd root of unity,
   $$
   \begin{aligned}
     \{2^{1} = 2, 2^{2}\equiv 4, 2^3 \equiv 1, 2^4 \equiv 2, \dots\}
   \end{aligned}
   $$
-  You can see for all $i$ the $2^i$ is equal to one of $1, 2, 4$. Then, the powers of $2$ is $\{1, 2, 4\}$. So, the powers of $2$ is the 3-rd roots of unity.
+  You can see for all $i$ the $2^i$ is equal to one of $1, 2, 4$. Then, the powers of $2$ is $\{1, 2, 4\}$. The powers of $2$ is the 3-rd roots of unity.
 
 ### Definition
 The below definition is the same as above discussion.
@@ -182,7 +180,7 @@ In other words, an $n$-th root of unity is a *primitive $n$-th root of unity* wh
 ### Example 11
 Consider $F_7$ and the $n$-th roots of unity we calculated before in Example 1. We want to determine the primitive $n$-th roots of unity using the definition. We denote $H_i$ as the set of $i$-th roots of unity
 
-- $H_2 = \{1, 6\}$ is 2-nd roots of unity (Example 2). We want to find primitive 2-nd root of unity. For that we are looking for elements in 2-nd roots of unity such that the order of those element be equal to 2. Since 
+- $H_2 = \{1, 6\}$ is 2-nd roots of unity (Example 1). We want to find primitive 2-nd root of unity. For that we are looking for elements in 2-nd roots of unity such that the order of those element be equal to 2. Since 
   $$
   \begin{aligned}
   &\mathrm {ord} (1) = 1\\
@@ -225,6 +223,7 @@ Consider $F_7$ and the $n$-th roots of unity we calculated before in Example 1. 
   Then $3, 5$ are primitive 6-th roots of unity. Because the order of $3, 5$ is 6. Note that $4^6\equiv 1$ but it is not a primitive 6-th root of unity because the lowest $n$ that satisfied $4^n \equiv 1$ is 3. Therefore, it is a 6-th root of unity, but not a primitive 6th root of unity. It is however a primitive 3rd root of unity.
 
 The below code uses brute force to find primitive roots of unity:
+
 ```python
 import galois
 GF = galois.GF(7)
@@ -254,7 +253,7 @@ primitive_roots = primitive_nth_roots_of_unity_in_finite_field(field_size, n)
 print(f"The primitive {n}-th roots of unity in F{field_size} are: {primitive_roots}")
 ```
 
-This code is non-brute force  version of find the $n$-th roots of unity in a finite field $F_q$, where $q$ is a prime number:
+This code is non-brute force  version of find the primitive $n$-th roots of unity in a finite field $F_q$, where $q$ is a prime number:
 ```python
 # non-brute force code
 import galois
@@ -355,7 +354,7 @@ print(f"Number of primitive {n}-th roots of unity in F{field_size}: {num_primiti
 Consider field $F_{17} =\{0, 1, 2,\dots, 16\}$. For a given $n$ we want to find all $n$-th roots of unity and primitive $n$-th root of unity in $F_{17}$ using roots of unity and primitive roots of unity definitions.
 
 ## The generator of $F^*_{17}$
-Recall from Theorem 1 the $F^*_{17}$ is a cyclic group. We are proving that $F^*_{17} = \langle 3 \rangle$:
+The $F^*_{17}$ is a cyclic group. We are proving that $F^*_{17} = \langle 3 \rangle$:
 
 $$
 \begin{aligned}
