@@ -2,12 +2,9 @@
 - Finite field $\mathbb{F}$
 - Arithmetic circuit $\mathcal{C}$ of depth $d$ and size (number of gates) $s$
 - Boolean hypercube $\{0,1\}^n$
-- Boolean circuit
-- layered circuit
-- Sumcheck protocol
 - Fan-in: The number of inputs a gate has is known as fan-in.
 
-# Arithmetic Circuit
+# Arithmetic Circuit and Boolean circuit
 An Arithmetic circuit $\mathcal{C}$ over field $\mathbb{F}$ is a directed graph whose nodes are labeled $+$, $*$, computing field element addition and multiplication respectively, for the values on the incoming wires.
 
 # Layered Arithmetic Circuit
@@ -30,7 +27,7 @@ Consider 2-depth and fan-in 2, arithmetic circuit $\mathcal{C}$ that computing $
 
 We will use $\mathbb{F}_{11}$ for concreteness and set $x_1 = 2, x_2 = 3, x_3 = 4, x_4 = 5$. So, $(2.3).(4.5) = 6.20 \equiv 6.9\equiv 54\equiv 10$.
 
-## W_i
+## $W_i$ Polynomials of Circuit
 Let $S_i$ denote the number of gates at layer $i$ of the circuit $\mathcal{C}$ (In general we assume $S_i$ is a power of 2 and $S_i = 2^{k_i}$). You can see that
 $$
 \begin{aligned}
@@ -56,6 +53,50 @@ $$
     &W_1(0) = 6,\space\space W_1(1) = 9
 \end{aligned}
 $$
+Multilinear extension $\widetilde{W}_1$ of $W_1$, calculate as below:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{W}_1 := \mathbb{F}\rightarrow\mathbb{F}
+\end{split}
+\end{aligned}
+$$
+$$
+\begin{equation}
+\begin{split}
+\widetilde{W}_1(x_1) = \sum_{\substack{b\in\{0,1\}}}W_1(b)·\chi_b(x_1)
+\end{split}
+\end{equation}
+$$
+where
+$$
+\begin{equation}
+\begin{split}
+\chi_b(x_1) &:= \prod_{i=1}^{1}\big(x_ib_i+(1-x_i)(1-b_i)\big)\\
+            &= x_1b+(1-x_1)(1-b)\space\space\space\text{In this itme  $b = b_1$}
+\end{split}
+\end{equation}
+$$
+then
+$$
+\begin{equation}
+\begin{split}
+\chi_0(x_1) &:= 1-x_1\\
+\chi_1(x_1) &:= x_1\\
+\end{split}
+\end{equation}
+$$
+The final multilinear extension:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{W}_1(x_1) &= \sum_{\substack{b\in\{0,1\}}}W_1(b)·\chi_b(x_1)\\
+    &= W_1(0)\chi_0(x_1) + W_1(1)\chi_1(x_1)\\
+    &= 6(1-x_1)+ 9x_1\\
+    &= 3x_1+ 6
+\end{split}
+\end{aligned}
+$$
 For layer 2:
 $$
 \begin{aligned}
@@ -63,9 +104,53 @@ $$
     &W_2(0,0) = 2,\space\space W_2(0,1) = 3,\space\space W_2(1,0) = 4,\space\space W_2(1,1) = 5
 \end{aligned}
 $$
-We should write about multilinear extension $\widetilde{W}_i$ of $W_i$
-
-WWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWWW
+Multilinear extension $\widetilde{W}_2$ of $W_2$, calculate as below:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{W}_2 := \mathbb{F}^2\rightarrow\mathbb{F}
+\end{split}
+\end{aligned}
+$$
+$$
+\begin{equation}
+\begin{split}
+\widetilde{W}_2(x_1,x_2) = \sum_{\substack{b\in\{0,1\}^2}}W_2(b)·\chi_b(x_1, x_2)
+\end{split}
+\end{equation}
+$$
+where for any $b = (b_1, b_2)$
+$$
+\begin{equation}
+\begin{split}
+\chi_b(x_1, x_2) &:= \prod_{i=1}^{2}\big(x_ib_i+(1-x_i)(1-b_i)\big)\\
+            &= \big(x_1b_1+(1-x_1)(1-b_1)\big)*\big(x_2b_2+(1-x_2)(1-b_2)\big)
+\end{split}
+\end{equation}
+$$
+then,
+$$
+\begin{equation}
+\begin{split}
+\chi_{(0,0)}(x_1, x_2) &:= (1-x_1)(1-x_2)\\
+\chi_{(0,1)}(x_1, x_2) &:= (1-x_1)(x_2)\\
+\chi_{(1,0)}(x_1, x_2) &:= (x_1)(1-x_2)\\
+\chi_{(1,1)}(x_1, x_2) &:= x_1x_2\\
+\end{split}
+\end{equation}
+$$
+The final multilinear extension:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{W}_2(x_1, x_2) &= \sum_{\substack{b\in\{0,1\}^2}}W_2(b)·\chi_b(x_1)\\
+    &= W_2(0,0)\chi_{(0,0)}(x_1, x_2) + W_2(1,0)\chi_{(1,0)}(x_1, x_2) + W_2(0,1)\chi_{(0,1)}(x_1, x_2)+ W_2(1,1)\chi_{(1,1)}(x_1, x_2)\\
+    &= 2(1-x_1)(1-x_2)+ 3(1-x_1)(x_2) + 4(x_1)(1-x_2)+ 5x_1x_2\\
+    &= 2 + 2x_1x_2 - 2x_1 - 2x_2 + 3x_2 - 3x_1x_2 + 4x_1 - 4x_1x_2 + 5x_1x_2\\
+    &= 2x_1 + x_2 + 2
+\end{split}
+\end{aligned}
+$$
 
 ## In1 and In2
 The GKR protocol also makes use of the notion of a “wiring predicate” that encodes which pairs of wires from layer $i+1$ are connected to a given gate at layer $i$ in $\mathcal{C}$. Let
@@ -94,7 +179,7 @@ $$
 \end{aligned}
 $$
 
-## Add and Mul
+## $\mathrm{add}_i$ and $\mathrm{mult}_i$ Polynomials of Circuit
 Define two functions, $\mathrm{add}_i$ and $\mathrm{mult}_i$, mapping $\{0,1\}^{k_i+2k_{i+1}}$ to {0,1},
 $$
 \begin{aligned}
@@ -121,8 +206,13 @@ For our example since the circuit contains no addition gates, $\mathrm{add}_0$ a
 $$
 \begin{aligned}
 &\mathrm{mult}_0: \{0,1\} \times \{0,1\}^2 \times \{0,1\}^2\rightarrow \{0, 1\}\\
-&(0,(0,0),(0,1))\rightarrow 1\\
-&(1,(1,0),(1,1))\rightarrow 1\\
+\end{aligned}
+$$
+given by
+$$
+\begin{aligned}
+&\mathrm{mult}_0(0,(0,0),(0,1)) = 1\\
+&\mathrm{mult}_0(1,(1,0),(1,1)) = 1\\
 &\text{On all other inputs, $\mathrm{mult}_0$ evaluates to zero}
 \end{aligned}
 $$
@@ -141,15 +231,81 @@ $$
     &\mathrm{in}_{2,0}(1) = (1,1)
 \end{aligned}
 $$
-Similarly, $\mathrm{mult}_1$ is a function on domain $\{0,1\}^2 \times \{0,1\}^2 \times \{0,1\}^2$. It evaluates to 0 on all inputs except for the following four, on which it evaluates to 1:
+Multilinear extension $\widetilde{\mathrm{mult}}_0$ of $\mathrm{mult}_0$, calculate as below:
 $$
 \begin{aligned}
+\begin{split}
+\widetilde{\mathrm{mult}}_0 := \mathbb{F}\times\mathbb{F}^2\times\mathbb{F}^2=\mathbb{F}\^5\rightarrow\mathbb{F}
+\end{split}
+\end{aligned}
+$$
+$$
+\begin{equation}
+\begin{split}
+\widetilde{\mathrm{mult}}_0\big(x_1,(x_2,x_3),(x_4,x_5)\big) &= \sum_{\substack{b\in\{0,1\}^5}}\mathrm{mult}_0(b)·\chi_b\big(x_1,(x_2,x_3),(x_4,x_5)\big)\\
+&= \chi_{\big(0,(0,0),(0,1)\big)}\big(x_1,(x_2,x_3),(x_4,x_5)\big) + \chi_{\big(1,(1,0),(1,1)\big)}\big(x_1,(x_2,x_3),(x_4,x_5)\big)
+\end{split}
+\end{equation}
+$$
+because $\mathrm{mult}_0\big(0,(0,0),(0,1)\big) = 1$ and $\mathrm{mult}_0\big(1,(1,0),(1,1)\big) = 1$ for other inputs $\mathrm{mult}_0$ is 0.
+$$
+\begin{equation}
+\begin{split}
+\chi_b(x_1, x_2,x_3,x_4,x_5) &:= \prod_{i=1}^{5}\big(x_ib_i+(1-x_i)(1-b_i)\big)\\
+\end{split}
+\end{equation}
+$$
+then,
+$$
+\begin{equation}
+\begin{split}
+\chi_{(0,0,0,0,1)}(x_1, x_2, x_3, x_4, x_5) &:= (1-x_1)(1-x_2)(1-x_3)(1-x_4)(x_5)\\
+\chi_{(1,1,0,1,1)}(x_1, x_2, x_3, x_4, x_5) &:= (x_1)(x_2)(1-x_3)(x_4)(x_5)\\
+\end{split}
+\end{equation}
+$$
+The final multilinear extension:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{\mathrm{mult}}_0\big(x_1,(x_2,x_3),(x_4,x_5)\big) &= (1-x_1)(1-x_2)(1-x_3)(1-x_4)(x_5) + (x_1)(x_2)(1-x_3)(x_4)(x_5)
+\end{split}
+\end{aligned}
+$$
+
+Similarly, $\mathrm{mult}_1$ is a function on domain $\{0,1\}^2 \times \{0,1\}^2 \times \{0,1\}^2$. It evaluates to 0 on all inputs except for the following four, on which it evaluates to 1:
+$$
+\begin{equation}
+\begin{split}
     &\big((0,0),(0,0),(0,0)\big)\\
     &\big((0,1),(0,1),(0,1)\big)\\
     &\big((1,0),(0,1),(1,0)\big)\\
     &\big((1,1),(1,1),(1,1)\big)
+\end{split}
+
+\end{equation}
+$$
+For calculating the $\widetilde{\mathrm{mult}}_1$ as mentioned above since just for four inputs (10) the $\mathrm{mult}_1$ is 1 and for all other inputs $\mathrm{mult}_1$ is 0, then we just need calculate $\chi_b$ for just four inputs (10) and sum those value together give us the $\widetilde{\mathrm{mult}}_1$.
+$$
+\begin{equation}
+\begin{split}
+\chi_{(0,0,0,0,0)}(x_1, x_2, x_3, x_4, x_5) &:= (1-x_1)(1-x_2)(1-x_3)(1-x_4)(1-x_5)(1-x_6)\\
+\chi_{(0,1,0,1,0,1)}(x_1, x_2, x_3, x_4, x_5) &:= (1-x_1)(x_2)(1-x_3)(x_4)(1-x_5)(x_6)\\
+\chi_{(1,0,0,1,1,0)}(x_1, x_2, x_3, x_4, x_5) &:= (x_1)(1-x_2)(1-x_3)(x_4)(x_5)(1-x_6)\\
+\chi_{(1,1,1,1,1)}(x_1, x_2, x_3, x_4, x_5) &:= (x_1)(x_2)(x_3)(x_4)(x_5)(x_6)\\
+\end{split}
+\end{equation}
+$$
+The final multilinear extension:
+$$
+\begin{aligned}
+\begin{split}
+\widetilde{\mathrm{mult}}_1\big((x_1,x_2),(x_3,x_4),(x_5,x_6)\big) &= \text{The sum of all right hand side expresions of (11)}
+\end{split}
 \end{aligned}
 $$
+
+
 Note that for each layer $i$, $\mathrm{add}_i$ and $\mathrm{mult}_i$ depend only on the circuit $\mathcal{C}$ and not on the input $x$ to $\mathcal{C}$. In contrast, the function $W_i$ does depend on $x$. This is because $W_i$ maps each gate label at layer $i$ to the value of the gate when $\mathcal{C}$ is evaluated on input $x$.
 
 As usual, let $\widetilde{\mathrm{add}}_i$ and $\widetilde{\mathrm{mult}}_i$ denote the multilinear extensions of $\mathrm{add}_i$ and $\mathrm{mult}_i$. 
@@ -161,7 +317,7 @@ As usual, let $\widetilde{\mathrm{add}}_i$ and $\widetilde{\mathrm{mult}}_i$ den
 
 **Detailed Description.** The GKR protocol consists of $d$ iterations, one for each layer of the circuit. Each iteration $i$ starts with $\mathcal{P}$ claiming a value for $\widetilde{W}_i(r_i)$ for some point in $r_i\in\mathbb{F}^{k_i}$.
 
-At the start of the first iteration, this claim is derived from the claimed outputs of the circuit. Specifically, if there are $S_0 = 2^{k_0}$ outputs of $\mathcal{C}$, let $D: {0,1}^{k_0} \rightarrow \mathbb{F}$ denote the function that maps the label of an output gate to the claimed value of that output. Then the verifier can pick a random point $r_0\in\mathbb{F}^{k_0}$, and evaluate $\widetilde{D}(r_0)$ in time $\mathrm{O}(S_0)$ using Lemma [3.8](). By the [Schwartz-Zippel lemma](), if $\widetilde{D}(r_0) = \widetilde{W}_0(r_0)$ (i.e., if the multilinear
+At the start of the first iteration, this claim is derived from the claimed outputs of the circuit. Specifically, if there are $S_0 = 2^{k_0}$ outputs of $\mathcal{C}$, let $D: \{0,1\}^{k_0} \rightarrow \mathbb{F}$ denote the function that maps the label of an output gate to the claimed value of that output. Then the verifier can pick a random point $r_0\in\mathbb{F}^{k_0}$, and evaluate $\widetilde{D}(r_0)$ in time $\mathrm{O}(S_0)$ using Lemma [3.8](). By the [Schwartz-Zippel lemma](), if $\widetilde{D}(r_0) = \widetilde{W}_0(r_0)$ (i.e., if the multilinear
 extension of the claimed outputs equals the multilinear extension of the correct outputs when evaluated at a randomly chosen point), then it is safe for the verifier to believe that $\widetilde{D}$ and $\widetilde{W}_0$ are the same polynomial, and hence that all of the claimed outputs are correct. **Unfortunately, the verifier cannot evaluate $\widetilde{W}_0(r_0)$ without help from the prover**.
 
 The purpose of iteration $i$ is to reduce the claim about the value of $\widetilde{W}_i(r_i)$ to a claim about $\widetilde{W}_{i+1}(r_{i+1})$ for
@@ -259,5 +415,4 @@ Now, the prover wants to convince the verifier that the circuit was evaluated co
 Encode each layer's values as polynomial over finite field (e.g. $F_{11}$)
 - Layer 0 (Inputs): Truth table for $a=3$, and $b=4$ is $V_0(0) = 3$ and $V_0(1) = 4$. Then MLE $\bar{V}_0(x) = 3(1-x) + 4x = x + 3$
 - Layer 1 (Output): Truth table for $a=3$, and $b=4$ is $V_0(0) = 3$ and $V_0(1) = 4$. Then MLE $\bar{V}_0(x) = 3(1-x) + 4x = x + 3$
-
 
