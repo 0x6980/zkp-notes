@@ -161,9 +161,12 @@ $$
 \begin{aligned}
 \begin{split}
 \tilde{f}(x_1,x_2,x_3) &= \sum_{\substack{w\in\{0,1\}^3}}f(w)·\chi_w(x_1,x_2,x_3)\\
-&= f(0,0,0)\chi_{(0,0,0)}(x_1,x_2,x_3) + f(0,1,0)\chi_{(0,1,0)}(x_1,x_2,x_3) + f(1,0,0)\chi_{(1,0,0)}(x_1,x_2,x_3) + f(1,1,0)\chi_{(1,1,0)}(x_1,x_2,x_3)\\
-&\space\space\space\space\space + f(0,0,1)\chi_{(0,0,1)}(x_1,x_2,x_3)+f(0,1,1)\chi_{(0,1,1)}(x_1,x_2,x_3)+ f(1,0,1)\chi_{(1,0,1)}(x_1,x_2,x_3)+f(1,1,1)\chi_{(1,1,1)}(x_1,x_2,x_3)\\
-&= (1-x_1)(1-x_2)(1-x_3) + 2(1-x_1)(x_2)(1-x_3) + 3(x_1)(1-x_2)(1-x_3) + 4(x_1)(x_2)(1-x_3)\\
+&= f(0,0,0)\chi_{(0,0,0)}(x_1,x_2,x_3) + f(0,1,0)\chi_{(0,1,0)}(x_1,x_2,x_3)\\
+&\space\space\space\space\space + f(1,0,0)\chi_{(1,0,0)}(x_1,x_2,x_3) + f(1,1,0)\chi_{(1,1,0)}(x_1,x_2,x_3)\\
+&\space\space\space\space\space + f(0,0,1)\chi_{(0,0,1)}(x_1,x_2,x_3)+f(0,1,1)\chi_{(0,1,1)}(x_1,x_2,x_3)\\
+&\space\space\space\space\space + f(1,0,1)\chi_{(1,0,1)}(x_1,x_2,x_3)+f(1,1,1)\chi_{(1,1,1)}(x_1,x_2,x_3)\\
+&= (1-x_1)(1-x_2)(1-x_3) + 2(1-x_1)(x_2)(1-x_3)\\
+&\space\space\space\space\space + 3(x_1)(1-x_2)(1-x_3) + 4(x_1)(x_2)(1-x_3)\\
 &\space\space\space\space\space + 5(1-x_1)(1-x_2)(x_3)+6(1-x_1)(x_2)(x_3)+7(x_1)(1-x_2)(x_3)+8(x_1)(x_2)(x_3)
 \end{split}
 \end{aligned}
