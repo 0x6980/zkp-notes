@@ -9,7 +9,7 @@ export default {
     pedersen_commitment_scheme: 'Pedersen Commitment',
     kate_commitment_scheme: 'Kate Commitment Scheme (KZG)',
     gkr: "GKR",
-    jpc: "Jagged Polynomial Commitments",
+    jpcs: "Jagged Polynomial Commitments",
     fri: {
       title: 'FRI',
       // title: 'Fast Reed-Solomon Interactive Oracle Proof of Proximity (FRI)',

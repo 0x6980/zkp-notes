@@ -1,4 +1,3 @@
-# Jagged Polynomial Commitments
 ## Jagged Function
 Let $p, k\in\mathbb{N}$. A jagged function with heights $\big(h_y\in[0,\dots, 2^n − 1]\big)_{y\in\{0,1\}^k}$ is a function $p : \{0, 1\}^n\times\{0, 1\}^k\rightarrow\mathbb{F}$ such that $p(x, y) = 0$ for every $x \in \{0, 1\}^n$ and $y \in \{0, 1\}^k$ for
 which $x \ge h_y$.
@@ -105,37 +104,37 @@ In particular, note that the $t_y$’s are monotonically non-decreasing, and tha
 We say that a sequence of cumulative heights $t = \big(t_y \in \{0, 1\}^m\big)_{y\in\{0,1\}^k}$ is **admissible** if it is of the above form, namely it is non-decreasing and $t_{1^k} = 2^m$.
 
 ## Bijection between $\{0, 1\}^m$ and non-zero part of $p$
-Fixing $t = \big(t_y \in \{0, 1\}^m\big)_{y\in\{0,1\}^k}$ as above a admissible sequence of cumulative heights, we construct a (natural) bijection between $\{0, 1\}^m$ and the non-zero part of $p$ via two functions $row_t : \{0, 1\}^m\rightarrow \{0, 1\}^n$ and $col_t : \{0, 1\}^m \rightarrow \{0, 1\}^k$ as follows. Given an index $i \in \{0, 1\}^m$, let $y \in \{0, 1\}^k$ be the smallest such that $i < t_y$. Define $col_t(i) = y$ and $row_t(i) = i − t_y − 1$ (where for simplicity of notation we use $t_{0^k}−1$ as a shorthand for 0).
+Fixing $t = \big(t_y \in \{0, 1\}^m\big)_{y\in\{0,1\}^k}$ as above a admissible sequence of cumulative heights, we construct a (natural) bijection between $\{0, 1\}^m$ and the non-zero part of $p$ via two functions $row_t : \{0, 1\}^m\rightarrow \{0, 1\}^n$ and $col_t : \{0, 1\}^m \rightarrow \{0, 1\}^k$ as follows. Given an index $i \in \{0, 1\}^m$, let $y \in \{0, 1\}^k$ be the smallest such that $i < t_y$. Define $col_t(i) = y$ and $row_t(i) = i − t_{y − 1}$ (where for simplicity of notation we use $t_{0^k}−1$ as a shorthand for 0).
 $$
 \begin{aligned}
     &row_t : \{0, 1\}^m\rightarrow \{0, 1\}^n\\
-    &row_t(i) = i − t_y − 1\\
+    &row_t(i) = i − t_{y − 1}\\
     &\\
     &col_t : \{0, 1\}^m \rightarrow \{0, 1\}^k\\
     &col_t(i) = y
 \end{aligned}
 $$
 Let's try this bijection in our Example 2:
-- Let $i=0\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 0 < t_y$ holds. Since $t_0 = 0$ not satisfies $i < t_0$. We choose $y = 1$, then $t_1 = 1$ and $i < t_y = t_1 = 1$. So, $row_t(i) = i − t_1 − 1 = 0 - 1 - 1 = -2$ and $col_t(i) = y = 1$.
-- Let $i=1\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 1 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ not satisfies $i < t_y$. We choose $y = 2$, then $t_2 = 3$ and $i < t_y = t_2 = 3$. So, $row_t(i) = i − t_2 − 1 = 1 - 2 - 1 = -2$ and $col_t(i) = y = 2$.
-- Let $i=2\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 2 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ not satisfies $i < t_y$. We choose $y = 2$, then $t_2 = 3$ and $i < t_y = t_2 = 3$. So, $row_t(i) = i − t_2 − 1 = 2 - 2 - 1 = -1$ and $col_t(i) = y = 2$.
-- Let $i=3\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 3 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ and $t_2 = 3$ not satisfies $3 < t_y$. We choose $y = 3$, then $t_3 = 6$ and $i = 3 < t_y = t_3 = 6$. So, $row_t(i) = i − t_3 − 1 = 3 - 6 - 1 = -4$ and $col_t(i) = y = 3$.
-- Let $i=4\in\{0,1\}^3$. Then, $row_t(4) = 4 − t_3 − 1 = 4 - 6 - 1 = -3$ and $col_t(4) = y = 3$.
-- Let $i=5\in\{0,1\}^3$. Then, $row_t(5) = 5 − t_3 − 1 = 5 - 6 - 1 = -2$ and $col_t(5) = y = 3$.
-- Let $i=6\in\{0,1\}^3$. Then, $row_t(6) = 6 − t_3 − 1 = 6 - 6 - 1 = -1$ and $col_t(6) = y = 3$.
-- Let $i=7\in\{0,1\}^3$. Then, $row_t(7) = 7 − t_3 − 1 = 7 - 6 - 1 = 0$ and $col_t(7) = y = 3$.
+- Let $i=0\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 0 < t_y$ holds. Since $t_0 = 0$ not satisfies $i < t_0$. We choose $y = 1$, then $t_1 = 1$ and $i < t_y = t_1 = 1$. So, $row_t(i) = i − t_{1 − 1} = i - t_0 = 0 - 0 = 0$ and $col_t(i) = y = 1$.
+- Let $i=1\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 1 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ not satisfies $i < t_y$. We choose $y = 2$, then $t_2 = 3$ and $i < t_y = t_2 = 3$. So, $row_t(i) = i − t_{2 − 1} = i- t_1 = 1 - 1 = 0$ and $col_t(i) = y = 2$.
+- Let $i=2\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 2 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ not satisfies $i < t_y$. We choose $y = 2$, then $t_2 = 3$ and $i < t_y = t_2 = 3$. So, $row_t(i) = i − t_{2 − 1} = i-t_1 = 2 - 1 = 1$ and $col_t(i) = y = 2$.
+- Let $i=3\in\{0,1\}^3$, then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 3 < t_y$ holds. Since $t_0 = 0$ and $t_1 = 1$ and $t_2 = 3$ not satisfies $3 < t_y$. We choose $y = 3$, then $t_3 = 6$ and $i = 3 < t_y = t_3 = 6$. So, $row_t(i) = i − t_{3 − 1} = i - t_2 = 3 - 3 = 0$ and $col_t(i) = y = 3$.
+- Let $i=4\in\{0,1\}^3$. Then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 4 < t_y = t_3 = 6$ holds. Then, $row_t(4) = 4 − t_{3 − 1} = 4 - t_2 = 4 - 3 = 1$ and $col_t(4) = y = 3$.
+- Let $i=5\in\{0,1\}^3$. Then we want to find a smallest $y\in\{0,1\}^2$ such that $i = 5 < t_y = t_3 = 6$ holds. Then, $row_t(5) = 5 − t_{3 − 1} = 5 - t_2 = 5 - 3 = 2$ and $col_t(5) = y = 3$.
+- Let $i=6\in\{0,1\}^3$. Then, $row_t(6) = 6 − t_{3 − 1} 6 - t_2 = 6 - 3 = 3$ and $col_t(6) = y = 3$.
+- Let $i=7\in\{0,1\}^3$. Then, $row_t(7) = 7 − t_{3 − 1} = 7 - t_2 = 7 - 3 = 4$ and $col_t(7) = y = 3$.
 - Note that $i = 8$, not belongs to $\{0,1\}^3$.
 $$
 \begin{aligned}
     &row_t: \{0, 1\}^3\rightarrow \{0, 1\}^2\\
-    &row_t(0) = -2,\\ 
-    &row_t(1) = -2,\\ 
-    &row_t(2) = -1,\\
-    &row_t(3) = -4,\\
-    &row_t(4) = -3,\\
-    &row_t(5) = -2,\\
-    &row_t(6) = -1,\\
-    &row_t(7) = 0
+    &row_t(0) = 0,\\ 
+    &row_t(1) = 0,\\ 
+    &row_t(2) = 1,\\
+    &row_t(3) = 0,\\
+    &row_t(4) = 1,\\
+    &row_t(5) = 2,\\
+    &row_t(6) = 3,\\
+    &row_t(7) = 4
 \end{aligned}
 $$
 $$
@@ -157,13 +156,31 @@ Back to our Example 2.
 $$
 \begin{aligned}
     &\mathrm{map} : \{0, 1\}^3\rightarrow \{(00, 01), (00, 10), (00, 11), (01, 10), (01, 11), (10, 11)\}\\
-    &0\mapsto(row_t(0), col_t(0)) = (-2, 1),\\ 
-    &1\mapsto(row_t(1), col_t(1)) = (-2, 2),\\ 
-    &2\mapsto(row_t(2), col_t(2)) = (-1, 2),\\
-    &3\mapsto(row_t(3), col_t(3)) = (-4, 3),\\
-    &4\mapsto(row_t(4), col_t(4)) = (-3, 3),\\
-    &5\mapsto(row_t(5), col_t(5)) = (-2, 3),\\
-    &6\mapsto(row_t(6), col_t(6)) = (-1, 3),\\
-    &7\mapsto(row_t(7), col_t(7)) = (0, 3)
+    &0\mapsto(row_t(0), col_t(0)) = (0, 1) = (00, 01),\\ 
+    &1\mapsto(row_t(1), col_t(1)) = (0, 2) = (00, 10),\\ 
+    &2\mapsto(row_t(2), col_t(2)) = (1, 2) = (01, 10),\\
+    &3\mapsto(row_t(3), col_t(3)) = (0, 3) = (00, 11),\\
+    &4\mapsto(row_t(4), col_t(4)) = (1, 3) = (01, 11),\\
+    &5\mapsto(row_t(5), col_t(5)) = (2, 3) = (10, 11),\\
+    &6\mapsto(row_t(6), col_t(6)) = (3, 3),\\
+    &7\mapsto(row_t(7), col_t(7)) = (4, 3)
+\end{aligned}
+$$
+
+## Dense Representation of Jagged Function $p$
+Define a function $q : \{0, 1\}^m \rightarrow\mathbb{F}$ such that $q(i) = p(row_t(i), col_t(i))$, for every $i \in \{0, 1\}^m$. We refer to $q$ as the *dense representation* of $p$, and to $p$ as the *sparse representation*. In other words $p$ is sparse representation of $q$.
+
+Back to our Example 2, want to define dense representation of $p$.
+$$
+\begin{aligned}
+    &q : \{0, 1\}^3\rightarrow \mathrm{F}\\
+    &q(0) = p(row_t(0), col_t(0)) = p(0, 1) = p(00, 01) = 4,\\ 
+    &q(1) = p(row_t(1), col_t(1)) = p(0, 2) = p(00, 10) = 5,\\ 
+    &q(2) = p(row_t(2), col_t(2)) = p(1, 2) = p(01, 10) = 7,\\
+    &q(3) = p(row_t(3), col_t(3)) = p(0, 3) = p(00, 11) = 6,\\
+    &q(4) = p(row_t(4), col_t(4)) = p(1, 3) = p(01, 11) = 8,\\
+    &q(5) = p(row_t(5), col_t(5)) = p(2, 3) = p(10, 11) = 9,\\
+    &q(6) = p(row_t(6), col_t(6)) = p(3, 3) = p(11, 11) = 0,\\
+    &q(7) = p(row_t(7), col_t(7)) = p(4, 3) = 0
 \end{aligned}
 $$
