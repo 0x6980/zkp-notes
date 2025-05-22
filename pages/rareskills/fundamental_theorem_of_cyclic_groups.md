@@ -5,7 +5,7 @@ This article introduces the Fundamental Theorem of Cyclic Groups.
 
 The Fundamental Theorem of Cyclic Groups provides guarantees about the existence of subgroups of a desired order.
 
-In the context of FRI Protocols and the Fast Fourier Transform of polynomials in a finite field, we need multiplicative subgroups that have an order which is a power of two. The Fundamental Theorem of Cyclic Groups enables us to quickly determine if a particular finite field has a multiplicative subgroup with that order or not.
+In the context of FRI Protocols and the Fast Fourier Transform of polynomials over a finite field, we need multiplicative subgroups that have an order which is a power of two. The Fundamental Theorem of Cyclic Groups enables us to quickly determine if a particular finite field has a multiplicative subgroup with that order or not.
 
 ## Subgroups
 Given a group $(G, *)$, a subset $H$ of $G$ is a subgroup of $G$ if $(H, *)$ form a group with respect to the group operation in $G$.
@@ -58,13 +58,13 @@ If $G$ is any group then $\{1\} = \langle 1\rangle$ is a cyclic subgroup of $G$.
 - $(F, +, .)$ is a field, we denote it by $F$.
 - $F^* = F\setminus\{0\}$.
 - $F_q$ is a field with $q$ elements.
-- When we say multiplicative subgroup $H$, means that $(H, .)$ is subgroup of $(F^*, .)$. So, now we completely understand the **multiplicative** word in "multiplicative subgroups" where come from.
+- When we say multiplicative subgroup $H$, means that $(H, .)$ is subgroup of $(F^*, .)$. Now we grasp where the **multiplicative** term in multiplicative subgroups comes from..
 
 
 ## Theorem 1
-If $F_q$ is a **finite field** with order of $q$, then $(F^*_q, .)$ is a cyclic group of order $q-1$.
+If $F_q$ is a **finite field** with order $q$, then $(F^*_q, .)$ is a cyclic group of order $q-1$.
 
-A cyclic group has a generator, therefore we know that $g\in F^*$ exists such that
+A cyclic group has a generator, therefore we know that some $g\in F^*$ exists such that
 $$
 F^*_q = \{1, g^1, g^2, \dots, g^{q-2}\} = \langle g \rangle
 $$
@@ -72,7 +72,7 @@ $$
 ## Primitive Elements (Generators)
 In field theory, a *primitive element* of a finite field $F_q$ is a generator of the multiplicative group of the field. The element $g$ in Theorem 1 is a primitive element in $F_q$.
 
-The below Python code uses the galois library to identify primitive elements (generators) in $F_7$.
+The Python code below uses the galois library to identify primitive elements (generators) in $F_7$.
 
 ```python
 import galois
@@ -97,19 +97,25 @@ The fundamental theorem of finite cyclic groups makes three claims. Let $G$ be a
 
 2. The order of $H$ (the number of elements it has) is a factor of the order of $G$. In other words, the order of $H$ divides the order of $G$. Suppose the order of $G$ is 6. We automatically know a subgroup of order 5 does not exist, since 5 does not divide 6.
 
-3. If $n$ is the order of $G$, and $k$ divides $n$, then a subgroup of size $k$ necessarily exists. In fact, we can immediately find a generator for it. if $g$ is a generator of $G$, then $\langle g^\frac{n}{k} \rangle$ is the generator for a subgroup of size $k$. We will show examples for this shortly.
+3. If $n$ is the order of $G$, and $k$ divides $n$, then a subgroup of size $k$ necessarily exists. In fact, we can immediately find a generator for it. if $g$ is a generator of $G$, then $g^\frac{n}{k}$ is a generator for a subgroup of size $k$. This subgroup of size $k$ is equal to $\langle g^\frac{n}{k} \rangle$. We will show examples for this shortly.
+
+### Remark
+Part (2) of The Fundamental Theorem of Finite Cyclic Groups is actually true for any finite group $G$, whether or not it is cyclic. This result is Lagrange’s Theorem.
 
 ### Example 4
-If $G = \langle g \rangle$ is any finite cyclic group of order $n$, and $\{1\}$ is a subgroup of order 1, then
+If $G = \langle g \rangle$ is any finite cyclic group of order $n$, and $\{1\}$ is a subgroup of order 1, then the generator of subgroup $\{1\}$ using fundamental theorem is $g^{\frac{n}{1}} = g^{n}$. And in a cyclic group of order $n$, generator $g$ to power $n$ is equal to element $1$. So, $g^n = 1$. Now we are going to generate the subgroup $\langle g^{\frac{n}{1}}\rangle$:
 $$
 \langle g^{\frac{n}{1}}\rangle = \langle g^{n}\rangle = \langle 1\rangle = \{1\}
 $$
-We used Corollary 1, for $g^{n} = 1$. For example, $3$ is a generator of $G = {1,2,3,4,5,6}$, and $3^6 = 1$ (mod 7).
+Consider group $G =\{1, 2, 3, 4, 5, 6\} = \langle 3\rangle$, non-zero integers under multiplication modulo 7 and $|G| = n = 6$. Then, the generator to power of size of the group, means $g^n = 3^6$ is equal to $1$ mod 7. So, for generating the subgroup of order 1, we have
+$$
+\langle g^{\frac{n}{1}}\rangle = \langle g^{n}\rangle = \langle 3^6\rangle = \langle 1\rangle = \{1\}
+$$
 
 ### Example 5
-Consider the group of non-zero integers under multiplication modulo 7 which is $G =\{1, 2, 3, 4, 5, 6\} = \langle 3\rangle$, and $|G| = 6$. We have that $g = 3$ is a generator for $G$ in our example. We want to use **The Fundamental Theorem of Finite Cyclic Groups** and find the subgroups of order 3 because $3|6$.
-- By **The Fundamental Theorem of Finite Cyclic Groups** part 3, since $3 | 6$, then $3^{\frac{n}{k}} = 3^{\frac{6}{3}} = 3^{2} = 9 \equiv 2$. Therefore, $2$ is a generator for the subgroup of order 3.
-- Then, $\langle 2 \rangle = \{1, 2, 4\}$
+Consider the group of non-zero integers under multiplication modulo 7 which is $G =\{1, 2, 3, 4, 5, 6\} = \langle 3\rangle$, and $|G| = 6$. We have that $g = 3$ is a generator for $G$ in our example. Using the fundamental theorem of finite cyclic groups, we know that there is a subgroup of order 3 because $3|6$.
+- As stated in the third statement of the **Fundamental Theorem of Finite Cyclic Groups**, since $3 | 6$, then we can find the generator of this group as $3^{\frac{n}{k}} = 3^{\frac{6}{3}} = 3^{2} = 9 \equiv 2$. Therefore, $2$ is a generator for the subgroup of order 3.
+- The elements of this subgroup are, $\langle 2 \rangle = \{1, 2, 4\}$
     $$
     \begin{aligned}
         &\langle 2 \rangle = \{2^0, 2^1, 2^2, 2^3, 2^4, 2^5, 2^6, \dots\} = \{1, 2, 4, 8\equiv \boxed{1}, 16\equiv \boxed{2}, 32\equiv \boxed{4}, 64 \equiv \boxed{1} \dots\}
@@ -140,11 +146,8 @@ $$
 ### Order of element
 If $g$ is an element of a group $G$, then the order of element $g$ is equal to order of subgroup $\langle g \rangle$. So, $\mathrm{ord} (g) = |\langle g \rangle|$. Colloquially, we can think of $\mathrm{ord}(g)$ as being the number of unique elements we get if we repeatedly multiply $g$ by itself.
 
-### Remark
-Part (2) of The Fundamental Theorem of Finite Cyclic Groups is actually true for any finite group $G$, whether or not it is cyclic. This result is Lagrange’s Theorem.
-
 ### Corollary 1
-A useful second corollary is that we can quickly check if a group of a certain size exists or not by listing all the divisors of n. For example, we can quickly check that $F_{41}$ has a subgroup of size 8 because 8 divides 40. For another example $F_{17}$ has a subgroup of size 8 because 8 divides 16, also has a subgroup of size 4, because 4 divides 16 and you can guess $F_{17}$ also has a subgroup of size 2.
+A useful corollary is that we can quickly check if a group of a certain size exists or not by listing all the divisors of n. For example, let us consider the field $F_41$, which has a multiplicative group $F_41^*$ with order 40. Then, we can quickly check that $F_{41}$ has a subgroup of size 8 because 8 divides 40. For another example, consider the field $F_{17}$, which has a multiplicative group $F_17^*$ with order 16. $F_{17}$ has a subgroup of size 8 because 8 divides 16, also has a subgroup of size 4, because 4 divides 16 and you can guess $F_{17}$ also has a subgroup of size 2.
 
 To find the generator for that subgroup however is a different question, which we answered in the part (3) of The Fundamental Theorem of Finite Cyclic Groups. 
 
@@ -196,7 +199,7 @@ print("A primitive element:", primitive_element)
 ```
 
 ## Using The Fundamental Theorem of Finite Cyclic Groups
-Suppose we want to know if a subgroup of order 4 exists. Recall from the theorem, since $n|q-1$, explicitly $4|16$, then $g^{\frac{q-1}{n}}$ is a generator and $\langle g^{\frac{q-1}{n}}\rangle$ is subgroup of size 4 and exactly. So
+Suppose we want to know if a multiplicative subgroup of order 4 in finite field $F_q = F_{17}$ exists. Note that multiplicative group of $F_q$ has size $q-1$. Then, for $F_{17}$ we have multiplicative group $F_{17}^*$ with $q-1 =17-1 = 16$ elements. Recall from the fundamental theorem of finite cyclic groups, since $n|q-1$, explicitly $4|16$, then $g^{\frac{q-1}{n}}$ is a generator and $\langle g^{\frac{q-1}{n}}\rangle$ is subgroup of size 4.
 $$
 g^{\frac{q-1}{n}} = 3^{\frac{16}{4}} = 3^4 \equiv 13
 $$
