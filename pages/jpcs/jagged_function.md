@@ -33,7 +33,7 @@ notation such as $x < x^{\prime}$ also in the case that both are bit-strings.
 
 So, in the above example $00$ is binary representation of number $0$, and $01$ for $1$, $10$ for $2$, and finally $11$ for $3$.
 
-Com back to our example, by given heights we have
+Com back to our example, by given heights,
 $$
 \begin{aligned}
     &p(00, 00) = 0,\space\space\space\space\space\text{because $x = 0 \ge h_{00} = 0$}\\

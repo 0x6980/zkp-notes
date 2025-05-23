@@ -51,7 +51,7 @@ $$
 \end{split}
 \end{aligned}
 $$
-then,
+then for $x=y$,
 $$
 \begin{aligned}
 \begin{split}
@@ -92,3 +92,20 @@ $$
 $$
 This is done by running the sumcheck protocol for products of multilinears. The sumcheck protocol reduces the above to a claim about a single point of $\tilde{q}$ and a single point of $\tilde{f}_t$.
 The former claim is the output of the verifier, and we show how the verifier can compute the latter claim directly.
+
+Completeness and soundness follow immediately from Sum-check protocol and so we proceed to the
+complexity analysis.
+
+On the prover’s side,
+- Recall that the prover already has access to $\big(q(i)\big)_{i\in\{0,1\}^m}$
+- The prover by first using $2^n$ multiplications and $2^n$ additions to generate the sequences $\big(eq(row_t(i), z_r)\big)_{row_t(i)\in\{0,1\}^n}$. Because, recall that $row_t : \{0, 1\}^m\rightarrow \{0, 1\}^n$, then every $row_t(i)\in \{0, 1\}^n$. Then 
+- And the prover take $2^k$ multiplications and $2^k$ additions to generate $\big(eq(col_t(i), z_c)\big)_{col_t(i)\in\{0,1\}^k}$. Because, recall that $col_t : \{0, 1\}^m\rightarrow \{0, 1\}^k$, then every $col_t(i)\in \{0, 1\}^k$.
+- Then, the prover can generate the sequence of values $\big(\tilde{f}_t(z_r, z_c, i)\big)_{i\in\{0,1\}^m}$ using equation (4) an $2^m$ additional multiplications (by simply iterating over $i \in \{0, 1\}^m$).
+- The total work to generate $\tilde{f}$ is therefore $2^m + 2^n + 2^k$ multiplications and $\mathrm{O}(2^n + 2^k)$ additions.
+- The sumcheck itself requires an additional $4 · 2^m$ multiplications and $\mathrm{O}(2^m)$ basic operations.
+
+On the verifier’s side,
+- The verifier performs $\mathrm{O}(m)$ field operations during the jagged sum-check.
+- At the end of the sum-check, the verifier derives a two claims as follow:
+  - A claim of the form $\tilde{q}(i) = \alpha$, for $i \in \mathbb{F}^m$ and $\alpha\in \mathbb{F}$, which is the output of the verifier in the jagged protocol.
+  - And one of the form $\tilde{f}(i) = \beta$, for $i \in \mathbb{F}^m$ and $\beta\in \mathbb{F}$, we show in the following chapter how it can be computed efficiently by the verifier.
