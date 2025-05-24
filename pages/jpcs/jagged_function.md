@@ -184,3 +184,8 @@ $$
     &q(7) = p(row_t(7), col_t(7)) = p(4, 3) = 0
 \end{aligned}
 $$
+
+## Commitment
+The commitment to $\tilde{p}$, is the multilinear
+oracle $\tilde{q} : \mathbb{F}^m \rightarrow \mathbb{F}$ and the cumulative heights $\{t_y\}_{y\in\{0,1\}^k}$, which are sent in the clear (i.e., not as
+an oracle — later when consider methods that avoid this).
