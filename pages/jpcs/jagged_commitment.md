@@ -108,4 +108,35 @@ On the verifier’s side,
 - The verifier performs $\mathrm{O}(m)$ field operations during the jagged sum-check.
 - At the end of the sum-check, the verifier derives a two claims as follow:
   - A claim of the form $\tilde{q}(i) = \alpha$, for $i \in \mathbb{F}^m$ and $\alpha\in \mathbb{F}$, which is the output of the verifier in the jagged protocol.
-  - And one of the form $\tilde{f}(i) = \beta$, for $i \in \mathbb{F}^m$ and $\beta\in \mathbb{F}$, we show in the following chapter how it can be computed efficiently by the verifier.
+  - And one of the form $\tilde{f}(i) = \beta$, for $i \in \mathbb{F}^m$ and $\beta\in \mathbb{F}$, we show in the following section how it can be computed efficiently by the verifier.
+
+## Efficiently Computing $\tilde{f}_t$
+Let $g : \{0, 1\}^n \times \{0, 1\}^{3m} \rightarrow \{0, 1\}$ be defined as $g(a, b, c, d) = 1$ if and only if $b < d$ and $b = a + c$.
+Let $\tilde{g} : \mathbb{F}^{n+3m} \rightarrow \mathbb{F}$ denote the multilinear extension of $g$. We relate $\tilde{f}_t$ to $\tilde{g}$ via the following claim.
+**Claim 1.** For every $z_r \in \mathbb{F}^n$, $z_c \in \mathbb{F}^k$ and $i \in \mathbb{F}^m$ it holds that:
+$$
+\begin{align}
+    \tilde{f}_t(z_r, z_c, i) = \sum_{y\in\{0,1\}^k}eq(z_c, y) · \tilde{g}(z_r, i, t_{y−1}, t_y),
+\end{align}
+$$
+where to simplify the notation, we use 
+$t_{0^k−1}$ to denote $0$.
+
+Proof. First consider the below Fact:
+
+Fact: Two multilinear polynomials $f, g : \mathbb{F}^m \rightarrow\mathbb{F}$ that agree on every input in $\{0, 1\}^m$ must also agree on every input in $\mathbb{F}^m$.
+Observe that both sides of the equation (5) are multilinear in $z_r$, $z_c$, and $i$. Thus, by above Fact, it suffices to prove the claim when $z_r \in \{0, 1\}^n$, $z_c \in \{0, 1\}^k$ and $i \in \{0, 1\}^m$.
+$$
+\begin{aligned}
+    \tilde{f}_t(z_r, z_c, i) = \sum_{y\in\{0,1\}^k}eq(z_c, y) · \tilde{g}(z_r, i, t_{y−1}, t_y),
+\end{aligned}
+$$
+In this case, the right hand side simplifies to $g(z_r, i, t_{y−1}, t_y)$, where $y = z_c$. Let's a little deep in this case.
+
+Not that, for any $y_1, y_2\in\{0,1\}^k$, the lagrange basis $eq(y_1, y_2)$ is equal to 0 except for $y_1 = y_2$, which is equal to 1. Then the right hand side of equation (5) simplifies to $g(z_r, i, t_{y−1}, t_y)$, where $y = z_c$.
+
+Suppose $g(z_r, i, t_{y−1}, t_y) = 1$. Then, by definition, $i < t_y$ and $i = z_r + t_{y−1}$ (where $t_{0^k−1}$ is defined as 0). As $t$ is admissible, this means that $t_{y−1} \le i < t_y$ and that $z_r = i − t_{y−1}$. Thus, $col_t(i) = y$ and $row_t(i) = z_r$ and so $f_t(z_r, y, i) = 1$.
+
+Similarly, if $f_t(z_r, y, i) = 1$ then $col_t(i) = y$ and $row_t(i) = z_r$, which means that $t_{y−1} \le i < t_y$ and that $z_r = i − t_{y−1}$ and therefore $g(z_r, i, t{y−1}, t_y) = 1$.
+
+Thus, by above Claim, to compute $\tilde{f}$ it suffices to compute $\tilde{g}$ at $2^k$ points. Computing the multilinear extension of a general function on $n + 3m$ variables takes time $2^{n+3m}$ which we cannot afford. Rather, in order to compute $\tilde{g}$ efficiently, we next show that there exists a small-width readonce branching program for computing $g$. **This, in combination with Lemma 4.2 below implies that the multilinear extension $\tilde{g}$ can be efficiently computed.**
