@@ -40,6 +40,16 @@ $$
 $$
 where now $f_{t,c}(z_{tab}, z_{row}, z_{col}, i)$ is a function that given the configuration $(t, c)$ outputs 1 if $i$ is mapped via the natural bijection to $(z_{tab}, z_{row}, z_{col})$ and otherwise outputs 0.
 
+
+## Define $f_{t,c}$
+Define a function $f_{t,c} : \{0, 1\}^k \times \{0, 1\}^n \times \{0, 1\}^c \times \{0, 1\}^m \rightarrow \{0, 1\}$ such that $f_{t,c}(z_{tab}, z_{row}, z_{col}, i) = 1$ if and only if $tab_t(i) = z_{tab}$, $row_t(i) = z_{row}$ and $col_t(i) = z_{col}$. In other words $f_{t,c}$ equals to 1, only when index $i$ maps to the given $(tab_t, row_t, col_t)$, and equals 0 elsewhere. We next show that for every index $i \in \{0, 1\}^m$ and $z_{tab} \in \mathbb{F}^k$ and $z_{row} \in \mathbb{F}^n$ and $z_{col} \in \mathbb{F}^c$, it holds that
+$$
+\begin{align}
+    \tilde{f}_{t,c}(z_{tab}, z_{row}, z_{col}, i) = eq(tab_t(i), z_{tab}) . eq(row_t(i), z_{row}) · eq(col_t(i), z_{col}),
+\end{align}
+$$
+where $\tilde{f}_{t,c}$ is the multilinear extension of $f_{t,c}$.
+
 ## Sum-check
 To check the claim, as expected, we employ the sum-check protocol (Lemma 2.3). 
 ### The Prover
@@ -54,4 +64,8 @@ $$
    f_{t,c}(z_{tab}, z_{row}, z_{col}, i) = \sum_{y\in\{0,1\}^k}eq(z_{tab}, y)\sum_{u}eq(u, c_y) · \tilde{g}_u(z_{row}, z_{col}, i, t_y, t_{y−1})
 \end{aligned}
 $$
-where $g(z_{row}, z_{col}, i, t_y, t_{y−1})$ is a function that checks that $i = t_{y−1} + z_{row} · 2^u + z_col$ and $i < t_y$.
+where $g(z_{row}, z_{col}, i, t_y, t_{y−1})$ is a function that checks that $i = t_{y−1} + z_{row} · 2^u + z_{col}$ and $i < t_y$.
+
+## Define $g$
+Let $g : \{0, 1\}^n \times \{0, 1\}^c \times \{0, 1\}^{4m} \rightarrow \{0, 1\}$ be defined as $g(a, b, c, d, e, f) = 1$ if and only if $c < e$ and $c = a. 2^d + f + b$.
+Let $\tilde{g} : \mathbb{F}^{n+c+4m} \rightarrow \mathbb{F}$ denote the multilinear extension of $g$.
