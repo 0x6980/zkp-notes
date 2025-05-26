@@ -5,7 +5,7 @@ Each vertex $v$ in layer $i < n$ has exactly $2^b$ outgoing edges, labeled by al
 
 ## Example 1
 A width-2 read-once branching program (ROBP) over the alphabet $\Sigma = \{0,1\}$ (i.e., $b=1$) with $n=3$ and $n+1 = 4$ layers:
-```mermaid
+```
 graph LR
     v0((v0)) -->|0| v1((v1))
     v0 -->|1| v2((v2))
@@ -45,7 +45,7 @@ $$
 
 ## Example 2
 A width-3 ROBP example with alphabet $\Sigma = \{0,1\}^2 = \{00, 01, 10, 11\}$ ($b=2$) and $n=2$ ($n+1 = 3$ total layers, including sinks):
-```mermaid
+```
 graph LR
     v0((v0)) -->|00| v1((v1))
     v0 -->|01| v2((v2))
@@ -200,7 +200,7 @@ an additional $w$ multiplications.
 - Alphabet ($b=1$): $\Sigma = \{0,1\}$
 - Sink Labels: $\mathbb{F}_3 = \{0,1,2\}$
 ### Graph Definition
-```mermaid
+```
 graph LR
     v0((v0)) -->|0| v1((v1))
     v0 -->|1| v2((v2))
@@ -227,6 +227,7 @@ $$
 &f(11) = 1,\qquad\text{(Path $v_0\xrightarrow{1} v_2\xrightarrow{1} 1$)}\\
 \end{aligned}
 $$
+
 ### Step-by-Step MLE Computation
 Let’s compute the MLE $\tilde{f}(z)$ at $z=(z_1,z_2)\in\mathbb{F}^2$, where $z_1$ corresponds to Layer 0 to Layer 1 and $z_2$ corresponds to Layer 1 to sinks.
 
@@ -301,7 +302,7 @@ $$
    - $eq(z_1, 1) · \tilde{f}_{v_2}(z_2)$ calculated with 1 multiplication.
    - $eq(z_1, 0) · \tilde{f}_{v_1}(z_2) + eq(z_1, 1) · \tilde{f}_{v_2}(z_2)$ calculated with 1 addition.
 
-In total, we have 8 Multiplications and 3 additions.
+Total: we have 8 Multiplications and 3 additions.
 
 1. Multiplications based on claim 1, is at most $n.(w^2+2^b) = 2.(2^2+2^1) = 12$.
 2. Additions based on claim 1 is at most $\mathrm{O}(n.w.2^b) = \mathrm{O}(2.2.2) = \mathrm{O}(8)$.
