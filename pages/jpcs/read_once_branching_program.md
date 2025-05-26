@@ -123,6 +123,8 @@ $$
 Now by noticing to above calculation we have a little extra result which we will introduce it latter as a lemma.
 $$
 \begin{aligned}
+    &f_{\varGamma(v_1, 0)}(0) = f_{v_3}(0) = 0 = f_{v_1}(00),\\
+    &f_{\varGamma(v_1, 0)}(1) = f_{v_3}(1) = 1 = f_{v_1}(01),\\
     &f_{\varGamma(v_1, 1)}(0) = f_{v_4}(0) = 1 = f_{v_1}(10),\\
     &f_{\varGamma(v_1, 1)}(1) = f_{v_4}(1) = 0 = f_{v_1}(11)
 \end{aligned}
@@ -139,8 +141,6 @@ $$
 $$
 You can write for any vertex $v$ a function $f_v$ by just using the graph.
 
-Consider the symbol $\zeta = 110$ in $\mathbb{F}$ which is equal to $3\in\mathbb{F}$ and a vector $z$ in $(\mathbb{F}^b)^{n−i-1} = \mathbb{F}$ want to calculate the $\tilde{f}_{v_2}$
-
 **Lemma 1.** For any vertex $v$ at layer $i<n$, and $\zeta\in\{0,1\}^b$, and $z\in(\{0,1\}^b)^{n-i-1}$
 $$
 f_{\varGamma(v, \zeta)}(z) = f_{v}(\zeta, z)\qquad\text{or bit-string format $f_{v}(\zeta z)$}
@@ -154,13 +154,13 @@ $$
 \end{align}
 $$
 **Proof.** Recall the fact that, two multilinear polynomials 
-$f, g : \mathbb{F}^m \rightarrow \mathbb{F}$ that agree on every input in $\{0, 1\}^m$ (which we show in equality (4)) must also agree on every input in $\mathbb{F}^m$, and since both sides of the equation (1) are multilinear (in the variables $\zeta$ and z), it suffices to proof equation (1) for boolean-valued $\zeta\in\{0,1\}^b$ and $z\in(\{0,1\}^{b})^{n−i−1}$.
+$f, g : \mathbb{F}^m \rightarrow \mathbb{F}$ that agree on every input in $\{0, 1\}^m$ must also agree on every input in $\mathbb{F}^m$, and since both sides of the equation (1) are multilinear (in the variables $\zeta$ and z), it suffices to proof equation (1) for boolean-valued $\zeta\in\{0,1\}^b$ and $z\in(\{0,1\}^{b})^{n−i−1}$.
 
 Now, since $eq(ζ, \sigma) = 0$, for all $\sigma\in\{0,1\}^{b}$ except for $\sigma=\zeta$, which is equal to 1, then the summation in this case:
 $$
 \sum_{\sigma\in\{0,1\}^b}eq(\zeta, \sigma) · \tilde{f}_{\varGamma(v,\sigma)}(z) =  \tilde{f}_{\varGamma(v,\zeta)}(z).
 $$
-On other han side, based on previous lemma 1, since:
+On the other hand side, based on previous lemma 1, since:
 $$
 f_{\varGamma(v,\zeta)}(z) = f_v(\zeta, z),
 $$
@@ -173,9 +173,9 @@ And finally equation (1) holds.
 
 The following lemma shows how to efficiently compute the MLE of functions computable by ROBP.
 
-**Lemma 2.** Suppose that the function $f : (\{0, 1\}^b)^n \rightarrow\mathbb{F}$ can be computed by a width $w$ ROBP. Then $\tilde{f} : (\mathbb{F}^b)^n \rightarrow \mathbb{F}$ can be computed using $n · (w^2 + 2b)$ multiplications and $\mathrm{O}(n · w · 2b)$ additions.
+**Lemma 2.** Suppose that the function $f : (\{0, 1\}^b)^n \rightarrow\mathbb{F}$ can be computed by a width $w$ ROBP. Then $\tilde{f} : (\mathbb{F}^b)^n \rightarrow \mathbb{F}$ can be computed using $n · (w^2 + 2^b)$ multiplications and $\mathrm{O}(n · w · 2^b)$ additions.
 
-Using Claim 1, the algorithm proceeds layer by layer and computes the evaluation of $\tilde{f}_v$, for every vertex $v$ (on the corresponding suffix of $z$). Eventually, the value obtained at the source vertex is precisely the desired $\tilde{f}f(z)$.
+Using Claim 1, the algorithm proceeds layer by layer and computes the evaluation of $\tilde{f}_v$, for every vertex $v$ (on the corresponding suffix of $z$). Eventually, the value obtained at the source vertex is precisely the desired $\tilde{f}(z)$.
 
 To obtain the desired number of multiplications we observe that for vertex $v$ in layer $i < n$, the equation (1) in Claim 1 can be rewritten as:
 $$
@@ -192,3 +192,116 @@ for every $v^{\prime}$ in layer $i+1$.
 
 Finally for every $v$ it uses equation (2) to layer $i$ it can use the generated data to compute $\tilde{f}_v(\zeta, z)$ using
 an additional $w$ multiplications.
+
+## Example 3
+### Setup ROBP Structure:
+- Width (w): 2
+- Layers: 3 ($n=2$ steps, Layer 0 is source, Layer 2 is the sinks)
+- Alphabet ($b=1$): $\Sigma = \{0,1\}$
+- Sink Labels: $\mathbb{F}_3 = \{0,1,2\}$
+### Graph Definition
+```mermaid
+graph LR
+    v0((v0)) -->|0| v1((v1))
+    v0 -->|1| v2((v2))
+    v1 -->|0| 1((1))
+    v1 -->|1| 2((2))
+    v2 -->|0| 0((0))
+    v2 -->|1| 1((1))
+```
+### Edge definitions:
+$$
+\begin{aligned}
+    &\varGamma(v_0, 0) = v_1, \varGamma(v_0, 1) = v_2,\\
+    &\varGamma(v_1, 0) = 1\space\space\text{(sink)}, \varGamma(v_1, 1) = 2 \space\space\text{(sink)},\\
+    &\varGamma(v_2, 0) = 0\space\space\text{(sink)}, \varGamma(v_2, 1) = 1\space\space\text{(sink)}
+\end{aligned}
+$$
+### Function Computed
+The function $f: (\{0, 1\}^b)^n = \{0,1\}^2\rightarrow\mathbb{F}_3$, given by:
+$$
+\begin{aligned}
+&f(00) = 1, \qquad\text{(Path $v_0\xrightarrow{0} v_1\xrightarrow{0} 1$)}\\
+&f(01) = 2, \qquad\text{(Path $v_0\xrightarrow{0} v_1\xrightarrow{1} 2$)}\\
+&f(10) = 0,\qquad\text{(Path $v_0\xrightarrow{1} v_2\xrightarrow{0} 0$)}\\
+&f(11) = 1,\qquad\text{(Path $v_0\xrightarrow{1} v_2\xrightarrow{1} 1$)}\\
+\end{aligned}
+$$
+### Step-by-Step MLE Computation
+Let’s compute the MLE $\tilde{f}(z)$ at $z=(z_1,z_2)\in\mathbb{F}^2$, where $z_1$ corresponds to Layer 0 to Layer 1 and $z_2$ corresponds to Layer 1 to sinks.
+
+**Base Case (sinks):**
+For all $u$ in sinks ($\mathbb{F}^3$)
+  $$
+  \begin{aligned}
+    &\tilde{f}_u(z) = \text{label}(u),\\
+    &\tilde{f}_0(z) = 0, \tilde{f}_1(z) = 1, \tilde{f}_2(z) = 2\\
+    &\\
+  \end{aligned}
+  $$
+**Layer 1 to sinks:** Which in this case $i =1$. Recall from claim (1) that for vertex $v$ in layer $i<n$, symbol $\zeta \in \mathbb{F}^b$ and vector $z \in (\mathbb{F}^b)^{n−i−1}$ it holds that:
+$$
+\begin{aligned}
+    \tilde{f}_v(\zeta, z) = \sum_{\sigma\in\{0,1\}^b}eq(\zeta, \sigma) · \tilde{f}_{\varGamma(v,\sigma)}(z)
+\end{aligned}
+$$
+When for layer $i = n-1$, we have $z \in (\mathbb{F}^b)^{n−i−1}= (\mathbb{F}^b)^{n-n+1−1}=(\mathbb{F}^b)^{0} = \{\}$. In another word we don't have $z$ in layer $n-1$, and the above equation holds just for $\zeta$ which belongs to layer $n-1$ to layer $n$.
+
+Back to our example, when we want create $\tilde{f}_{v_1}$ and $\tilde{f}_{v_2}$, as above discussion, since $v_1$, and $v_2$ are in layer $n-1 = 2-1 =1$, then we should just create $\tilde{f}_{v_1}(z_2)$, and $\tilde{f}_{v_2}(z_2)$, which $z_2$ corresponds to Layer 1 to sinks.
+  
+For vertex $v_1$, we want to generate $\tilde{f}_{v_1}$. 
+$$
+\begin{aligned}
+\tilde{f}_{v_1}(z_2) &= \sum_{\sigma\in\{0,1\}}eq(z_2, \sigma) · \tilde{f}_{\varGamma(v_1,\sigma)}(z_2)\\
+                   &= eq(z_2, 0) · \tilde{f}_{\varGamma(v_1,0)}(z_2) + eq(z_2, 1) · \tilde{f}_{\varGamma(v_1,1)}(z_2)\qquad\text{(2 terms $\times$ 1 mult)}\\
+                   &=eq(z_2, 0) · \tilde{f}_{1}(z_2) + eq(z_2, 1) · \tilde{f}_{2}(z_2)\\
+                   &= (1-z_2). 1 + z_2. 2\\
+                   &= 1+z_2
+\end{aligned}
+$$
+For vertex $v_2$, we want to generate $\tilde{f}_{v_2}$
+$$
+\begin{aligned}
+\tilde{f}_{v_2}(z_2) &= \sum_{\sigma\in\{0,1\}}eq(z_2, \sigma) · \tilde{f}_{\varGamma(v_2,\sigma)}(z_2)\\
+                   &= eq(z_2, 0) · \tilde{f}_{\varGamma(v_2,0)}(z_2) + eq(z_2, 1) · \tilde{f}_{\varGamma(v_2,1)}(z_2)\qquad\text{(2 terms $\times$ 1 mult)}\\
+                   &=eq(z_2, 0) · \tilde{f}_{0}(z_2) + eq(z_2, 1) · \tilde{f}_{1}(z_2)\\
+                   &= (1-z_2). 0 + z_2. 1\\
+                   & = z_2
+\end{aligned}
+$$
+**Layer 0 to Layer 1 ($i=0$):**
+For source $v_0$,
+$$
+\begin{aligned}
+\tilde{f}_{v_0}(z) &= \tilde{f}_{v_0}(z_1, z_2)\\
+                   &= \sum_{\sigma\in\{0,1\}}eq(z_1, \sigma) · \tilde{f}_{\varGamma(v_0,\sigma)}(z_2)\\
+                   &= eq(z_1, 0) · \tilde{f}_{\varGamma(v_0,0)}(z_2) + eq(z_1, 1) · \tilde{f}_{\varGamma(v_0,1)}(z_2)\qquad\text{(2 terms $\times$ 1 mult)}\\
+                   &=eq(z_1, 0) · \tilde{f}_{v_1}(z_2) + eq(z_1, 1) · \tilde{f}_{v_2}(z_2)\\
+                   &= (1-z_1). 0 + z_2. 1\\
+                   &= (1-z_1).(1-z_2) + z_1. z_2\\
+                   &= 1-z_1-z_2 + 2z_1. z_2\\
+\end{aligned}
+$$
+### Complexity Analysis
+1. $\tilde{f}_{v_1}(z_2)=eq(z_2, 0) · \tilde{f}_{1}(z_2) + eq(z_2, 1) · \tilde{f}_{2}(z_2)$ calculated with 3 multiplications and 1 addition, because: 
+   - $eq(z_2, 0)= 1-z_2$ calculated with 1 multiplications and in this case here without any additions.
+   - $eq(z_2, 1) = z_2$ already available.
+   - $eq(z_2, 0) · \tilde{f}_{1}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_2, 1) · \tilde{f}_{2}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_2, 0) · \tilde{f}_{1}(z_2) + eq(z_2, 1) · \tilde{f}_{2}(z_2)$ calculated with 1 addition.
+2. $\tilde{f}_{v_2}(z_2)=eq(z_2, 0) · \tilde{f}_{0}(z_2) + eq(z_2, 1) · \tilde{f}_{1}(z_2)$ calculated with 2 multiplications and 1 addition, because:
+   - $eq(z_2, 0), eq(z_2, 1)$ already available.
+   - $eq(z_2, 0) · \tilde{f}_{0}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_2, 1) · \tilde{f}_{1}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_2, 0) · \tilde{f}_{0}(z_2) + eq(z_2, 1) · \tilde{f}_{1}(z_2)$ calculated with 1 addition.
+3. $\tilde{f}_{v_0}(z)=eq(z_1, 0) · \tilde{f}_{v_1}(z_2) + eq(z_1, 1) · \tilde{f}_{v_2}(z_2)$ calculated with 3 multiplications and 1 addition, because: 
+   - $eq(z_1, 0) = 1-z_1$ calculated with 1 multiplications and 0 addition.
+   - $eq(z_1, 1) = z_1$ already available.
+   - $eq(z_1, 0) · \tilde{f}_{v_1}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_1, 1) · \tilde{f}_{v_2}(z_2)$ calculated with 1 multiplication.
+   - $eq(z_1, 0) · \tilde{f}_{v_1}(z_2) + eq(z_1, 1) · \tilde{f}_{v_2}(z_2)$ calculated with 1 addition.
+
+In total, we have 8 Multiplications and 3 additions.
+
+1. Multiplications based on claim 1, is at most $n.(w^2+2^b) = 2.(2^2+2^1) = 12$.
+2. Additions based on claim 1 is at most $\mathrm{O}(n.w.2^b) = \mathrm{O}(2.2.2) = \mathrm{O}(8)$.
