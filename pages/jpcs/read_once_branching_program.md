@@ -5,6 +5,7 @@ Each vertex $v$ in layer $i < n$ has exactly $2^b$ outgoing edges, labeled by al
 
 ## Example 1
 A width-2 read-once branching program (ROBP) over the alphabet $\Sigma = \{0,1\}$ (i.e., $b=1$) with $n=3$ and $n+1 = 4$ layers:
+
 ```
 graph LR
     v0((v0)) -->|0| v1((v1))
@@ -169,6 +170,7 @@ $$
 \tilde{f}_{\varGamma(v,\zeta)}(z) = \tilde{f}_v(\zeta, z)
 $$
 And finally equation (1) holds.
+
 ## Efficiently Compute the MLE of Function
 
 The following lemma shows how to efficiently compute the MLE of functions computable by ROBP.

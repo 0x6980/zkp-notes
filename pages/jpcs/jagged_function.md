@@ -248,6 +248,6 @@ $$
 To ensure correctness, let's evaluate $\tilde{q}$ at a few points:
 - At $(0, 0, 0)$: $\tilde{q}(0, 0, 0) = 3$, matches $q(000) = q(0)$.
 - At $(0, 0, 1)$: $\tilde{q}(0, 0, 1) = 1 + 3$, matches $q(001) = q(1)$.
-- At $(1, 1, 1)$: $\tilde{q}(0, 0, 1) = -5 + 5 + 4 + 1 - 2 + 2 + 1 + 3 = 9$, matches $q(111) = q(7)$.
+- At $(1, 1, 1)$: $\tilde{q}(1, 1, 1) = -5 + 5 + 4 + 1 - 2 + 2 + 1 + 3 = 9$, matches $q(111) = q(7)$.
 
 The commitment to $\tilde{p}$ is oracle access to $\tilde{q}$ and $(t_y)_{y\in\{0,1\}^k} = (t_y)_{y\in\{0,1\}^2} = {t_0,t_1, t_2, t_3} = {1, 2, 5, 8}$
