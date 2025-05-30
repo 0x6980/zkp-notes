@@ -25,6 +25,7 @@ $$
 | **1** | $p(1, 0) = 0$ | $p(1, 1) = 0$ |
 
 Note that height in column 0 is zero, because all rows in this column is zero. And in column 1 is 1, because after row 1 all column is zero.
+
 **Example 2.** Suppose $p : \{0, 1\}^2\times\{0, 1\}^2\rightarrow\mathbb{F}$ with heights
 $$
 \begin{aligned}
@@ -66,7 +67,7 @@ $$
 | **10** | $p(10, 00) = 0$ | $p(10, 01) = 0$ | $p(10, 10) = 1$ | $p(10, 11) = 9$ |
 | **11** | $p(11, 00) = 0$ | $p(11, 01) = 0$ | $p(11, 10) = 0$ | $p(11, 11) = 0$ |
 
-Note that, height in column $00$ is 1, because after row 1 all values, are zero. And height in column $01$ is 1, because after row 1 all values are zero. The height in column $10$ is 2, because after row 2 all values are zero. The height in column $11$ is 3, because after row 3, the only remaining cell value is zero.
+Note that, height in columns $00$ and $01$ are 1, because after row 1 all values, are zero. The height in columns $10$ and $11$ is 3, because after row 3 all values are zero, the only remaining cell value is zero.
 
 ## Non-zero Part of Jagged Function
 We refer to the set of coordinates $\{(x, y) \in \{0, 1\}^n \times \{0, 1\}^k\space\space\text{s.t.}\space\space x < h_y\}$ (i.e., the coordinates of $p$ which are not necessarily zero) as the non-zero part of $p$.
@@ -250,4 +251,4 @@ To ensure correctness, let's evaluate $\tilde{q}$ at a few points:
 - At $(0, 0, 1)$: $\tilde{q}(0, 0, 1) = 1 + 3$, matches $q(001) = q(1)$.
 - At $(1, 1, 1)$: $\tilde{q}(1, 1, 1) = -5 + 5 + 4 + 1 - 2 + 2 + 1 + 3 = 9$, matches $q(111) = q(7)$.
 
-The commitment to $\tilde{p}$ is oracle access to $\tilde{q}$ and $(t_y)_{y\in\{0,1\}^k} = (t_y)_{y\in\{0,1\}^2} = {t_0,t_1, t_2, t_3} = {1, 2, 5, 8}$
+The commitment to $\tilde{p}$ is oracle access to $\tilde{q}$ and $(t_y)_{y\in\{0,1\}^k} = (t_y)_{y\in\{0,1\}^2} = {t_0,t_1, t_2, t_3} = {1, 2, 5, 8}$.
