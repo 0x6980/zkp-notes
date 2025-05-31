@@ -1,4 +1,8 @@
 ## Read-Once Branching Program (ROBP) 
+## Introduction
+A read-once branching program (ROBP) is a computational model that captures bounded space computations, in which the input is read in a one-pass streaming manner. While this model is weak, it is very convenient for capturing simple calculations that often arise in proof-systems. For example, checking whether two strings are equal, the first is greater than the second (when interpreted as integers), addition relations, etc.
+
+## Definition
 For $w \in \mathbb{N}$, a width-$w$ read-once branching program (ROBP) over an alphabet $\Sigma = \{0, 1\}^b$ consists of a layered directed graph $G = (V, E)$, with $n + 1$ layers. The first layer, denoted layer 0, consists of a single vertex known as the source. Each subsequent layer consists of at most $w$ vertices. The vertices in the last layer (aka layer n) are called sinks and are each labeled by a field element.
 
 Each vertex $v$ in layer $i < n$ has exactly $2^b$ outgoing edges, labeled by all of the strings in $\Sigma$ each of which goes into layer $i + 1$ (or directly to a sink). For every symbol $\sigma\in\{0, 1\}^b$, we denote the neighbor of $v$ that is incident to the outgoing edge that is labeled by $\sigma$, by $\varGamma(v, \sigma)$.
@@ -93,7 +97,7 @@ Note that this width-3 ROBP computes a function over 4 symbols (2-bit inputs) wh
 Given an input $x \in \Sigma^n = (\{0,1\}^b)^n$, the ROBP is evaluated by starting at the source and proceeding on the
 edge marked with $x_1$, then by $x_2$ and so forth. After $n$ such steps, we reach a sink and output its label. Intuitively, such a branching program captures a streaming algorithm with space $\log_2(w)$, where the vertices in layer $i$ represent all possible configurations of the memory at time step $i$.
 
-## Definition $f_v$
+## Definition of $f_v$
 For a vertex $v$ in layer $i$, denote by $f_v : (\{0, 1\}^b)^{n−i} \rightarrow\mathbb{F}$ the function obtained by running
 the ROBP, but starting at $v$ (rather than the original source vertex).
 
