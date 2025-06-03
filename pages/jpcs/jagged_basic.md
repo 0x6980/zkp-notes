@@ -142,9 +142,106 @@ Thus, by above Claim, to compute $\tilde{f}$ it suffices to compute $\tilde{g}$ 
 Since $g : (\{0, 1\}^b)^m \rightarrow\mathbb{F}$ can be computed by a width 4 read-once branching program. Then $\tilde{g} : (\mathbb{F}^b)^m \rightarrow \mathbb{F}$ can be computed using $m · (w^2 + 2^b)$ multiplications and $\mathrm{O}(m · w · 2^b)$ additions.[Link](../jpcs/with4_robp.md#efficient-computable-g), [Link](../jpcs/with4_robp.md#efficient-computable-g)
 
 Thus, $\tilde{g}$ can computable by  $m . (4^2 + 2^4) = 32m$ multiplications and $\mathrm{O}(m · 4 · 2^4) = \mathrm{O}(64m)$ additions.
+
+## Example
+Suppose $p : \{0, 1\}^2\times\{0, 1\}^2\rightarrow\mathbb{F}$ with heights
 $$
 \begin{aligned}
-    v &= \sum_{i\in\{0,1\}^m} \tilde{q}(i) · \tilde{f}_t(z_r, z_c, i)\\
+\big\{h_y\in[0,\dots, 2^2 − 1]\big\}_{y\in\{0,1\}^2}
+=\big\{h_{00} = 0, h_{01} = 1, h_{10} = 2, h_{11} = 3\big\}
+\end{aligned}
+$$
+And table of points as
+|x\y     |**00**           |**01**           |**10**           |**11**           |
+|--------|-----------------|-----------------|-----------------|-----------------|
+| **00** | $p(00, 00) = 3$ | $p(00, 01) = 4$ | $p(00, 10) = 5$ | $p(00, 11) = 6$ |
+| **01** | $p(01, 00) = 0$ | $p(01, 01) = 0$ | $p(01, 10) = 7$ | $p(01, 11) = 8$ |
+| **10** | $p(10, 00) = 0$ | $p(10, 01) = 0$ | $p(10, 10) = 1$ | $p(10, 11) = 9$ |
+| **11** | $p(11, 00) = 0$ | $p(11, 01) = 0$ | $p(11, 10) = 0$ | $p(11, 11) = 0$ |
+
+First, we have an evaluation claim of the form $\tilde{p}(z_r, z_c) = v$, where $z_r \in \mathbb{F}^n$, $z_c \in \mathbb{F}^k$ and $v \in \mathbb{F}$.
+$$
+\begin{aligned}
+    v&= \tilde{p}(z_r, z_c)\\
+    &=\sum_{\substack{x\in\{0, 1\}^n\\ y\in\{0, 1\}^k}} p(x, y)·eq(x, z_r)·eq(y, z_c)\\
+    &= \sum_{i\in \{0,1\}^m} q(i)·eq(row_t(i), z_r)·eq(col_t(i), z_c)\\
+    &= \sum_{i\in\{0,1\}^m} \tilde{q}(i) · \tilde{f}_t(z_r, z_c, i)
+\end{aligned}
+$$
+The prover, already have the sequence 
+$$
+\begin{aligned}
+\{q(i)\}_{i\in\{0, 1\}^3} &= \{q(000), q(001), q(010), q(011), q(100), q(101), q(110)\}\\
+&=\{q(0), q(1), q(2), q(3), q(4), q(5), q(6), q(7)\}\\
+&=\{3, 4, 5, 7, 1, 6, 8, 9\}
+\end{aligned}
+$$
+The prover, generate the sequence 
+$$
+\begin{aligned}
+\big\{eq(row_t(i), z_r)\big\}_{row_t(i)\in\{0, 1\}^n} &= \big\{eq(0, z_r), eq(1, z_r), eq(2, z_r), eq(3, z_r),\big\}\\
+&= \big\{eq(00, z_r), eq(01, z_r), eq(10, z_r), eq(11, z_r)\big\}
+\end{aligned}
+$$
+with $2^n = 2^2 = 4$ multiplications and $2^n = 2^2 = 4$ additions.
+
+The prover, generate the sequence 
+$$
+\begin{aligned}
+\big\{eq(col_t(i), z_c)\big\}_{col_t(i)\in\{0, 1\}^k} &= \big\{eq(0, z_c), eq(1, z_c), eq(2, z_c), eq(3, z_c),\big\}\\
+&= \big\{eq(00, z_c), eq(01, z_c), eq(10, z_c), eq(11, z_c),\big\}
+\end{aligned}
+$$
+with $2^k = 2^2 = 4$ multiplications and $2^k = 2^2 = 4$ additions.
+
+Given above two sequences, the prover can generate the sequence of values $\big\{\tilde{f}_t(z_r, z_c, i)\big\}_{i\in\{0, 1\}^3}$ by $2^m = 2^3 = 8$ additional multiplications by simply iterating over $i\in\{0, 1\}^3$.
+
+$$
+\begin{aligned}
+&\tilde{f}_t(z_r, z_c, i) = eq(row_t(i), z_r) · eq(col_t(i), z_c)\\
+&\tilde{f}_t(z_r, z_c, 000) = eq(00, z_r) · eq(00, z_c) =\\
+\end{aligned}
+$$
+
+At final, the verifier can compute $\tilde{g}$ by $32m$ multiplications and $\mathrm{O}(64m)$ additions.
+
+As calculated before, $M = 2^m = 8 = 2^3$, thus $m = 3$. The multilinear extension of dense representation of $p$ computed as below:
+$$
+\begin{aligned}
+\tilde{q}(x) &= \sum_{b\in\{0, 1\}^3}q(b)eq(x, b)\\
+&=q(000)eq(x, 000) + q(001)eq(x, 001) + q(010)eq(x, 010) + q(011)eq(x, 011)\\
+ &\quad+ q(100)eq(x, 100) + q(101)eq(x, 101) + q(110)eq(x, 110) + q(111)eq(x, 111)\\
+             &= -5x_1x_2x_3 + 5x_1x_2 + 4x_1x_3 + x_2x_3 - 2x_1 + 2x_2 + x_3 + 3
+\end{aligned}
+$$
+
+The commitment to $\tilde{p}$ is oracle access to $\tilde{q}$ and $\{t_y\}_{y\in\{0,1\}^k} = \{t_y\}_{y\in\{0,1\}^2} = \{t_0,t_1, t_2, t_3\} = \{1, 2, 5, 8\}$. The prover sends this commitment to the verifier.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+-----------------------------------------------------------------------------------------------------------
+$$
+\begin{aligned}
+    v&= \tilde{p}(z_r, z_c)\\
+    &=\sum_{\substack{x\in\{0, 1\}^n\\ y\in\{0, 1\}^k}} p(x, y)·eq(x, z_r)·eq(y, z_c)\\
+    &= \sum_{i\in \{0,1\}^m} q(i)·eq(row_t(i), z_r)·eq(col_t(i), z_c)\\
+    &= \sum_{i\in\{0,1\}^m} \tilde{q}(i) · \tilde{f}_t(z_r, z_c, i)\\
       &=\sum_{i\in\{0,1\}^m} \tilde{q}(i) · \sum_{y\in\{0,1\}^k}eq(z_c, y) · \tilde{g}(z_r, i, t_{y−1}, t_y)
 \end{aligned}
 $$
