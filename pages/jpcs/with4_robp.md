@@ -24,7 +24,7 @@ does it hold that $b < d$ and $b = a + c$, where
 - $c$ is big-endian representation of $c_0\dots c_{m-1}$. In other words $c = \sum_{i=0}^{m-1}c_i2^i = c_02^0 + c_12^1+ c_22^2 + \dots + c_{m-1}2^{m-1}$.
 - $d$ is big-endian representation of $d_0\dots d_{m-1}$. In other words $d = \sum_{i=0}^{m-1}d_i2^i = d_02^0 + d_12^1+ d_22^2 + \dots + d_{m-1}2^{m-1}$.
 
-We will construct a ROBP that computes $g$. The width 4 comes from tracking the following states at each step:
+We will construct a ROBP that computes $g$. The width 4, comes from tracking the following states at each step:
 1. $carry_i$: Tracks whether $b = a + c$ has been satisfied for the bits read so far.
 2. $lt_i$: Tracks whether $b < d$ holds for the bits read so for.
 
