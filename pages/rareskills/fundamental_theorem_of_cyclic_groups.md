@@ -3,7 +3,7 @@
 ## Introduction
 This article introduces the Fundamental Theorem of Cyclic Groups.
 
-The Fundamental Theorem of Cyclic Groups provides guarantees about the existence of subgroups of a desired order.
+The Fundamental Theorem of Cyclic Groups provides guarantees about the existence of cyclic subgroups within a cyclic group.
 
 In the context of FRI protocols and the Fast Fourier Transform of polynomials over a finite field, we need multiplicative subgroups that have an order which is a power of two. The Fundamental Theorem of Cyclic Groups enables us to quickly determine if a particular finite field has a multiplicative subgroup with that order or not.
 
@@ -61,7 +61,7 @@ If $g \in G$, then the subgroup $\langle g\rangle = \{g^k: k\in\mathbb{Z}\}$ is 
 Let $g \in G$, If $G = \langle g\rangle$, then we say that $G$ is a cyclic group and that $g$ is a generator of $G$. 
 
 ### Example 3
-Consider the group of non-zero integers under multiplication modulo 7 which is $G =\{1, 2, 3, 4, 5, 6\}$. Since $\langle 3 \rangle = G$, then we say that $G$ is a cyclic group and $3$ is a generator of $G$.
+Consider the group of non-zero integers under multiplication modulo 7 which is $G =\{1, 2, 3, 4, 5, 6\}$. Since $\langle 3 \rangle = G$, as we showed in the section above on "Powers of a generator", we say that $G$ is a cyclic group and $3$ is a generator of $G$.
 
 ## Notation
 - Let $d$ and $n$ be integers, if $d$ divides $n$, we denote this by $d | n$. For example 3|6 but it is not true that 5|6.
@@ -113,28 +113,18 @@ The fundamental theorem of finite cyclic groups makes three claims. Let $G$ be a
 Statement (2) of The Fundamental Theorem of Finite Cyclic Groups is actually true for any finite group $G$, whether or not it is cyclic. This result is Lagrange’s theorem.
 
 ### Example 4
-If $G = \langle g \rangle$ is any finite cyclic group of order $n$, and $\{1\}$ is a subgroup of order 1, then the generator of subgroup $\{1\}$ using the fundamental theorem is $g^{\frac{n}{1}} = g^{n}$. And in a cyclic group of order $n$, the generator $g$ to power $n$ is equal to element $1$. So, $g^n = 1$. Now we are going to generate the subgroup $\langle g^{\frac{n}{1}}\rangle$:
-$$
-\langle g^{\frac{n}{1}}\rangle = \langle g^{n}\rangle = \langle 1\rangle = \{1\}
-$$
-Consider the group $G =\{1, 2, 3, 4, 5, 6\} = \langle 3\rangle$, non-zero integers under multiplication modulo 7, and $|G| = n = 6$. Then, the generator to power of size of the group, means $g^n = 3^6$ is equal to $1$ mod 7. So, for generating the subgroup of order 1, we have
-$$
-\langle g^{\frac{n}{1}}\rangle = \langle g^{n}\rangle = \langle 3^6\rangle = \langle 1\rangle = \{1\}
-$$
+Let's use $G = \{1,2,3,4,5,6\}$ under multiplication modulo 7 as our cyclic group.
+
+We've already shown earlier that $g = 3$ generates the whole group.
+
+Now let's try to find the generator for a subgroup of size 1. Since $k = 1$, we have $3^{\frac{6}{1}} \equiv 1$.
+
+$1$ is clearly the generator for a subgroup of size one.
+
+Now let's try to find a subgroup of size 2. We know it exists because $2|6$. Here we have $g = 3$, $n = 6$, and $k = 2$. Plugging it into the formula we have $g^{6/2} \equiv 3$ or $3^3 \equiv 6$. 6 generates $\{1, 6\}$.
 
 ### Example 5
-Consider the group of non-zero integers under multiplication modulo 7 which is $G =\{1, 2, 3, 4, 5, 6\} = \langle 3\rangle$, and $|G| = 6$. We have that $g = 3$ is a generator for $G$ in our example. Using the fundamental theorem of finite cyclic groups, we know that there is a subgroup of order 3 because $3|6$.
-- As stated in the third statement of the **Fundamental Theorem of Finite Cyclic Groups**, since $3 | 6$, we can find the generator of this subgroup as $3^{\frac{n}{k}} = 3^{\frac{6}{3}} = 3^{2} = 9 \equiv 2$. Therefore, $2$ is a generator for the subgroup of order 3.
-- The elements of this subgroup are $\langle 2 \rangle = \{1, 2, 4\}$
-    $$
-    \begin{aligned}
-        &\langle 2 \rangle = \{2^0, 2^1, 2^2, 2^3, 2^4, 2^5, 2^6, \dots\} = \{1, 2, 4, 8\equiv \boxed{1}, 16\equiv \boxed{2}, 32\equiv \boxed{4}, 64 \equiv \boxed{1} \dots\}
-    \end{aligned}
-    $$
-    You can see that in $\langle 2 \rangle$ the elements $1, 2, 4$ repeat as the power increases. So $\langle 2 \rangle = \{1, 2 , 4\}$.
-
-### Example 6
-Consider Example 5 assumptions:
+Consider Example 4 assumptions:
 
 Since $6 | 6$, we have a subgroup of order 6
 $$
