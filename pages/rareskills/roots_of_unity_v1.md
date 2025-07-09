@@ -129,55 +129,72 @@ num_roots = number_of_roots_of_unity(field_size, n)
 print(f"Number of {n}-th roots of unity in F{field_size}: {num_roots}")
 ```
 
+## Order Of An Element
+The order of element $a\in G$ is the **smallest** positive integer $k$ such that $a^k = 1$. For example, the order of element $1$ is 1.
+
+If there is no such $k$, then $a$ has **infinite order**.
+
+Consider the group of non-zero integers under multiplication modulo 7, $\{1, 2, 3, 4, 5, 6\}$. The powers of $2$ modulo 7 are as follow:
+$$
+\begin{aligned}
+&\boxed{2^6 = 64 = 1}\\
+&2^5 = 32 = 4\\
+&2^4 = 16 = 2\\
+&\boxed{2^3 = 8 = 1}\\
+&2^2 = 4\\
+&2^1 = 2
+\end{aligned}
+$$
+The smallest positive integer k such that $2^k ≡ 1$ (mod 7) is 3, so the order of $2$ (mod 7) is 3.
+
+The powers of $3$ modulo 7 are as follow:
+$$
+\begin{aligned}
+&\boxed{3^6 = 9 * 9 * 9 = 2 * 2 * 2 = 8 = 1}\\
+&3^5 = 9 * 9 * 3 = 5\\
+&3^4 = 81 = 4\\
+&3^3 = 27 = 6\\
+&3^2 = 2\\
+&3^1 = 3
+\end{aligned}
+$$
+The smallest positive integer k such that $3^k ≡ 1$ (mod 7) is 6, so the order of $3$ (mod 7) is 6.
+
+The powers of $6$ modulo 7 are as follow:
+```math
+\begin{aligned}
+&\boxed{6^6 = 36 * 36 * 36 = 1 * 1 * 1 = 1}\\
+&6^5 = 36 * 36 * 6 = 1 * 1 * 6 = 6\\
+&\boxed{6^4 = 36 * 36 = 1 * 1 = 1}\\
+&6^3 = 36 * 6 = 1 * 6 = 6\\
+&\boxed{6^2 = 36 = 1}\\
+&6^1 = 6
+\end{aligned}
+```
+The smallest positive integer k such that $6^k ≡ 1$ (mod 7) is 2, so the order of $6$ (mod 7) is 2.
+
+Note that the **order of an element** is different from the **order of a group**. The order of a group refers to the number of elements in the group, while the order of an element $a$ refers to the smallest positive integer $n$ such that $a^n =1$.
+
+**Corollary**:
+When the order of element $a$ is $k$, it means that $a^k = 1$ and no smaller positive power of $a$ equals $1$. Consequently, the cyclic subgroup $\langle a\rangle$ will contain $k$ distinct elements: $1 = a^0, a^1, a^2, \dots, a^{k-1}$. Therefore, the order of the cyclic subgroup $\langle a\rangle$ is also $k$. 
+
 ## Primitive Roots Of Unity
-In set of $n$-th roots of unity those elements like $a$ are primitive $n$-th root of unity which there exists smallest $n\in\mathbb{Z}$ such that  $a^n \equiv 1$. 
+An $n$-th root of unity $a$ is a *primitive $n$-th root of unity* when $\mathrm {ord} (a) = n$. In other words an element $a$ is a *primitive $n$-th root of unity* if
+1. $a$ is an $n$-th root of unity. So, $a^n \equiv 1$.
+2. $\mathrm {ord} (a) = n$. So, $n$ is the smallest positive integer such that $a^n \equiv 1$.
 
 For example in $F_7$:
-- $6$ is 2-nd root of unity because $6^2\equiv 1$. Since 2 is smallest positive integer such that $6^2\equiv 1$, then $6$ is primitive $2$-nd root of unity.
+- $6$ is 2-nd root of unity because $6^2\equiv 1$. Since the smallest positive integer k such that $6^k ≡ 1$ (mod 7) is 2$, then $6$ is primitive $2$-nd root of unity.
 
 - $4$ is a 6-th root of unity because $4^6$ is 1 but it is not a primitive root of unity because $4^3$ is also a solution and 3 is smaller than 6.
 
-- $4$ is a 3-rd root of unity because $4^3$ is 1. Since 3 is smallest positive integer such that $4^3\equiv 1$, then $4$ is primitive $3$-rd root of unity.
+- $4$ is a 3-rd root of unity because $4^3$ is 1. Since the smallest positive integer $k$ such that $4^k\equiv 1$ (mod 7) is 3, then $4$ is primitive $3$-rd root of unity.
 
-- $2$ is a 3-rd root of unity because $2^3$ is 1.Since 3 is smallest positive integer such that $2^3\equiv 1$, then $2$ is primitive $3$-rd root of unity.
+- $2$ is a 3-rd root of unity because $2^3$ is 1.Since the smallest positive integer $k$ such that $2^k\equiv 1$ (mod 7) is 3, then $2$ is primitive $3$-rd root of unity.
 
 - Two above examples shows that we have two primitive 3-rd roots of unity.
 
-### Powers of primitive root of unity
-Consider above examples and we want to calculate the powers of primitive $n$-th root of unity.
-
-- $6$ is a primitive 2-nd root of unity,
-  $$
-  \begin{aligned}
-    \{6^{1} = 6, 6^{2}\equiv 1, 6^3 \equiv 6, 6^4 \equiv 1, \dots\}
-  \end{aligned}
-  $$
-  You can see for all $i$ the $6^i$ is equal to $6$ or equal to $1$. Then, the powers of $6$ is $\{1, 6\}$. The powers of $6$ is the 2-nd roots of unity.
-- $4$ is a primitive 3-rd root of unity, then
-  $$
-  \begin{aligned}
-    \{4^{1} = 4, 4^{2}\equiv 2, 4^3 \equiv 1, 4^4 \equiv 4, \dots\}
-  \end{aligned}
-  $$
-  You can see for all $i$ the $4^i$ is equal to one of $1, 2, 4$. Then, the powers of $4$ is $\{1, 2, 4\}$. The powers of $4$ is the 3-rd roots of unity.
-- $2$ is a primitive 3-rd root of unity,
-  $$
-  \begin{aligned}
-    \{2^{1} = 2, 2^{2}\equiv 4, 2^3 \equiv 1, 2^4 \equiv 2, \dots\}
-  \end{aligned}
-  $$
-  You can see for all $i$ the $2^i$ is equal to one of $1, 2, 4$. Then, the powers of $2$ is $\{1, 2, 4\}$. The powers of $2$ is the 3-rd roots of unity.
-
-### Definition
-The below definition is the same as above discussion.
-
-An element $a$ is a *primitive $n$-th root of unity* if
-1. $a$ is an $n$-th root of unity. So, $a^n \equiv 1$.
-2. $\mathrm {ord} (a) = n$. So, $n$ is the smallest positive integer such that $a^n \equiv 1$.
-   
-In other words, an $n$-th root of unity is a *primitive $n$-th root of unity* when $\mathrm {ord} (a) = n$.
-
-### Example 11
+### Example 2
 Consider $F_7$ and the $n$-th roots of unity we calculated before in Example 1. We want to determine the primitive $n$-th roots of unity using the definition. We denote $H_i$ as the set of $i$-th roots of unity
 
 - $H_2 = \{1, 6\}$ is 2-nd roots of unity (Example 1). We want to find primitive 2-nd root of unity. For that we are looking for elements in 2-nd roots of unity such that the order of those element be equal to 2. Since 
@@ -263,6 +280,32 @@ GF.primitive_roots_of_unity(3)
 # GF([2, 4], order=7)
 ```
 
+
+## Powers of primitive root of unity
+Consider above examples and we want to calculate the powers of primitive $n$-th root of unity.
+
+- $6$ is a primitive 2-nd root of unity,
+  $$
+  \begin{aligned}
+    \{6^{1} = 6, 6^{2}\equiv 1, 6^3 \equiv 6, 6^4 \equiv 1, \dots\}
+  \end{aligned}
+  $$
+  You can see for all $i$ the $6^i$ is equal to $6$ or equal to $1$. Then, the powers of $6$ is $\{1, 6\}$. The powers of $6$ is equal to the 2-nd roots of unity (Example 1).
+- $4$ is a primitive 3-rd root of unity, then
+  $$
+  \begin{aligned}
+    \{4^{1} = 4, 4^{2}\equiv 2, 4^3 \equiv 1, 4^4 \equiv 4, \dots\}
+  \end{aligned}
+  $$
+  You can see for all $i$ the $4^i$ is equal to one of $1, 2, 4$. Then, the powers of $4$ is $\{1, 2, 4\}$. The powers of $4$ is equal to the 3-rd roots of unity (Example 1).
+- $2$ is a primitive 3-rd root of unity,
+  $$
+  \begin{aligned}
+    \{2^{1} = 2, 2^{2}\equiv 4, 2^3 \equiv 1, 2^4 \equiv 2, \dots\}
+  \end{aligned}
+  $$
+  You can see for all $i$ the $2^i$ is equal to one of $1, 2, 4$. Then, the powers of $2$ is $\{1, 2, 4\}$. The powers of $2$ is equal to the 3-rd roots of unity (Example 1).
+
 ## Every member of a subgroup of order $n$ is a $n$-th root of unity
 If $g$ is a primitive $n$-th root of unity, then $\mathrm{ord}(g)$ is $n$. Every element in $\langle g \rangle$ is a $n$-th root of unity, or in other words, every element of $\langle g \rangle$ raised to the $n$-th power is 1. Here is why:
 
@@ -272,13 +315,13 @@ $$
 $$
 Therefore, any member of $\langle g \rangle$ raised to the $n$-th power is 1, which is equivalent to saying every member of the $\langle g \rangle$  is a $n$-th root of unity.
 
-### Example 2
+### Example 3
 Since $\langle 3\rangle = F^*_7$ and $2|6$, then $3^{\frac{q-1}{n}} = 3^{\frac{6}{2}} = 3^{3} = 27 \equiv 6$ is a generator for 2-nd roots of unity $H_2 = \{1, 6\} = \langle 6\rangle$ in $F_7$. The element $6$ called the **primitive 2-nd root of unity**.
 
-### Example 3
+### Example 4
 Since $\langle 3\rangle = F^*_7$ and $3|6$, then $3^{\frac{q-1}{n}} = 3^{\frac{6}{3}} = 3^{2} = 9 \equiv 2$ is a generator for 3-rd roots of unity $H_3 = \{1, 2, 4\} = \langle 2\rangle$ in $F_7$. The element $2$ called the **primitive 3-rd root of unity**.
 
-### Example 4
+### Example 5
 - If $F_q$ is a finite field, any element $a\in F^*_q$ is $q-1$-th root of unity.
   - **Proof.** Recall from **Theorem 1** there is $g\in F^*$ such that
     $$
@@ -314,13 +357,13 @@ Since $\langle 3\rangle = F^*_7$ and $3|6$, then $3^{\frac{q-1}{n}} = 3^{\frac{6
 - Represents the smallest positive integer where raising the element to that power gives the identity. 
 - Also if the order of $a$ is $n$, then $a$ necessarily is a primitive $n$-th root of unity.
 
-### Example 5
+<!-- ### Example 6
 Those elements in 2-nd roots of unity are primitive 2-nd root of unity if the order of that element is equal to 2. 
 - In other words: $a \in 2$-nd roots of unity is a primitive 2-nd root of unity if $\mathrm{ord} (a) = 2$
 - $a \in 3$-rd roots of unity is a primitive 3-rd root of unity if $\mathrm{ord} (a) = 3$
 - $a \in 4$-th roots of unity is a primitive 4-th root of unity if $\mathrm{ord} (a) = 4$
 - And so on.
-- You know by definition of order of element, that $\mathrm{ord}(a) = n$ if $n$ is smallest positive integer such that $a^n =1$. So if $\mathrm{ord} (a) = 3$ means 3 is smallest positive integer such that $a^3 =1$, And so on.
+- You know by definition of order of element, that $\mathrm{ord}(a) = n$ if $n$ is smallest positive integer such that $a^n =1$. So if $\mathrm{ord} (a) = 3$ means 3 is smallest positive integer such that $a^3 =1$, And so on. -->
 
 ### The number of primitive $n$-th roots of unity
 The number of primitive $n$-th roots of unity in $F_q$ is $\phi (n)$ ([Euler's totient function](https://en.wikipedia.org/wiki/Euler%27s_totient_function)).
@@ -350,7 +393,7 @@ num_primitive_roots = number_of_roots_of_unity(field_size, n)
 print(f"Number of primitive {n}-th roots of unity in F{field_size}: {num_primitive_roots}")
 ```
 
-# Example 6
+# All in One Example
 Consider field $F_{17} =\{0, 1, 2,\dots, 16\}$. For a given $n$ we want to find all $n$-th roots of unity and primitive $n$-th root of unity in $F_{17}$ using roots of unity and primitive roots of unity definitions.
 
 ## The generator of $F^*_{17}$
