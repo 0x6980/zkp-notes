@@ -2,17 +2,17 @@
 # Roots of unity and Primitive roots of unity
 In the [previous article](https://hackmd.io/6ipdFFwPTTqHkDsSMwSeAw), we talked about multiplicative subgroups and how to find them in a finite field.
 
-In this article, we will introduce the concept of *roots of unity* and *primitive roots of unity*, both of which are tightly linked to multiplicative subgroups.
+In this article, we introduce the concept of *roots of unity* and *primitive roots of unity*, both of which are tightly linked to multiplicative subgroups.
 
 ## Roots Of Unity
-Let $a\in \mathbb{F}$. We say $a$ is an $n$-**th root of unity** when
+Let $a$ an element in the finite field $\mathbb{F}_q$ where $q$ is a the size of finite field. We say $a$ is an $n$-**th root of unity** if it satisfies:
 $$
 a^n = 1.
 $$
 In other words, there exists a positive integer $n$ such that $a$ raised to the power $n$ is 1. We can think of the 2nd root of unity ($n = 2$) as the square root of 1 and the 3rd root of unity ($n = 3$) as the cube root. The term "unity" just means "1".
 
 ### Example 1
-Consider field $\mathbb{F}_7 =\{0, 1, 2, 3, 4, 5, 6\}$:
+Consider the finite field $\mathbb{F}_7 =\{0, 1, 2, 3, 4, 5, 6\}$:
 - **Element-wise perspective:** For each element in $\mathbb{F}_7$, we determine the values of $n$ for which it is an $n$-th root of unity. For example, the element $1$ is an $i$-th root of unity for all $1\le i\le 6$.
 - **Fixed-$n$ perspective:** For a fixed $n$, we find all elements that are $n$-th roots of unity (i.e. solutions to $a^n = 1$). 
 
@@ -22,9 +22,13 @@ These two approaches yield the same results but provide complementary insights, 
 
 Since $1^i\equiv 1$ for all $1\le i\le 6$ then, the element $1$ is 1st, 2nd, 3rd, 4th, 5th and 6th roots of unity.
 
-The element $2$ is 3rd, 6th roots of unity because there exists $2^3\equiv 1$ and there exists $2^6\equiv 1$, but $2$ is not 4th root of unity because $2^4$ mod 7 is not $1$. For the same reason $2$ is not a 5th root of unity.
+The element 2 serves as both a 3rd and 6th root of unity in $\mathbb{F}_7$, since:
+$$
+2^3\equiv 1 \quad\text{(mod 7)}\qquad\text{and}\qquad 2^6\equiv 1\quad\text{(mode 7)}
+$$
+However, $2$ is not 4th root of unity because $2^4$ mod 7 is not $1$. For the same reason $2$ is not a 5th root of unity.
 
-The element $4$ is a 3rd root of unity because there exists $4^3 \equiv 1$, but $4$ is not a 2nd root of unity because $4^2$ mod 7 is not 1. For the same reason $4$ is not a 5th root of unity. Note that $4$ is a 6th root of unity too.
+The element $4$ is a 3rd root of unity because $4^3 \equiv 1$, but $4$ is not a 2nd root of unity because $4^2$ mod 7 is not 1. For the same reason $4$ is not a 5th root of unity. Note that $4$ is a 6th root of unity too.
 
 As exercise check the element $5$.
 
@@ -226,7 +230,7 @@ For example in $\mathbb{F}_7$:
 - Two above examples shows that we have two primitive 3rd roots of unity.
 
 ### Example 2
-Consider $\mathbb{F}_7$ and the $n$-th roots of unity we calculated before in Example 1. We want to determine the primitive $n$-th roots of unity using the definition. We denote $H_i$ as the set of $i$-th roots of unity
+Consider $\mathbb{F}_7$ and the $n$-th roots of unity we calculated before in Example 1. We want to determine the primitive $n$-th roots of unity using the definition. We denote $H_i$ as the set of $i$-th roots of unity.
 
 - $H_2 = \{1, 6\}$ is 2nd roots of unity (Example 1). We want to find primitive 2nd root of unity. For that we are looking for elements in 2nd roots of unity such that the order of those element be equal to 2. Since 
   $$
@@ -236,7 +240,7 @@ Consider $\mathbb{F}_7$ and the $n$-th roots of unity we calculated before in Ex
   \end{aligned}
   $$
 
-  Then $6$ is primitive 2nd root of unity and $1$ is not primitive because the order of $1$ is not 2 (again recall that the order of element $1$ is **smallest** positive integer n such that $1^n=1$).
+  Thus, the element $6$ is primitive 2nd root of unity and $1$ is not primitive 2nd root of unity because smallest positive integer $n$ such that $1^n=1$ is 1, not 2.
 - $H_3 = \{1, 2, 4\}$ is 3rd roots of unity. Since 
   $$
   \begin{aligned}
@@ -268,7 +272,7 @@ Consider $\mathbb{F}_7$ and the $n$-th roots of unity we calculated before in Ex
         \mathrm {ord} (6) = 2
     \end{aligned}
   $$
-  Then $3, 5$ are primitive 6th roots of unity. Because the order of $3, 5$ is 6. Note that $4^6\equiv 1$ but it is not a primitive 6th root of unity because the lowest $n$ that satisfied $4^n \equiv 1$ is 3. Therefore, it is a 6th root of unity, but not a primitive 6th root of unity. It is however a primitive 3rd root of unity.
+  Then $3, 5$ are primitive 6th roots of unity because the order of $3, 5$ is 6. Note that $4^6\equiv 1$ but it is not a primitive 6th root of unity because the lowest $n$ that satisfied $4^n \equiv 1$ is 3. Therefore, it is a 6th root of unity, but not a primitive 6th root of unity. It is however a primitive 3rd root of unity.
 
 The following code uses brute force to find primitive roots of unity:
 
@@ -339,7 +343,18 @@ num_primitive_roots = number_of_roots_of_unity(field_size, n)
 print(f"Number of primitive {n}-th roots of unity in F{field_size}: {num_primitive_roots}")
 ```
 
-## Powers of primitive root of unity
+## Every member of a subgroup of order $n$ is a $n$-th root of unity
+If $g$ is a primitive $n$-th root of unity, then $\mathrm{ord}(g)$ is $n$. Every element in $\langle g \rangle = \{1, g^1, \dots,g^{n-1}\}$ is an $n$-th root of unity; or in other words, every element of $\langle g \rangle$ raised to the $n$-th power is 1. Here is why:
+
+Suppose $g^m$ is a member of the subgroup $\langle g \rangle$ where $0\le m\le n-1$. Since $g$ is a primitive $n$-th root of unity, we have that $g^n = 1$. If we raise any member of $\langle g \rangle$ to the $n$-th power, we have that
+$$
+(g^{m})^{n} = g^{(mn)} = g^{(nm)} = (g^{n})^{m} = 1^m = 1
+$$
+Therefore, any member of $\langle g \rangle$ raised to the $n$-th power is 1, which is equivalent to saying every member of the $\langle g \rangle$  is an $n$-th root of unity. For example, see the 'Powers of a Primitive Root of Unity' section below.
+
+### Powers of primitive root of unity
+In this section, we demonstrate through examples how the powers of a primitive $n$-th root of unity generate all $n$-th roots of unity.
+
 Consider the examples above, and we want to calculate the powers of the primitive $n$-th root of unity.
 
 - $6$ is a primitive 2nd root of unity, and powers of $6$ are as follow:
@@ -364,27 +379,19 @@ Consider the examples above, and we want to calculate the powers of the primitiv
   $$
   You can see for all $i$ the $2^i$ is equal to one of $1, 2, 4$. Then, the powers of $2$ is $\{1, 2, 4\}$. Therefore, the powers of $2$ is equal to the 3rd roots of unity (Example 1).
 
-## Every member of a subgroup of order $n$ is a $n$-th root of unity
-If $g$ is a primitive $n$-th root of unity, then $\mathrm{ord}(g)$ is $n$. Every element in $\langle g \rangle$ is an $n$-th root of unity; or in other words, every element of $\langle g \rangle$ raised to the $n$-th power is 1. Here is why:
 
-If $g$ is a primitive $n$-th root of unity, then $g^m$ is a member of the subgroup $\langle g \rangle$. Since $g$ is a primitive $n$-th root of unity, we have that $g^n = 1$. If we raise any member of $\langle g \rangle$ to the $n$-th power, we have that
-$$
-(g^{m})^{n} = g^{(mn)} = g^{(nm)} = (g^{n})^{m} = 1^m = 1
-$$
-Therefore, any member of $\langle g \rangle$ raised to the $n$-th power is 1, which is equivalent to saying every member of the $\langle g \rangle$  is an $n$-th root of unity.
+## Remark: Efficient Computation of Roots of Unity in Finite Fields
+For a finite field $\mathbb{F}_q$ and positive integer $n$, the $n$-th roots of unity can be obtained by:
+- Finding a primitive $n$-th root of unity $\omega\in\mathbb{F}_q$ if one exists. Primitive $n$-th roots exist in $\mathbb{F}_q$ iff $n$ divides $q-1$. 
+- Computing all powers $\omega^k$ for $k = 0,1,\dots,n-1$.
+  
+In the two examples below (Example 3, 4), we successfully implemented this efficient computation method.
 
 ### Example 3
 Since $\langle 3\rangle = \mathbb{F}^*_7$ and $2|6$, recall from the fundamental theorem of cyclic groups that $3^{\frac{q-1}{n}} = 3^{\frac{6}{2}} = 3^{3} = 27 \equiv 6$ is a generator for the subgroup of order 2. Therefore, $\langle 6\rangle = \{1, 6\}$. On the other hand, since every member of a subgroup of order 2 is a 2nd root of unity, $\langle 6\rangle = \{1, 6\}$ consists of 2nd roots of unity in $\mathbb{F}_7$. The element $6$ called the **primitive 2nd root of unity**.
 
 ### Example 4
 Since $\langle 3\rangle = \mathbb{F}^*_7$ and $3|6$, recall from the fundamental theorem of cyclic groups that $3^{\frac{q-1}{n}} = 3^{\frac{6}{3}} = 3^{2} = 9 \equiv 2$ is a generator for the subgroup of order 3. Therefore, $\langle 2\rangle = \{1, 2, 4\}$. On the other hand, since every member of a subgroup of order 3 is a 3rd root of unity,  $\langle 2\rangle = \{1, 2, 4\}$ consists of 3rd roots of unity in $\mathbb{F}_7$. The element $2$ called the **primitive 3rd root of unity**.
-
-### Remark: Efficient Computation of Roots of Unity in Finite Fields
-For a finite field $\mathbb{F}_q$ and positive integer $n$, the $n$-th roots of unity can be obtained by:
-- Finding a primitive $n$-th root of unity $\omega\in\mathbb{F}_q$ if one exists. Primitive $n$-th roots exist in $\mathbb{F}_q$ iff $n$ divides $q-1$. 
-- Computing all powers $\omega^k$ for $k = 0,1,\dots,n-1$.
-  
-In the two examples above (Example 3, 4), we successfully implemented this efficient computation method.
 
 # All in One Example
 Consider the finite field $\mathbb{F}_{17} =\{0, 1, 2,\dots, 16\}$. For a given positive integer $n$, we aim to find all $n$-th roots of unity and primitive $n$-th root of unity in $\mathbb{F}_{17}$
@@ -485,7 +492,7 @@ Since $\mathbb{F}^*_q$ is cyclic group, there is generator $g\in \mathbb{F}^*$ s
 $$
 \langle g\rangle = \{1, g^1, g^2, \dots, g^{q-2}\} = \mathbb{F}^*_q
 $$
-recall from fundamental theorem of cyclic group, since $q-1|q-1$, then $g^{\frac{q-1}{q-1}} = g^{1} = g$ is a generator for $H_{q-1}$ which is $q-1$-th roots of unity in $\mathbb{F}_q$. So any element $a\in \mathbb{F}^*_q$ is $q-1$-th root of unity.
+Recall from fundamental theorem of cyclic group, since $q-1|q-1$, then $g^{\frac{q-1}{q-1}} = g^{1} = g$ is a generator for the subgroup of order $q-1$ which is exactly the $q-1$-th roots of unity in $\mathbb{F}_q$. So any element $a\in \mathbb{F}^*_q$ is $q-1$-th root of unity.
 
 # Appendix 2
 ## Key points to remember Order of an element and Primitive $n$-th root of unity:
