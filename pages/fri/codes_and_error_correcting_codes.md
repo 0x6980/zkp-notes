@@ -1133,12 +1133,6 @@ $$
 }
 $$
 
-Once this picture is understood, we can move to the next important question in coding theory:
-
-> **How can we construct useful codes with a large minimum distance without adding an unreasonable amount of redundancy?**
-
-<!-- That question leads naturally to **linear codes**, and from there to **Reed-Solomon Code**.
-
 We now understand what makes an error-correcting code useful: distance.
 A code whose codewords are far apart can detect and correct many errors.
 
@@ -1150,4 +1144,4 @@ And, more importantly for what comes next:
 
 Can we build such codes using mathematical structure that we can actually work with?
 
-To answer this, we will move from arbitrary sets of codewords to linear codes, and then from vectors to polynomials over finite fields. This path will eventually lead us to Reed–Solomon codes. -->
+To answer this, we will move from arbitrary sets of codewords to linear codes, and then from vectors to polynomials over finite fields. This path will eventually lead us to Reed–Solomon codes.
