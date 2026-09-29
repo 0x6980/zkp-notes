@@ -1,61 +1,159 @@
-# Introduction
+# Chapter 1 — Why Error-Correcting Codes?
 
-## Module 1: RS Codes
+* What is a code?
+* Why transmit codewords?
+* Noise
+* Redundancy
+* Error detection
+* Error correction
+* Hamming distance
+* Minimum distance
 
-## Module 2: IOPP
+This is essentially the chapter we already wrote.
 
-## Module 3: FRI
+# Chapter 2 — Linear Codes
 
-### Introduction
+Keep this relatively short.
 
-### Codes
+* Vectors over $\mathbb F_2$
+* Linear codes
+* Hamming weight
+* Minimum distance of a linear code $[n,k,d]$
+* Rate
+* Generator matrix — brief
+* Parity-check matrix — brief
+* Syndrome — optional
 
-### Error Correcting Code
+The goal isn't to become experts in classical linear-code decoding.
 
-### Block Codes
+The goal is:
 
-### Unique Decoding 
+Give students the algebraic language they need for RS codes.
 
-### Linear Codes
+# Chapter 3 — Finite Fields
 
-### Decoding
+This is essential for FRI.
 
-### Polynomials
+* Why fields? $\mathbb F_p$
+* Extension fields $\mathbb F_{p^m}$
+* Field arithmetic
+* Inverses
+* Polynomial arithmetic
+* Roots
+* Multiplicative groups
+* Roots of unity
 
-### Reed-Solomon Codes
+Especially:
 
-### Decoding
+$$ \omega^n=1. $$
 
-### **Berlekamp–Welch RS Code Decoding Algorithm**
+# Chapter 4 — Polynomials over Finite Fields
 
-### RS Codes Error Probability
+Very important.
 
-### Proximity Test
+* Degree
+* Roots
+* Fundamental root bound
+* Polynomial interpolation
+* Lagrange interpolation
+* Polynomial evaluation
+* Uniqueness
 
-### Proximity Gap
+The key theorem:
 
-### Low Degree Test
+$$ 
+\boxed{ \deg f<k \quad\Longrightarrow\quad f\text{ is determined by } k \text{ distinct evaluations}. }
+$$
 
-### Folding
+# Chapter 5 — Reed–Solomon Codes
 
-### FRI
+Now introduce RS properly.
 
-### Interactive Oracle Proof (IOP)
+$$ 
+RS(D,d) = \{(f(x))_{x\in D}:\deg f<d\}. 
+$$
 
-### IOP of Proximity (IOPP)
+Then:
 
+* Message polynomial
+* Evaluation domain
+* Encoding
+* Codeword
+* Dimension
+* Rate
+* Minimum distance
+* Proof that $d_{\min}=n-d+1$
+* MDS property
+* Error correction capacity
+* Proximity to RS
 
+This should be the RS chapter for FRI, rather than the classical-decoding-heavy version.
 
+# Chapter 6 — Reed–Solomon Proximity
 
-# Previous version
+This is where we start explicitly moving toward FRI.
 
-## Codes
-## Linear Codes
-## Reed–Solomon Codes
-### Vandermonde matrix
-## Polynomial Commitment with Reed-Solomon Codes
-### Merkle tree
-### Issues of RS-codes poly-commit
-### The FRI
-## RS proximity problem
-## RS proximity testing
+* Hamming distance from a word to a code
+* Relative distance
+* Close to an RS code
+* Low-degree functions
+* Low-degree testing
+* Why testing is different from decoding
+* Why we don't want to read the whole function
+
+This chapter creates the motivation for FRI.
+
+# Chapter 7 — Evaluation Domains for FRI
+* Multiplicative subgroups
+* Roots of unity
+* Cosets
+* Domains of size \(2^m\)
+* Pairing $x\leftrightarrow -x$
+* Why these domains are convenient
+* Chapter 8 — The Algebra Behind FRI Folding
+
+Introduce
+
+$$ f(X)=g(X^2)+Xh(X^2). $$
+
+Then derive
+
+$$ g(x^2)=\frac{f(x)+f(-x)}2 $$
+
+and
+
+$$ h(x^2)=\frac{f(x)-f(-x)}{2x}. $$
+
+Then explain how the protocol uses a random challenge to combine these pieces into a new lower-degree polynomial.
+
+This is where students can finally see why FRI can repeatedly reduce the degree.
+
+Chapter 9 — The FRI Protocol
+
+Only now introduce the actual protocol.
+
+Students already understand:
+
+$$ \text{polynomial} $$
+$$ \downarrow $$ 
+$$ \text{RS evaluation} $$ 
+$$ \downarrow $$ 
+$$ \text{proximity} $$ 
+$$ \downarrow $$
+$$ \text{folding} $$
+$$ \downarrow $$ 
+$$ \text{smaller RS problem}. $$
+
+Then the FRI protocol becomes much less mysterious.
+
+So the overall architecture is:
+
+Chapter 1: Why do we need error-correcting codes?
+Chapter 2: How can we give codes useful algebraic structure?
+Chapter 3: What mathematical universe do we need for that structure?
+Chapter 4: How do polynomials behave over that universe?
+Chapter 5: How do polynomial evaluations become a code? → Reed–Solomon
+Chapter 6: What does it mean for a function to be close to a Reed–Solomon codeword?
+Chapter 7: Why are special evaluation domains useful?
+Chapter 8: How does folding reduce the degree?
+Chapter 9: FRI.
