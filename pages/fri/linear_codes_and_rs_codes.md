@@ -4,7 +4,7 @@
 
 In the previous chapter, we learned that the minimum distance of a code determines its ability to detect and correct errors.
 
-Recall that a code with minimum distance \(d_{\min}\) can correct
+Recall that a code with minimum distance $d_{\min}$ can correct
 
 $$
 t=
@@ -15,15 +15,9 @@ $$
 
 errors.
 
-So, naturally, we want a large minimum distance.
-
-This leads to a fundamental question:
+So, naturally, we want a large minimum distance. This leads to a fundamental question:
 
 > **How can we construct codes whose codewords are far apart?**
-
-But there is another requirement.
-
-A code should not only be powerful. It should also be **useful**.
 
 We would like to be able to:
 
@@ -49,21 +43,15 @@ One of the most important ways of obtaining this structure is through **linear c
 
 ---
 
-# 2. A first attempt at constructing a code
+# A first attempt at constructing a code
 
-Suppose our messages consist of two bits.
-
-There are four possible messages:
+Suppose our messages consist of two bits $\{0,1\}$. There are four possible messages:
 
 $$
 00,\quad01,\quad10,\quad11.
 $$
 
-Suppose we want to protect these messages against errors.
-
-One possibility is to add redundancy.
-
-For example, we could encode
+Suppose we want to protect these messages against errors. One possibility is to add redundancy. For example, we could encode
 
 $$
 00\rightarrow00000
@@ -81,13 +69,7 @@ $$
 11\rightarrow11110.
 $$
 
-Now each message is represented by a word of length \(5\).
-
-We have transformed a message of length \(2\) into a codeword of length \(5\).
-
-This gives us redundancy.
-
-But there is an important question:
+Now each message is represented by a word of length \(5\). We have transformed a message of length \(2\) into a codeword of length \(5\). This gives us redundancy. But there is an important question:
 
 > **How did we choose these particular codewords?**
 
@@ -97,7 +79,7 @@ This is where algebra becomes useful.
 
 ---
 
-# 3. Look for structure
+# Look for structure
 
 Consider the following code:
 
@@ -106,33 +88,25 @@ C=
 \{00000,00111,11001,11110\}.
 $$
 
-Something interesting happens if we add two codewords using binary addition.
-
-For example,
+Something interesting happens if we add two codewords using binary addition. For example,
 
 $$
 00111+11001
 $$
 
-where addition is performed modulo \(2\).
-
-We obtain
+where addition is performed modulo \(2\). We obtain
 
 $$
 11110.
 $$
 
-And \(11110\) is also a codeword.
-
-Similarly,
+And \(11110\) is also a codeword. Similarly,
 
 $$
 00111+11110=11001.
 $$
 
-Again, the result is a codeword.
-
-Also,
+Again, the result is a codeword. Also,
 
 $$
 11001+11110=00111.
@@ -146,83 +120,11 @@ This is the beginning of the idea of a **linear code**.
 
 ---
 
-# 4. Binary addition
-
-Before defining linear codes, let's make sure the operation is clear.
-
-In binary arithmetic over \(\mathbb F_2\),
-
-$$
-0+0=0,
-$$
-
-$$
-0+1=1,
-$$
-
-$$
-1+0=1,
-$$
-
-and
-
-$$
-1+1=0.
-$$
-
-The last rule may look strange.
-
-But it is simply addition modulo \(2\):
-
-$$
-1+1=2\equiv0\pmod2.
-$$
-
-For example,
-
-$$
-1011+1101
-$$
-
-is calculated as
-
-$$
-0110.
-$$
-
-Indeed,
-
-$$
-1+1=0,
-$$
-
-$$
-0+1=1,
-$$
-
-$$
-1+0=1,
-$$
-
-$$
-1+1=0.
-$$
-
-Thus
-
-$$
-1011+1101=0110.
-$$
-
----
-
-# 5. What is a linear code?
+# What is a linear code?
 
 Now we can define the idea.
 
-A code \(C\subseteq\mathbb F_q^n\) is called a **linear code** if it is a vector subspace of \(\mathbb F_q^n\).
-
-For a binary code, this means that if
+A code $C\subseteq\mathbb F_q^n$ is called a **linear code** if it is a vector subspace of $\mathbb F_q^n$. For a binary code, this means that if
 
 $$
 x,y\in C,
@@ -236,7 +138,7 @@ $$
 
 Also, multiplying a codeword by an element of the field must produce another codeword.
 
-For binary codes, the only scalars are \(0\) and \(1\), so this condition is very simple.
+For binary codes, the only scalars are 0 and 1, so this condition is very simple.
 
 Therefore, for a binary code, you can think of linearity as:
 
@@ -252,15 +154,23 @@ This simple property gives us a huge amount of structure.
 
 ---
 
-# 6. Why is linearity useful?
+## Exercise 1 — Linear or not?
 
-Suppose we have a code containing thousands or millions of codewords.
+Consider the following binary code:
 
-We don't want to list every codeword individually.
+$$
+C=\{000,011,101,110\}.
+$$
 
-Instead, we want a compact description of the whole code.
+Check whether \(C\) is a linear code.
 
-Linearity allows us to describe the code using a small number of special codewords called **basis vectors**.
+Try adding different pairs of codewords.
+
+---
+
+# Why is linearity useful?
+
+Suppose we have a code containing thousands or millions of codewords. We don't want to list every codeword individually. Instead, we want a compact description of the whole code. Linearity allows us to describe the code using a small number of special codewords called **basis vectors**.
 
 For example, consider
 
@@ -385,7 +295,26 @@ So the generator matrix gives us a systematic way to encode messages.
 
 ---
 
-# 8. Dimension and length
+## Exercise 2 — Generator matrix
+
+Consider
+
+$$
+G=
+\begin{pmatrix}
+1&0&1&1\\
+0&1&1&0
+\end{pmatrix}.
+$$
+
+1. List all codewords generated by \(G\).
+2. How many codewords are there?
+3. What are \(n\) and \(k\)?
+4. Calculate the minimum distance.
+
+---
+
+# Dimension and length
 
 A linear code is usually described using parameters such as
 
@@ -395,21 +324,17 @@ $$
 
 Let's understand these one at a time.
 
-### \(n\): length
+### $n$: length
 
-Each codeword has \(n\) symbols.
-
-In our example,
+Each codeword has $n$ symbols. In our example,
 
 $$
 n=5.
 $$
 
-### \(k\): dimension
+### $k$: dimension
 
-The code has \(k\) independent generator vectors.
-
-In our example,
+The code has $k$ independent generator vectors. In our example,
 
 $$
 k=2.
@@ -421,9 +346,7 @@ $$
 q^k
 $$
 
-codewords in a \(q\)-ary linear code.
-
-For a binary code,
+codewords in a $q$-ary linear code. For a binary code,
 
 $$
 2^k.
@@ -437,7 +360,7 @@ $$
 
 codewords.
 
-### \(d\): minimum distance
+### $d$: minimum distance
 
 This is the minimum Hamming distance between distinct codewords.
 
@@ -447,11 +370,11 @@ $$
 [5,2,d].
 $$
 
-We still need to calculate \(d\).
+We still need to calculate $d$.
 
 ---
 
-# 9. A beautiful property of linear codes
+# A beautiful property of linear codes
 
 For a linear code, there is a very useful shortcut.
 
@@ -469,17 +392,13 @@ $$
 
 we can relate distance to Hamming weight.
 
-The **Hamming weight** \(wt(x)\) is the number of nonzero positions in \(x\).
-
-For example,
+The **Hamming weight** $wt(x)$ is the number of nonzero positions in $x$. For example,
 
 $$
 wt(00111)=3.
 $$
 
-Now consider two codewords \(x\) and \(y\).
-
-Over \(\mathbb F_2\),
+Now consider two codewords $x$ and $y$. Over $\mathbb F_2$,
 
 $$
 x-y=x+y.
@@ -491,7 +410,7 @@ $$
 d(x,y)=wt(x+y).
 $$
 
-Since \(x+y\) is itself a codeword, the minimum distance is simply the minimum nonzero weight of a codeword:
+Since $x+y$ is itself a codeword, the minimum distance is simply the minimum nonzero weight of a codeword:
 
 $$
 \boxed{
@@ -505,7 +424,7 @@ This is an extremely useful property of linear codes.
 
 ---
 
-# 10. Example
+# Example
 
 Consider
 
@@ -576,31 +495,42 @@ $$
 
 ---
 
-# 11. A new problem appears
+## Exercise 3 — Distance and correction
 
-Linear codes have given us a beautiful structure.
+A linear code has parameters
 
-But we still have our original problem:
+$$
+[10,4,d].
+$$
+
+Suppose its minimum distance is
+
+$$
+d=5.
+$$
+
+Determine:
+
+1. How many errors can it detect?
+2. How many errors can it correct?
+
+---
+
+# A new problem appears
+
+Linear codes have given us a beautiful structure. But we still have our original problem:
 
 > **How can we construct linear codes with very large minimum distance?**
 
-We could try random generator matrices.
+We could try random generator matrices. Sometimes they work well. But coding theory gives us much more systematic constructions. One particularly important idea is to connect coding with **polynomials**.
 
-Sometimes they work well.
-
-But coding theory gives us much more systematic constructions.
-
-One particularly important idea is to connect coding with **polynomials**.
-
-This may seem surprising at first.
-
-What could polynomials possibly have to do with correcting errors?
+This may seem surprising at first. What could polynomials possibly have to do with correcting errors?
 
 The answer is remarkably beautiful.
 
 ---
 
-# 12. From vectors to polynomials
+# From vectors to polynomials
 
 Consider a polynomial
 
@@ -608,15 +538,13 @@ $$
 f(x)=a_0+a_1x+a_2x^2+\cdots+a_{k-1}x^{k-1}.
 $$
 
-There are \(k\) coefficients:
+There are $k$ coefficients:
 
 $$
 a_0,a_1,\ldots,a_{k-1}.
 $$
 
-So a message consisting of \(k\) symbols can naturally be viewed as the coefficients of a polynomial.
-
-For example, suppose our message is
+So a message consisting of $k$ symbols can naturally be viewed as the coefficients of a polynomial. For example, suppose our message is
 
 $$
 (2,5,1).
@@ -644,17 +572,33 @@ $$
 f(0),f(1),f(2),f(3),f(4).
 $$
 
-This sequence can be used as a codeword.
-
-This is the basic idea behind **Reed–Solomon codes**.
+This sequence can be used as a codeword. This is the basic idea behind **Reed–Solomon codes**.
 
 ---
 
-# 13. Why does evaluating a polynomial help?
+## Exercise 4 — Polynomial representation
 
-This is the crucial insight.
+Consider the polynomial
 
-Suppose two different messages correspond to two different polynomials:
+$$
+f(x)=2+3x+x^2.
+$$
+
+Evaluate it at
+
+$$
+x=0,1,2,3.
+$$
+
+Use ordinary arithmetic first.
+
+Then think about what would change if the calculations were performed in a finite field.
+
+---
+
+# Why does evaluating a polynomial help?
+
+This is the crucial insight. Suppose two different messages correspond to two different polynomials:
 
 $$
 f(x)
@@ -672,9 +616,7 @@ $$
 h(x)=f(x)-g(x).
 $$
 
-If \(f\neq g\), then \(h(x)\) is a nonzero polynomial.
-
-Suppose both \(f\) and \(g\) have degree less than \(k\).
+If $f\neq g$, then $h(x)$ is a nonzero polynomial. Suppose both $f$ and $g$ have degree less than $k$.
 
 Then
 
@@ -690,7 +632,7 @@ This simple fact is the mathematical engine behind Reed–Solomon codes.
 
 ---
 
-# 14. The key polynomial idea
+# The key polynomial idea
 
 Suppose we evaluate polynomials at \(n\) distinct points:
 
@@ -698,19 +640,7 @@ $$
 \alpha_1,\alpha_2,\ldots,\alpha_n.
 $$
 
-Let
-
-$$
-f(x)
-$$
-
-and
-
-$$
-g(x)
-$$
-
-be two different polynomials of degree less than \(k\).
+Let $f(x)$ and $g(x)$ be two different polynomials of degree less than $k$.
 
 They can agree at at most
 
@@ -882,7 +812,7 @@ errors.
 
 ---
 
-# 17. A concrete example
+# A concrete example
 
 Let's temporarily use ordinary arithmetic just to see the mechanism.
 
@@ -1001,7 +931,7 @@ inside \(\mathbb F_7\).
 
 ---
 
-# 19. Reed–Solomon parameters
+# Reed–Solomon parameters
 
 A Reed–Solomon code is commonly described by
 
@@ -1073,7 +1003,7 @@ So adding redundancy directly increases the number of correctable errors.
 
 ---
 
-# 21. A practical example
+# A practical example
 
 Consider a Reed–Solomon code with
 
@@ -1141,7 +1071,24 @@ Therefore, Reed–Solomon codes are particularly useful when errors occur in **g
 
 ---
 
-# 22. Why Reed–Solomon codes are powerful
+## Exercise 5
+
+Consider a Reed–Solomon code with
+
+$$
+n=12,\qquad k=8.
+$$
+
+Find:
+
+1. The number of redundant symbols.
+2. The minimum distance.
+3. The maximum number of errors that can always be corrected.
+4. The maximum number of errors that can always be detected.
+
+---
+
+# Why Reed–Solomon codes are powerful
 
 We can now see the complete chain of ideas.
 
@@ -1284,97 +1231,6 @@ symbol errors can be corrected.
 ---
 
 # Exercises
-
-## Exercise 1 — Linear or not?
-
-Consider the following binary code:
-
-$$
-C=\{000,011,101,110\}.
-$$
-
-Check whether \(C\) is a linear code.
-
-Try adding different pairs of codewords.
-
----
-
-## Exercise 2 — Generator matrix
-
-Consider
-
-$$
-G=
-\begin{pmatrix}
-1&0&1&1\\
-0&1&1&0
-\end{pmatrix}.
-$$
-
-1. List all codewords generated by \(G\).
-2. How many codewords are there?
-3. What are \(n\) and \(k\)?
-4. Calculate the minimum distance.
-
----
-
-## Exercise 3 — Distance and correction
-
-A linear code has parameters
-
-$$
-[10,4,d].
-$$
-
-Suppose its minimum distance is
-
-$$
-d=5.
-$$
-
-Determine:
-
-1. How many errors can it detect?
-2. How many errors can it correct?
-
----
-
-## Exercise 4 — Polynomial representation
-
-Consider the polynomial
-
-$$
-f(x)=2+3x+x^2.
-$$
-
-Evaluate it at
-
-$$
-x=0,1,2,3.
-$$
-
-Use ordinary arithmetic first.
-
-Then think about what would change if the calculations were performed in a finite field.
-
----
-
-## Exercise 5 — Reed–Solomon parameters
-
-Consider a Reed–Solomon code with
-
-$$
-n=12,\qquad k=8.
-$$
-
-Find:
-
-1. The number of redundant symbols.
-2. The minimum distance.
-3. The maximum number of errors that can always be corrected.
-4. The maximum number of errors that can always be detected.
-
----
 
 ## Exercise 6 — The central idea
 
