@@ -1,134 +1,526 @@
-# Reed-Solomon Codes
 
-As what we learned until now, a Code is a collection of mapping (functions) $C$. This mapping encode a message to a codeword. We called encoder. 
+# A new problem appears
 
-In the structure of block code, we demonstrate that this mapping should have some special properties, which maps a fixed size string (a block) of domain into a fixed size string of co-domain.
+> **We want to construct linear codes with very large minimum distance!**
 
-In the linear code, we construct this kind of codes with alphabet of finite filed $\mathbb{F}_q$. The result code, was a linear subspace $C$ with dimension $k$ of the vector space  $\mathbb{F}_q^n$. In this case, the encoder (mapping) encodes a message (vector) of size $k$ into a codeword (vector) of size $n$. 
+One particularly important idea is to connect coding with **polynomials**.
 
-We explored some special properties like generator matrix, Hamming weight, minimum distance and Singleton bound in the previous chapters. 
+---
 
-In this chapter, we want to define a specific Code which follows a specific encoder, and we prove that it is a linear code with some special generator matrix $G$. This encoder works with polynomial. We call it Reed–Solomon code which they have **Maximum Distance Separable. i.e.,** 
+# From vectors to polynomials
 
-$$
-d_{\min} = n - k +1.
-$$
-
-Because of the above property, Reed–Solomon code is the most efficient code for correcting errors. 
-
-## Constructing Encoder of Reed-Solomon Code
-
-The alphabet is the finite field $\mathbb{F}_q$. The message length is $k$, and the block length is $n$. The key idea of encoder of RS codes is that **representing messages as polynomials.** Let's construct this encoder as follows:
-
-1. Suppose $m = (m_0,m_1,\dots,m_{k-1})$ be a message from $\mathbb{F}_q^k$.
-2. Treat this message as $y$-values of a polynomial $P(x)$ at $k$ evaluation points.
-3. We can choose the $k$ evaluation points, as $0,1,2,\dots,k-1$.
-4. This gives us value representation of the polynomial $P(x)$ at $k$ points as $\big\{(0,m_0),(1,m_1),\dots,(k-1,m_{k-1})\big\}$.
-5. We can interpolate these points to find the unique polynomial $P(x)$ of degree at most $k-1$. This is the coefficient representation of the polynomial $P(x)$.
-6. “Oversample” the polynomial by evaluating $P(x)$  at $n-k$ new points $k,k+1,\dots,n-1.$ Thus, we compute: 
+Consider a polynomial
 
 $$
-P(k),P(k+1),\dots,P(n-1).
+f(x)=a_0+a_1x+a_2x^2+\cdots+a_{k-1}x^{k-1}.
 $$
 
-1. The final codeword $w$ is the list of all $n$ evaluations. Where the first $k$ symbols are the original message $m$, and the next $n-k$ symbols are the parity as follows: 
+There are $k$ coefficients:
 
 $$
-\begin{aligned}
-w &=\big[P(0),P(1),\dots,P(k-1),P(k),P(k+1),\dots,P(n-1)\big]\\
-&= \big[m_0,m_1,\dots,m_{k-1},P(k),P(k+1),\dots,P(n-1)\big].
-\end{aligned}
+a_0,a_1,\ldots,a_{k-1}.
 $$
 
-## Reed-Solomon Code is a Linear Code
-
-If we construct a generator matrix for the Reed-Solomon Code, then they are linear code. We try to construct a standard form of generator matrix.
-
-Let’s review the above procedure:  We have a message $m = (m_0,m_1,\dots,m_{k-1})\in \mathbb{F}_q^k$. We interpolate polynomial $P(x) =p_0 + p_1x+\cdots+p_{k-1}x^{k-1}$. Then we have: 
+So a message consisting of $k$ symbols can naturally be viewed as the coefficients of a polynomial. For example, suppose our message is
 
 $$
-\begin{aligned}
-P(0) &= m_0,\\
-P(1) &= m_1,\\
-\qquad\qquad&\vdots\\
-P(k-1) &= m_{k-1},\\
-P(k) &= p_0 + p_1k+\cdots+p_{k-1}k^{k-1},\\
-P(k+1) &= p_0 + p_1(k+1)+\cdots+p_{k-1}(k+1)^{k-1},\\
-\qquad\qquad&\vdots\\
-P(n-1) &= p_0 + p_1(n-1)+\cdots+p_{k-1}(n-1)^{k-1}.
-\end{aligned}
+(2,5,1).
 $$
 
-We can compute $\mathrm{P_{\mathrm{eval}}}:=\begin{bmatrix}
-   P(k) & P(k+1) & P(k+2) &\dots &P(n-1)
-\end{bmatrix}$by matrix multiplications as follows:
+We can associate with it the polynomial
 
 $$
-\mathrm{P_{\mathrm{eval}}} =
-\begin{bmatrix}
-   p_0 & p_1 & p_2 & \dots p_{k-1}
-\end{bmatrix}
-\begin{bmatrix}
-   1 & 1 &\dots & 1\\
-   k & k+1 & \dots & n-1 \\
-   k^2 & (k+1)^2 & \dots & (n-1)^2 \\
-    \\
-\vdots\\
-   k^{k-1} & (k+1)^{k-1} & \dots & (n-1)^{k-1} \\
-\end{bmatrix}.
+f(x)=2+5x+x^2.
 $$
 
-This matrix will play as a parity matrix $M$ in the standard form generator matrix $G=[I_k|M]$. For creating the generator matrix $G$, it is suffices to put matrix $I_k$ in the left-hand side of parity matrix $M$ as follows: 
+Now comes the key idea.
+
+Instead of transmitting the coefficients directly, we can **evaluate the polynomial at several points**.
+
+For example, evaluate $f(x)$ at
 
 $$
-G =
-\begin{bmatrix}
-   1 & 0 & \dots & 0 & 1 & 1 &\dots & 1\\
-   0 & 1 & \dots & 0 & k & k+1 & \dots & n-1 \\
-   0 & 0 & \dots & 0 & k^2 & (k+1)^2 & \dots & (n-1)^2 \\
-\vdots & \vdots &\ddots&\vdots&\vdots&\vdots&\vdots&\vdots \\
-   0 & 0 & \dots & 1 & k^{k-1} & (k+1)^{k-1} & \dots & (n-1)^{k-1} \\
-\end{bmatrix}.
+x=0,1,2,3,4.
 $$
 
-This standard form matrix $G$ will encode every message $m = (m_0,m_1,\dots,m_{k-1})\in \mathbb{F}_q^k$ as follows: 
+We obtain a sequence
 
 $$
-w = x\cdot G = \big[m_0,m_1,\dots,m_{k-1},P(k),P(k+1),\dots,P(n-1)\big],
+f(0),f(1),f(2),f(3),f(4).
 $$
 
-where original message $m$ appears unchanged in the first $k$ positions of the codeword $w$. The remaining $n - k$ positions are the added redundancy.
+This sequence can be used as a codeword. This is the basic idea behind **Reed–Solomon codes**.
 
-Therefore, the Reed-Solomon code of length $n$ is a linear subspace $C$ with dimension $k$ of the vector space  $\mathbb{F}_q^n$ where $\mathbb{F}_q$ is a finite field with $q$ elements.
+---
 
-## Singleton Bound in Reed-Solomon Codes
+# Definition Reed–Solomon codes
 
-Same as linear codes, we have: $d_{\mathrm{min}}\le n-k+1,$ as Singleton bound.
-
-## A Codeword as Polynomial
-
-Since any two *distinct* polynomials of degree less than $k$ agree in at most $k−1$ points, this means that any two codewords of the Reed–Solomon code agree in at most $k-1$ positions. Let's compute step by step the statement above as follows:
-
-1. If two codewords agree in 1 position. So, disagree in $n-1$ positions. Thus, the hamming distance of these two codewords is $d = n-1$. Or,
-2. If two codewords agree in 2 positions. So, disagree in $n-2$ positions. Thus, the hamming distance of these two codewords is $d = n-2$. Or,
-3. If two codewords agree in 3 positions. So, disagree in $n-3$ positions. Thus, the hamming distance of these two codewords is $d = n-3$. Or,
-4. …
-5. Two codewords agree in $k-1$ positions. So, disagree in $n-(k-1)$ positions. Thus, the hamming distance is $d = n-k+1$.
-
-Note that, $d = n-k+1$ is less than any other hamming distances in the list above. Therefore, for the minimum distance, we have: 
+Let
 
 $$
-d_{\mathrm{min}}\ge n-k+1.
+D=\{x_1,\ldots,x_n\}\subseteq\mathbb F
 $$
 
-Thus, any two codewords of the Reed–Solomon code disagree in at least $n - (k-1) = n-k +1,$ positions. 
+be a set of $n$ distinct field elements.
 
-Mixing the above inequality with Singleton bound results 
+The Reed–Solomon code of dimension $k$ over the evaluation domain $D$ is
 
 $$
-d_{\mathrm{min}}= n-k+1.
+\boxed{
+RS(D,k)
+= C =
+\left\{
+\bigl(f(x_1),\ldots,f(x_n)\bigr)
+:
+f\in\mathbb F[X],\ \deg f<k
+\right\}.
+}
 $$
 
-## Corollary
+In words:
 
-Since $d_{\mathrm{min}}= n-k+1$, then the Reed-Solomon code is a **Maximum Distance Separable Code (MDS) which is the most efficient error-correcting code.**
+> A Reed–Solomon code consists of the evaluation vectors of all polynomials whose degree is less than $k$.
+
+This definition is the most important thing to remember from this chapter.
+
+We can summarize it as
+
+$$
+\boxed{
+\text{polynomial}
+\quad
+\xrightarrow{\text{evaluate on }D}
+\quad
+\text{Reed--Solomon codeword}.
+}
+$$
+
+And something immediately interesting happens.
+
+If
+
+$$
+f(X)
+$$
+
+and
+
+$$
+g(X)
+$$
+
+both have degree less than $k$, then
+
+$$
+af(X)+bg(X)
+$$
+
+also has degree less than $k$.
+
+Moreover,
+
+$$
+(af+bg)(x_i)
+=
+af(x_i)+bg(x_i).
+$$
+
+Therefore the corresponding evaluation vectors satisfy
+
+$$
+\operatorname{Eval}(af+bg)
+=
+a\operatorname{Eval}(f)
++
+b\operatorname{Eval}(g).
+$$
+
+So the set of evaluation vectors is automatically a **linear code**.
+
+This is the connection we were looking for.
+
+
+---
+
+# Why does evaluating a polynomial help?
+
+This is the crucial insight. Suppose two different messages correspond to two different polynomials:
+
+$$
+f(x)
+$$
+
+and
+
+$$
+g(x).
+$$
+
+Consider their difference:
+
+$$
+h(x)=f(x)-g(x).
+$$
+
+If $f\neq g$, then $h(x)$ is a nonzero polynomial. Suppose both $f$ and $g$ have degree less than $k$.
+
+Then
+
+$$
+\deg h<k.
+$$
+
+A fundamental theorem about polynomials says:
+
+> **A nonzero polynomial of degree at most $k-1$ can have at most $k-1$ roots.**
+
+This simple fact is the mathematical engine behind Reed–Solomon codes.
+
+
+
+---
+
+# The key polynomial idea
+
+Suppose we evaluate polynomials at $n$ distinct points:
+
+$$
+\alpha_1,\alpha_2,\ldots,\alpha_n.
+$$
+
+Let $f(x)$ and $g(x)$ be two different polynomials of degree less than $k$.
+
+They can agree at at most
+
+$$
+k-1
+$$
+
+of those evaluation points.
+
+Therefore, they must differ at least
+
+$$
+n-(k-1)
+$$
+
+positions.
+
+Thus,
+
+$$
+d_{\min}\geq n-k+1.
+$$
+
+In other hand, Singleton Bound implies that, for Reed–Solomon codes,
+
+$$
+\boxed{
+d_{\min}=n-k+1.
+}
+$$
+
+This is an extraordinarily strong result.
+
+---
+
+# A concrete example
+
+Let's temporarily use ordinary arithmetic just to see the mechanism.
+
+Take the message
+
+$$
+(2,3).
+$$
+
+The corresponding polynomial is
+
+$$
+f(x)=2+3x.
+$$
+
+Evaluate it at
+
+$$
+0,1,2,3,4.
+$$
+
+We obtain
+
+$$
+f(0)=2,
+$$
+
+$$
+f(1)=5,
+$$
+
+$$
+f(2)=8,
+$$
+
+$$
+f(3)=11,
+$$
+
+$$
+f(4)=14.
+$$
+
+So the codeword is
+
+$$
+\boxed{(2,5,8,11,14)}.
+$$
+
+Now suppose a transmission error changes the third symbol:
+
+$$
+(2,5,8,11,14)
+\longrightarrow
+(2,5,99,11,14).
+$$
+
+The receiver sees a sequence that does not lie on the original line.
+
+Because the receiver knows that a valid codeword must come from evaluating a polynomial of degree at most \(1\), it can use the other symbols to reconstruct the polynomial and identify the erroneous value.
+
+This is the basic intuition behind polynomial error correction.
+
+---
+
+# Reed–Solomon parameters
+
+A Reed–Solomon code is commonly described by
+
+$$
+\boxed{[n,k,d]}
+$$
+
+where
+
+$$
+d=n-k+1.
+$$
+
+Therefore,
+
+$$
+\boxed{d=n-k+1}.
+$$
+
+This means Reed–Solomon codes achieve the largest possible minimum distance allowed by the Singleton bound.
+
+Such codes are called **Maximum Distance Separable**, or
+
+$$
+\boxed{\text{MDS}}
+$$
+
+codes.
+
+The important point for now is not the name.
+
+The important point is:
+
+> **Reed–Solomon codes achieve an extremely efficient relationship between message length, codeword length, and minimum distance.**
+
+---
+
+# 20. Understanding the parameters
+
+Suppose we have
+
+$$
+RS[n,k].
+$$
+
+Then:
+
+* \(k\) = number of symbols containing the original information;
+* $n$ = number of symbols transmitted;
+* \(n-k\) = number of redundant symbols;
+* \(d=n-k+1\) = minimum distance.
+
+The number of errors that can be corrected is
+
+$$
+t=
+\left\lfloor
+\frac{n-k}{2}
+\right\rfloor.
+$$
+
+If \(n-k\) is even, this becomes
+
+$$
+t=\frac{n-k}{2}.
+$$
+
+So adding redundancy directly increases the number of correctable errors.
+
+---
+
+# A practical example
+
+Consider a Reed–Solomon code with
+
+$$
+n=15
+$$
+
+and
+
+$$
+k=11.
+$$
+
+Then there are
+
+$$
+15-11=4
+$$
+
+redundant symbols.
+
+The minimum distance is
+
+$$
+d=15-11+1=5.
+$$
+
+Therefore, the code can correct
+
+$$
+t=
+\left\lfloor
+\frac{5-1}{2}
+\right\rfloor
+=2
+$$
+
+symbol errors.
+
+So:
+
+$$
+\boxed{11\text{ information symbols}}
+$$
+
+become
+
+$$
+\boxed{15\text{ transmitted symbols}}
+$$
+
+and the code can correct up to
+
+$$
+\boxed{2\text{ erroneous symbols}}.
+$$
+
+Notice something important:
+
+A "symbol error" does not necessarily mean a single bit error.
+
+If the symbols belong to \(\mathbb F_{256}\), each symbol represents \(8\) bits.
+
+Therefore, Reed–Solomon codes are particularly useful when errors occur in **groups of bits**, or entire symbols are corrupted.
+
+---
+
+## Exercise 5
+
+Consider a Reed–Solomon code with
+
+$$
+n=12,\qquad k=8.
+$$
+
+Find:
+
+1. The number of redundant symbols.
+2. The minimum distance.
+3. The maximum number of errors that can always be corrected.
+4. The maximum number of errors that can always be detected.
+
+---
+
+# Exercises
+
+## Exercise 6 — The central idea
+
+Suppose two different polynomials $f(x)$ and $g(x)$ both have degree at most \(4\).
+
+Can they agree at five distinct points?
+
+Explain why or why not.
+
+### Hint
+
+Consider
+
+$$
+h(x)=f(x)-g(x).
+$$
+
+What can you say about the degree and number of roots of $h(x)$?
+
+---
+
+# The Most Important Mental Model
+
+At this point, there are two ways to look at a Reed–Solomon code.
+
+### Coding-theory viewpoint
+
+A Reed–Solomon code is a linear code with parameters
+
+$$
+[n,k,n-k+1].
+$$
+
+It has large minimum distance and therefore strong error-correcting properties.
+
+### Algebraic viewpoint
+
+A Reed–Solomon code is the set of functions on $D$ that arise by restricting low-degree polynomials to $D$:
+
+$$
+\boxed{
+RS(D,k)
+=
+\{f|_D:\deg f<k\}.
+}
+$$
+
+For the rest of our journey toward FRI, the **second viewpoint is more important**.
+
+We will increasingly stop thinking of a codeword as just a vector like
+
+$$
+(c_1,c_2,\ldots,c_n)
+$$
+
+and instead think of it as a function
+
+$$
+g:D\to\mathbb F_q.
+$$
+
+The special functions are the ones that come from low-degree polynomials.
+
+So we can write:
+
+$$
+\boxed{
+\text{Reed--Solomon code}
+=
+\text{low-degree functions on }D.
+}
+$$
+
+This is the viewpoint we will carry into FRI.
+
+---

@@ -17,8 +17,8 @@ export default {
       pagination: true
     }
   },
-  linear_codes_and_rs_codes: {
-    title:'Linear Codes and Reed–Solomon Codes',
+  linear_codes: {
+    title:'Linear Codes',
     theme: {
       footer: true,
       sidebar: true,
@@ -26,11 +26,18 @@ export default {
       pagination: true
     }
   },
-  error_correcting_codes: 'Error Correcting Codes',
+  reed_solomon_codes: {
+    title:'Reed-Solomon Coeds',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   block_codes: 'Block Codes',
   unique_decoding: 'Unique Decoding',
   linear_codes: 'Linear Codes',
-  reed_solomon_codes: 'Reed-Solomon Coeds',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
   fri_commitment: 'FRI Commitment',
