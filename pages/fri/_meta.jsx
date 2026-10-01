@@ -53,7 +53,15 @@ export default {
       pagination: true
     }
   },
-  block_codes: 'Block Codes',
+  fri_folding: {
+    title:'The Algebra Behind FRI Folding',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   unique_decoding: 'Unique Decoding',
   linear_codes: 'Linear Codes',
   fast_fourier_transform: 'Fast Fourier Transform',
