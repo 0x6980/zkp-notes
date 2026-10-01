@@ -44,6 +44,15 @@ export default {
       pagination: true
     }
   },
+  evaluation_domain_for_fri: {
+    title:'Evaluation Domains for FRI',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   block_codes: 'Block Codes',
   unique_decoding: 'Unique Decoding',
   linear_codes: 'Linear Codes',
