@@ -4,7 +4,7 @@ In the previous chapter, we changed the way we think about Reed–Solomon codes.
 
 Instead of focusing primarily on error correction, we asked:
 
-> Given a function $g:D\to\mathbb F$, is it close to the evaluations of a low-degree polynomial?
+> Given a function $g:D\to\mathbb F_q$, is it close to the evaluations of a low-degree polynomial?
 
 Mathematically, we were interested in
 
@@ -13,6 +13,35 @@ $$
 $$
 
 This is the question that eventually leads to FRI.
+
+When we say
+
+$$
+g\in RS(D,k),
+$$
+
+we are making a statement about **both**:
+
+* the function $g$ with degree lest tha $k$,
+* and the evaluation domain $D$.
+
+The same values interpreted on a different domain may correspond to a different polynomial behavior.
+
+So in FRI, the prover's object is not merely:
+
+$$
+(g(x_1),\ldots,g(x_n)).
+$$
+
+It is really:
+
+$$
+\boxed{
+\text{a function }g\text{ defined on a specific structured domain }D.
+}
+$$
+
+The domain is part of the algebraic context.
 
 But there is a problem.
 
@@ -34,82 +63,132 @@ For FRI, however, we choose $D$ very carefully.
 
 The domain is not just a list of points.
 
-We want it to have algebraic structure that allows us to repeatedly transform a polynomial into one of lower degree.
+In particular, we want the points to naturally come in pairs of the form
+
+$$
+\boxed{\{x,-x\}}.
+$$
+
+That is, whenever
+
+$$
+x\in D,
+$$
+
+we also want
+
+$$
+-x\in D.
+$$
+
+For example, a domain might look like
+
+$$
+D=\{x_0,-x_0,x_1,-x_1,x_2,-x_2,\ldots\}.
+$$
+
+This gives us a natural pairing:
+
+$$
+x_0\leftrightarrow -x_0,
+\qquad
+x_1\leftrightarrow -x_1,
+\qquad
+x_2\leftrightarrow -x_2.
+$$
+
+There is an additional property we want.
+
+After pairing the points, we consider their squares:
+
+$$
+x\mapsto x^2.
+$$
+
+Because
+
+$$
+x^2=(-x)^2,
+$$
+
+each pair \(\{x,-x\}\) maps to a single point.
+
+Therefore, we can define the **squared domain**
+
+$$
+\boxed{
+D^2=\{x^2:x\in D\}.
+}
+$$
+
+If the original domain has the right structure, $D^2$ is again a structured domain in which the same kind of pairing can be performed.
+
+So we can repeat the process:
+
+$$
+D_0
+\longrightarrow
+D_1=D_0^2
+\longrightarrow
+D_2=D_1^2
+\longrightarrow
+D_3=D_2^2
+\longrightarrow\cdots
+$$
+
+At each step, the domain becomes smaller.
+
+Schematically, we are looking for a sequence of domains of the form
+
+$$
+\boxed{
+D_0
+\supset
+D_1
+\supset
+D_2
+\supset
+\cdots
+\supset
+\{1\},
+}
+$$
+
+where
+
+$$
+\boxed{
+D_{i+1}=D_i^2.
+}
+$$
+
+For example, the sizes might decrease as
+
+$$
+16\to8\to4\to2\to1.
+$$
+
+The final domain contains only
+
+$$
+\boxed{\{1\}}.
+$$
+
+So, at a high level, the kind of evaluation domain we are looking for has two important properties:
+
+1. **Its points can be naturally paired as $x$ and $-x$.**
+2. **Squaring the points produces another domain with the same kind of structure, allowing the process to be repeated until only \(1\) remains.**
+
+We will not yet explain why FRI needs this particular structure. We will answer that in the next chapter.
 
 The key structure will come from **roots of unity**.
-
----
-
-# Why Not Use an Arbitrary Domain?
-
-Let's begin with the simplest possible question.
-
-Suppose we want to evaluate a polynomial
-
-$$
-f(X)
-$$
-
-at $n$ points.
-
-Why not simply choose
-
-$$
-D=\{x_1,x_2,\ldots,x_n\}
-$$
-
-arbitrarily?
-
-For defining Reed–Solomon codes, we can.
-
-Nothing in the basic definition requires anything more.
-
-But FRI needs to do something more sophisticated.
-
-It needs to repeatedly reduce the size of the evaluation domain while also reducing the degree of the polynomial.
-
-So we would like the domain to contain natural pairs of points:
-
-$$
-x,\,-x.
-$$
-
-Why?
-
-Because these two evaluations,
-
-$$
-f(x)
-$$
-
-and
-
-$$
-f(-x),
-$$
-
-allow us to separate the even and odd parts of $f$.
-
-And that separation will allow us to construct a lower-degree polynomial.
-
-This is the central algebraic idea behind FRI folding.
-
-So we want a domain where, whenever $x$ belongs to the domain,
-
-$$
--x
-$$
-
-also belongs to the domain.
-
-A multiplicative subgroup of suitable even order gives us exactly this structure.
 
 ---
 
 # Roots of Unity
 TODO: Mention my co-autered articles in rareskins zk-book
 
-Assume our field $\mathbb F$ contains an element
+Assume our field $\mathbb F_q$ contains an element
 
 $$
 \omega
@@ -134,7 +213,7 @@ $$
 The powers of $\omega$ form the multiplicative subgroup
 
 $$
-H=
+D=
 \langle\omega\rangle
 =
 \{1,\omega,\omega^2,\ldots,\omega^{n-1}\}.
@@ -146,7 +225,7 @@ Thus,
 
 $$
 \boxed{
-H=
+D=
 \{1,\omega,\omega^2,\ldots,\omega^{n-1}\}.
 }
 $$
@@ -232,7 +311,7 @@ Let $\omega$ be an element of order \(8\).
 Then the domain is
 
 $$
-H=
+D=
 \{
 1,
 \omega,
@@ -293,24 +372,24 @@ At every step, the domain size is roughly halved.
 
 The pairing does more than merely group points.
 
-The squares of the elements of $H$ form another subgroup:
+The squares of the elements of $D$ form another subgroup:
 
 $$
-H^2
+D^2
 =
-\{x^2:x\in H\}.
+\{x^2:x\in D\}.
 $$
 
 If
 
 $$
-H=\langle\omega\rangle
+D=\langle\omega\rangle
 $$
 
 has order $n$, then
 
 $$
-H^2
+D^2
 =
 \langle\omega^2\rangle.
 $$
@@ -325,33 +404,33 @@ Therefore
 
 $$
 \boxed{
-|H^2|=\frac n2.
+|D^2|=\frac n2.
 }
 $$
 
 So squaring maps the original domain
 
 $$
-H
+D
 $$
 
 onto a smaller domain
 
 $$
-H^2.
+D^2.
 $$
 
 For example,
 
 $$
-H=
+D=
 \{1,\omega,\omega^2,\ldots,\omega^{7}\}
 $$
 
 maps under squaring to
 
 $$
-H^2=
+D^2=
 \{1,\omega^2,\omega^4,\omega^6\}.
 $$
 
@@ -391,55 +470,11 @@ So the domain naturally folds in half:
 
 $$
 \boxed{
-H
+D
 \quad\xrightarrow{x\mapsto x^2}\quad
-H^2.
+D^2.
 }
 $$
-
----
-
-# Why Squaring Is the Right Map
-
-At this point, a natural question is:
-
-> Why do we specifically use $x^2$?
-
-The answer is that squaring identifies the two points
-
-$$
-x
-\quad\text{and}\quad
--x.
-$$
-
-Indeed,
-
-$$
-x^2=(-x)^2.
-$$
-
-So each point in the smaller domain corresponds to a pair of points in the original domain.
-
-This allows us to combine the two evaluations
-
-$$
-f(x)
-$$
-
-and
-
-$$
-f(-x)
-$$
-
-into information associated with the single point
-
-$$
-x^2.
-$$
-
-This is the algebraic mechanism that will eventually become **FRI folding**.
 
 ---
 
@@ -448,7 +483,7 @@ This is the algebraic mechanism that will eventually become **FRI folding**.
 So far, our domain has been
 
 $$
-H=\langle\omega\rangle.
+D=\langle\omega\rangle.
 $$
 
 But in practice, FRI often works with a **coset** of a multiplicative subgroup.
@@ -456,20 +491,20 @@ But in practice, FRI often works with a **coset** of a multiplicative subgroup.
 Choose some nonzero field element
 
 $$
-a\in\mathbb F^\times.
+a\in\mathbb F_q^\times.
 $$
 
 Then consider
 
 $$
-D=aH
+H=aD
 =
 \{a, a\omega,a\omega^2,\ldots,a\omega^{n-1}\}.
 $$
 
-This is a multiplicative coset of $H$.
+This is a multiplicative coset of $D$.
 
-Why use a coset instead of $H$ itself?
+Why use a coset instead of $D$ itself?
 
 Because cosets preserve essentially the same algebraic structure while allowing us to shift the evaluation domain away from particular special points.
 
@@ -479,7 +514,7 @@ The important thing for our purposes is:
 
 $$
 \boxed{
-D=aH
+H=aD
 }
 $$
 
@@ -492,23 +527,22 @@ $$
 And its elements still have a very structured relationship.
 
 ---
-TODO: Folding into squaring
 
-# Folding a Coset
+# Squaring a Coset
 
 Suppose
 
 $$
-D=aH.
+H=aD.
 $$
 
-If $x\in D$, then
+If $x\in H$, then
 
 $$
 -x
 $$
 
-is also in $D$, provided the subgroup has even order.
+is also in $H$, provided the subgroup has even order.
 
 Moreover,
 
@@ -519,28 +553,28 @@ $$
 belongs to
 
 $$
-a^2H^2.
+a^2D^2.
 $$
 
 Therefore the squaring map takes
 
 $$
-aH
+aD
 $$
 
 to
 
 $$
-a^2H^2.
+a^2D^2.
 $$
 
-So the folding process becomes
+So the squaring process becomes
 
 $$
 \boxed{
-aH
+aD
 \quad\xrightarrow{x\mapsto x^2}\quad
-a^2H^2.
+a^2D^2.
 }
 $$
 
@@ -625,71 +659,6 @@ The evaluation domain itself is repeatedly folded in half.
 
 ---
 
-TODO: Maybe transfer this section to the next chapter
-
-# 7.19 One More Important Perspective: The Domain Is Part of the Claim
-
-There is another subtle point.
-
-When we say
-
-$$
-g\in RS(D,k),
-$$
-
-we are making a statement about **both**:
-
-* the function $g$,
-* and the evaluation domain $D$.
-
-The same values interpreted on a different domain may correspond to a different polynomial behavior.
-
-So in FRI, the prover's object is not merely:
-
-$$
-(g(x_1),\ldots,g(x_n)).
-$$
-
-It is really:
-
-$$
-\boxed{
-\text{a function }g\text{ defined on a specific structured domain }D.
-}
-$$
-
-The domain is part of the algebraic context.
-
-As we fold, we move from
-
-$$
-(D_0,g_0)
-$$
-
-to
-
-$$
-(D_1,g_1),
-$$
-
-then
-
-$$
-(D_2,g_2),
-$$
-
-and so on.
-
-Each pair
-
-$$
-(D_i,g_i)
-$$
-
-represents the next stage of the low-degree-testing process.
-
----
-
 # Summary
 
 The main ideas of this chapter are:
@@ -707,7 +676,7 @@ But FRI needs more structure.
 For a subgroup generated by $\omega$,
 
 $$
-H=\{1,\omega,\ldots,\omega^{n-1}\}.
+D=\{1,\omega,\ldots,\omega^{n-1}\}.
 $$
 
 ### 3. When $n$ is even,
@@ -716,10 +685,10 @@ $$
 \omega^{n/2}=-1.
 $$
 
-Therefore every point $x\in H$ has its partner
+Therefore every point $x\in D$ has its partner
 
 $$
--x\in H.
+-x\in D.
 $$
 
 ### 4. Squaring identifies each pair
@@ -731,9 +700,9 @@ $$
 Therefore the domain naturally folds:
 
 $$
-H
+D
 \longrightarrow
-H^2.
+D^2.
 $$
 
 The size is reduced from
@@ -747,55 +716,3 @@ to
 $$
 \frac n2.
 $$
-
-### 5. The polynomial can be decomposed as
-
-$$
-\boxed{
-f(X)=g(X^2)+Xh(X^2).
-}
-$$
-
-Thus
-
-$$
-g(x^2)=\frac{f(x)+f(-x)}2
-$$
-
-and
-
-$$
-h(x^2)=\frac{f(x)-f(-x)}{2x}.
-$$
-
-### 6. Both $g$ and $h$ have roughly half the degree of $f$
-
-So the domain and degree can be reduced together.
-
-### 7. FRI combines the two pieces
-
-With a random challenge $\alpha$,
-
-$$
-\boxed{
-f_{\mathrm{next}}(Y)
-=
-g(Y)+\alpha h(Y).
-}
-$$
-
-Its evaluations can be computed from pairs of evaluations of $f$.
-
-### 8. The big picture
-
-$$
-\boxed{
-\begin{aligned}
-D_0 &\longrightarrow D_1\longrightarrow D_2\longrightarrow\cdots\\
-n &\longrightarrow n/2\longrightarrow n/4\longrightarrow\cdots\\
-\deg f_0 &\longrightarrow \deg f_1\longrightarrow \deg f_2\longrightarrow\cdots
-\end{aligned}
-}
-$$
-
-This simultaneous shrinking of the domain and polynomial degree is the algebraic foundation of FRI.
