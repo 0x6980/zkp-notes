@@ -35,6 +35,15 @@ export default {
       pagination: true
     }
   },
+  rs_proximity: {
+    title:'Reed-Solomon Proximity',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   block_codes: 'Block Codes',
   unique_decoding: 'Unique Decoding',
   linear_codes: 'Linear Codes',
