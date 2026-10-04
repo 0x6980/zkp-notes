@@ -63,7 +63,6 @@ export default {
     }
   },
   unique_decoding: 'Unique Decoding',
-  linear_codes: 'Linear Codes',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
   fri_commitment: 'FRI Commitment',
