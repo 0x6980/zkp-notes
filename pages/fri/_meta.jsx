@@ -44,6 +44,15 @@ export default {
       pagination: true
     }
   },
+  ch5_fri_main_challenge: {
+    title:'FRI Main Challenge',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   ch6_evaluation_domain_for_fri: {
     title:'Evaluation Domains for FRI',
     theme: {
