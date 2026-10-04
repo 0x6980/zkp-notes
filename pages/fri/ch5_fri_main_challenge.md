@@ -1,4 +1,4 @@
-# What is the FRI Main ژhallenge?
+# What is the FRI Main challenge?
 
 The core goal of the FRI (Fast Reed–Solomon Interactive Oracle Proof of Proximity) protocol is to verify that a given function is **close to a low-degree polynomial**, or equivalently, close to a codeword in Reed–Solomon codes.
 
