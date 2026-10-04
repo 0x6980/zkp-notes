@@ -1,42 +1,14 @@
-# Chapter 8 — The Algebra Behind FRI Folding
+# The Algebra Behind FRI Folding
 
 In the previous chapter, we carefully constructed the kind of evaluation domain that FRI needs.
 
-We started with a domain
+We started with a domain $D$ whose points can be naturally paired as $\{x,-x\}$.
 
-$$
-D
-$$
+We then considered the squaring map $x\mapsto x^2$.
 
-whose points can be naturally paired as
+Because $x^2=(-x)^2$, each pair of points is mapped to a single point in the squared domain: $D\longrightarrow D^2$.
 
-$$
-\{x,-x\}.
-$$
-
-We then considered the squaring map
-
-$$
-x\mapsto x^2.
-$$
-
-Because
-
-$$
-x^2=(-x)^2,
-$$
-
-each pair of points is mapped to a single point in the squared domain:
-
-$$
-D\longrightarrow D^2.
-$$
-
-The domain therefore gets smaller:
-
-$$
-n\longrightarrow \frac n2.
-$$
+The domain therefore gets smaller: $n\longrightarrow \frac n2$.
 
 We have not yet explained **why this particular pairing is useful for FRI**.
 
@@ -50,7 +22,7 @@ This allows us to split a polynomial into two parts:
 
 $$
 \boxed{
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 }
 $$
 
@@ -60,41 +32,13 @@ This simple identity is the algebraic foundation of FRI folding.
 
 # 8.1 The question we need to answer
 
-Suppose we have a polynomial
+Suppose we have a polynomial $f(X)$ and its evaluations on a domain $D$.
 
-$$
-f(X)
-$$
+For every pair $\{x,-x\}\subseteq D$, we know two values: $f(x)$ and $f(-x)$.
 
-and its evaluations on a domain \(D\).
+After squaring, these two points become one point: $x^2=(-x)^2$.
 
-For every pair
-
-$$
-\{x,-x\}\subseteq D,
-$$
-
-we know two values:
-
-$$
-f(x)
-\qquad\text{and}\qquad
-f(-x).
-$$
-
-After squaring, these two points become one point:
-
-$$
-x^2=(-x)^2.
-$$
-
-So we would like to somehow turn
-
-$$
-f(x),f(-x)
-$$
-
-into **one value associated with \(x^2\)**.
+So we would like to somehow turn $f(x),f(-x)$ into **one value associated with $x^2$**.
 
 In other words, we are looking for a transformation of the form
 
@@ -102,11 +46,11 @@ $$
 \boxed{
 \bigl(f(x),f(-x)\bigr)
 \longrightarrow
-f'(x^2)
+f_1(x^2)
 }
 $$
 
-where $f^{'}$ is a new polynomial of smaller degree.
+where $f_1$ is a new polynomial of smaller degree.
 
 The natural question is:
 
@@ -178,11 +122,11 @@ $$
 X^5=X(X^2)^2.
 $$
 
-Therefore, there exist polynomials $f_0$ and $f_1$ such that
+Therefore, there exist polynomials $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$ such that
 
 $$
 \boxed{
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 }
 $$
 
@@ -246,7 +190,7 @@ Therefore,
 
 $$
 \boxed{
-f(X)=f_0(X^2)+Xf_1(X^2)
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2)
 }
 $$
 
@@ -254,7 +198,7 @@ where
 
 $$
 \boxed{
-f_0(Y)=3+2Y+4Y^2
+f_{\mathrm{even}}(Y)=3+2Y+4Y^2
 }
 $$
 
@@ -262,7 +206,7 @@ and
 
 $$
 \boxed{
-f_1(Y)=5+7Y.
+f_{\mathrm{odd}}(Y)=5+7Y.
 }
 $$
 
@@ -271,13 +215,13 @@ The original polynomial has degree \(4\).
 The two new polynomials have degrees
 
 $$
-\deg f_0=2
+\deg f_{\mathrm{even}}=2
 $$
 
 and
 
 $$
-\deg f_1=1.
+\deg f_{\mathrm{odd}}=1.
 $$
 
 This is the first sign that something useful is happening:
@@ -295,7 +239,7 @@ FRI needs to turn them into one.
 Now take
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
 Evaluate it at $x$:
@@ -303,7 +247,7 @@ Evaluate it at $x$:
 $$
 f(x)
 =
-f_0(x^2)+xf_1(x^2).
+f_{\mathrm{even}}(x^2)+xf_{\mathrm{odd}}(x^2).
 $$
 
 Now evaluate it at $-x$:
@@ -311,7 +255,7 @@ Now evaluate it at $-x$:
 $$
 f(-x)
 =
-f_0((-x)^2)+(-x)f_1((-x)^2).
+f_{\mathrm{even}}((-x)^2)+(-x)f_{\mathrm{odd}}((-x)^2).
 $$
 
 Since
@@ -325,14 +269,14 @@ this becomes
 $$
 f(-x)
 =
-f_0(x^2)-xf_1(x^2).
+f_{\mathrm{even}}(x^2)-xf_{\mathrm{odd}}(x^2).
 $$
 
 So we have the two equations
 
 $$
 \boxed{
-f(x)=f_0(x^2)+xf_1(x^2)
+f(x)=f_{\mathrm{even}}(x^2)+xf_{\mathrm{odd}}(x^2)
 }
 $$
 
@@ -340,35 +284,17 @@ and
 
 $$
 \boxed{
-f(-x)=f_0(x^2)-xf_1(x^2).
+f(-x)=f_{\mathrm{even}}(x^2)-xf_{\mathrm{odd}}(x^2).
 }
 $$
 
 Now notice what happened.
 
-The even part,
+The even part, $f_{\mathrm{even}}(x^2)$, is the same in both equations.
 
-$$
-f_0(x^2),
-$$
+The odd part, $xf_{\mathrm{odd}}(x^2)$, has opposite signs.
 
-is the same in both equations.
-
-The odd part,
-
-$$
-xf_1(x^2),
-$$
-
-has opposite signs.
-
-This is precisely why the pair
-
-$$
-\{x,-x\}
-$$
-
-is useful.
+This is precisely why the pair $\{x,-x\}$ is useful.
 
 ---
 
@@ -379,28 +305,20 @@ Add the two equations:
 $$
 f(x)+f(-x)
 =
-2f_0(x^2).
+2f_{\mathrm{even}}(x^2).
 $$
 
 Therefore,
 
 $$
 \boxed{
-f_0(x^2)
+f_{\mathrm{even}}(x^2)
 =
 \frac{f(x)+f(-x)}{2}.
 }
 $$
 
-So if we know the two evaluations
-
-$$
-f(x)
-\quad\text{and}\quad
-f(-x),
-$$
-
-we can recover the even component at \(x^2\).
+So if we know the two evaluations $f(x)$ and $f(-x)$, we can recover the even component at $x^2$.
 
 ---
 
@@ -411,14 +329,14 @@ Now subtract the equations:
 $$
 f(x)-f(-x)
 =
-2xf_1(x^2).
+2xf_{\mathrm{odd}}(x^2).
 $$
 
 Therefore,
 
 $$
 \boxed{
-f_1(x^2)
+f_{\mathrm{odd}}(x^2)
 =
 \frac{f(x)-f(-x)}{2x}.
 }
@@ -426,17 +344,7 @@ $$
 
 So the two evaluations allow us to recover **both** components at the squared point.
 
-We have transformed
-
-$$
-f(x),f(-x)
-$$
-
-into
-
-$$
-f_0(x^2),f_1(x^2).
-$$
+We have transformed $f(x),f(-x)$ into $f_{\mathrm{even}}(x^2),f_{\mathrm{odd}}(x^2)$.
 
 At this point, the connection between the domain structure and polynomial structure should be clear.
 
@@ -449,30 +357,22 @@ $$
 while the polynomial decomposition gives us
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
 The two structures fit together exactly.
 
 ---
 
-# Why not simply keep $f_0$?
+# Folded Polynomial
 
 We now have two smaller-degree polynomials:
 
 $$
-f_0
+f_{\mathrm{even}}
 \qquad\text{and}\qquad
-f_1.
+f_{\mathrm{odd}}.
 $$
-
-A natural question is:
-
-> Why not simply continue with $f_0$?
-
-Because $f_0$ contains only the even-power information of $f$.
-
-The odd-power information contained in $f_1$ would be discarded.
 
 We want to compress the information from both components into a single polynomial.
 
@@ -488,7 +388,7 @@ and define
 
 $$
 \boxed{
-f'(Y)=f_0(Y)+\alpha f_1(Y).
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y).
 }
 $$
 
@@ -500,24 +400,18 @@ It combines the two approximately half-degree polynomials into one.
 
 # The folding formula
 
-Evaluate $f^{'}$ at
+Evaluate $f_1$ at $Y=x^2$. We get
 
 $$
-Y=x^2.
-$$
-
-We get
-
-$$
-f'(x^2)
+f_1(x^2)
 =
-f_0(x^2)+\alpha f_1(x^2).
+f_{\mathrm{even}}(x^2)+\alpha f_{\mathrm{odd}}(x^2).
 $$
 
 Using the formulas we derived above,
 
 $$
-f_0(x^2)
+f_{\mathrm{even}}(x^2)
 =
 \frac{f(x)+f(-x)}2
 $$
@@ -525,7 +419,7 @@ $$
 and
 
 $$
-f_1(x^2)
+f_{\mathrm{odd}}(x^2)
 =
 \frac{f(x)-f(-x)}{2x}.
 $$
@@ -534,7 +428,7 @@ Therefore,
 
 $$
 \boxed{
-f'(x^2)
+f_1(x^2)
 =
 \frac{f(x)+f(-x)}2
 +
@@ -545,17 +439,9 @@ $$
 
 This is the fundamental FRI folding equation.
 
-It converts the two evaluations
+It converts the two evaluations $f(x), f(-x)$ into one evaluation $f_1(x^2)$.
 
-$$
-f(x),\quad f(-x)
-$$
-
-into one evaluation
-
-$$
-f'(x^2).
-$$
+TODO: remove the rest of this section or add a new version with better intuition
 
 Schematically,
 
@@ -573,7 +459,7 @@ $$
 \boxed{
 \{f(x),f(-x)\}
 \quad\longrightarrow\quad
-\{f'(x^2)\}.
+\{f_1(x^2)\}.
 }
 $$
 
@@ -590,12 +476,12 @@ $$
 The decomposition
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2)
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2)
 $$
 
 separates the even and odd powers.
 
-The degrees of $f_0$ and $f_1$ are roughly half that of $f$.
+The degrees of $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$ are roughly half that of $f$.
 
 More precisely, if $d$ is even and
 
@@ -606,27 +492,27 @@ $$
 then
 
 $$
-\deg f_0\leq \frac d2-1
+\deg f_{\mathrm{even}}\leq \frac d2-1
 $$
 
 and
 
 $$
-\deg f_1\leq \frac d2-1.
+\deg f_{\mathrm{odd}}\leq \frac d2-1.
 $$
 
 Since
 
 $$
-f'(Y)=f_0(Y)+\alpha f_1(Y),
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y),
 $$
 
 we have
 
 $$
-\deg f'
+\deg f_1
 \leq
-\max(\deg f_0,\deg f_1)
+\max(\deg f_{\mathrm{even}},\deg f_{\mathrm{odd}})
 <
 \frac d2.
 $$
@@ -635,7 +521,7 @@ Therefore,
 
 $$
 \boxed{
-\deg f'<\frac d2.
+\deg f_1<\frac d2.
 }
 $$
 
@@ -681,7 +567,7 @@ Therefore,
 
 $$
 \boxed{
-f_0(Y)=3+2Y
+f_{\mathrm{even}}(Y)=3+2Y
 }
 $$
 
@@ -689,7 +575,7 @@ and
 
 $$
 \boxed{
-f_1(Y)=5+Y.
+f_{\mathrm{odd}}(Y)=5+Y.
 }
 $$
 
@@ -702,15 +588,15 @@ $$
 The folded polynomial is
 
 $$
-f'(Y)
+f_1(Y)
 =
-f_0(Y)+4f_1(Y).
+f_{\mathrm{even}}(Y)+4f_{\mathrm{odd}}(Y).
 $$
 
 Thus
 
 $$
-f'(Y)
+f_1(Y)
 =
 (3+2Y)+4(5+Y).
 $$
@@ -718,7 +604,7 @@ $$
 Expanding:
 
 $$
-f'(Y)
+f_1(Y)
 =
 3+2Y+20+4Y.
 $$
@@ -733,7 +619,7 @@ so
 
 $$
 \boxed{
-f'(Y)=6+6Y.
+f_1(Y)=6+6Y.
 }
 $$
 
@@ -743,9 +629,11 @@ The folded polynomial has degree \(1\).
 
 ---
 
+TODO: the following section not added any value!
+
 # Verify the fold using evaluations
 
-Now let's obtain the same result without using the coefficients of $f_0$ and $f_1$.
+Now let's obtain the same result without using the coefficients of $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$.
 
 Take
 
@@ -791,7 +679,7 @@ $$
 The folding formula gives
 
 $$
-f'(1)
+f_1(1)
 =
 \frac{11+16}{2}
 +
@@ -841,19 +729,19 @@ $$
 Therefore,
 
 $$
-f'(1)=5+7=12.
+f_1(1)=5+7=12.
 $$
 
 Now evaluate our folded polynomial directly:
 
 $$
-f'(Y)=6+6Y.
+f_1(Y)=6+6Y.
 $$
 
 At $Y=1$,
 
 $$
-f'(1)=6+6=12.
+f_1(1)=6+6=12.
 $$
 
 Both methods give exactly the same result.
@@ -889,7 +777,7 @@ $$
 For every pair, we compute
 
 $$
-f'(x_i^2)
+f_1(x_i^2)
 =
 \frac{f(x_i)+f(-x_i)}2
 +
@@ -902,10 +790,10 @@ Therefore, the new evaluation vector is
 $$
 \boxed{
 \left(
-f'(x_0^2),
-f'(x_1^2),
+f_1(x_0^2),
+f_1(x_1^2),
 \ldots,
-f'(x_{m-1}^2)
+f_1(x_{m-1}^2)
 \right).
 }
 $$
@@ -933,22 +821,22 @@ We have
 $$
 f(X)
 =
-f_0(X^2)+Xf_1(X^2)
+f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2)
 $$
 
 and define
 
 $$
-f'(Y)
+f_1(Y)
 =
-f_0(Y)+\alpha f_1(Y).
+f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y).
 $$
 
 So:
 
 $$
 \boxed{
-f\longrightarrow f'.
+f\longrightarrow f_1.
 }
 $$
 
@@ -960,7 +848,7 @@ $$
 \boxed{
 (f(x),f(-x))
 \longrightarrow
-f'(x^2).
+f_1(x^2).
 }
 $$
 
@@ -981,7 +869,7 @@ Both are essential for understanding FRI.
 We have defined
 
 $$
-f'(Y)=f_0(Y)+\alpha f_1(Y).
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y).
 $$
 
 Why choose \(\alpha\) randomly?
@@ -1002,12 +890,12 @@ and claim that it is close to a low-degree polynomial.
 
 The verifier needs evidence that this claim is true.
 
-If we always selected one fixed component, such as $f_0$, the transformation could systematically discard the other component.
+If we always selected one fixed component, such as $f_{\mathrm{even}}$, the transformation could systematically discard the other component.
 
 The random linear combination
 
 $$
-f_0+\alpha f_1
+f_{\mathrm{even}}+\alpha f_{\mathrm{odd}}
 $$
 
 mixes the two components.
@@ -1030,7 +918,7 @@ $$
 
 # 8.16 One fold is not enough
 
-After one fold, we have $f_1$ on a smaller domain $D_1$. But we can perform exactly the same operation again. Pair the points of $D_1$:
+After one fold, we have $f_{\mathrm{odd}}$ on a smaller domain $D_1$. But we can perform exactly the same operation again. Pair the points of $D_1$:
 
 $$
 x\leftrightarrow -x.
@@ -1045,7 +933,7 @@ $$
 Decompose
 
 $$
-f_1(X)
+f_{\mathrm{odd}}(X)
 =
 f_{1,0}(X^2)
 +
@@ -1074,9 +962,9 @@ Thus we get a sequence
 
 $$
 \boxed{
-f_0
+f_{\mathrm{even}}
 \longrightarrow
-f_1
+f_{\mathrm{odd}}
 \longrightarrow
 f_2
 \longrightarrow
@@ -1119,7 +1007,7 @@ $$
 and
 
 $$
-\deg f_0<d.
+\deg f_{\mathrm{even}}<d.
 $$
 
 After one fold, roughly,
@@ -1131,7 +1019,7 @@ $$
 and
 
 $$
-\deg f_1<\frac d2.
+\deg f_{\mathrm{odd}}<\frac d2.
 $$
 
 After another fold,
@@ -1186,19 +1074,19 @@ This is the central algebraic compression performed by FRI.
 Suppose the prover really starts with a polynomial
 
 $$
-f_0
+f_{\mathrm{even}}
 $$
 
 satisfying
 
 $$
-\deg f_0<d.
+\deg f_{\mathrm{even}}<d.
 $$
 
 We decompose it:
 
 $$
-f_0(X)
+f_{\mathrm{even}}(X)
 =
 f_{0,0}(X^2)
 +
@@ -1210,7 +1098,7 @@ Both components have approximately half the degree.
 Then
 
 $$
-f_1(Y)
+f_{\mathrm{odd}}(Y)
 =
 f_{0,0}(Y)
 +
@@ -1222,7 +1110,7 @@ also has approximately half the degree.
 Therefore,
 
 $$
-f_1
+f_{\mathrm{odd}}
 $$
 
 satisfies the next smaller degree bound.
@@ -1233,9 +1121,9 @@ Thus:
 
 $$
 \boxed{
-f_0\text{ is low degree}
+f_{\mathrm{even}}\text{ is low degree}
 \Longrightarrow
-f_1\text{ is low degree}
+f_{\mathrm{odd}}\text{ is low degree}
 \Longrightarrow
 f_2\text{ is low degree}
 \Longrightarrow\cdots
@@ -1308,7 +1196,7 @@ We can now finally see why previous chapter spent so much time constructing the 
 The algebra requires pairs $x,-x$. The domain provides exactly those pairs. The polynomial decomposition is
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
 The domain transformation is
@@ -1349,7 +1237,7 @@ $$
 \text{Domain} && \text{Polynomial}\\[4pt]
 \{x,-x\} &\longrightarrow& f(x),f(-x)\\[4pt]
 \downarrow && \downarrow\\[4pt]
-\{x^2\} &\longrightarrow& f'(x^2)
+\{x^2\} &\longrightarrow& f_1(x^2)
 \end{array}
 }
 $$
@@ -1390,7 +1278,7 @@ Write
 
 $$
 \boxed{
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 }
 $$
 
@@ -1399,13 +1287,13 @@ $$
 For each $x$,
 
 $$
-f(x)=f_0(x^2)+xf_1(x^2)
+f(x)=f_{\mathrm{even}}(x^2)+xf_{\mathrm{odd}}(x^2)
 $$
 
 and
 
 $$
-f(-x)=f_0(x^2)-xf_1(x^2).
+f(-x)=f_{\mathrm{even}}(x^2)-xf_{\mathrm{odd}}(x^2).
 $$
 
 ### Step 4: Recover the components
@@ -1414,7 +1302,7 @@ Compute
 
 $$
 \boxed{
-f_0(x^2)=
+f_{\mathrm{even}}(x^2)=
 \frac{f(x)+f(-x)}2
 }
 $$
@@ -1423,7 +1311,7 @@ and
 
 $$
 \boxed{
-f_1(x^2)=
+f_{\mathrm{odd}}(x^2)=
 \frac{f(x)-f(-x)}{2x}.
 }
 $$
@@ -1442,7 +1330,7 @@ Define
 
 $$
 \boxed{
-f'(Y)=f_0(Y)+\alpha f_1(Y).
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y).
 }
 $$
 
@@ -1452,7 +1340,7 @@ For each pair,
 
 $$
 \boxed{
-f'(x^2)
+f_1(x^2)
 =
 \frac{f(x)+f(-x)}2
 +
@@ -1477,7 +1365,7 @@ $$
 \boxed{
 (f,D)
 \longrightarrow
-(f',D^2).
+(f_1,D^2).
 }
 $$
 
@@ -1485,7 +1373,7 @@ And approximately,
 
 $$
 \boxed{
-\deg f'
+\deg f_1
 \approx
 \frac{\deg f}{2}
 }
@@ -1500,80 +1388,6 @@ $$
 \frac{|D|}{2}.
 }
 $$
-
----
-
-# 8.22 Repeated folding
-
-Now suppose the initial domain has size
-
-$$
-1024.
-$$
-
-The domain sizes evolve as
-
-$$
-1024
-\longrightarrow
-512
-\longrightarrow
-256
-\longrightarrow
-128
-\longrightarrow
-64
-\longrightarrow
-32
-\longrightarrow
-16
-\longrightarrow
-8
-\longrightarrow
-4
-\longrightarrow
-2
-\longrightarrow
-1.
-$$
-
-At each round, the polynomial degree bound is reduced correspondingly.
-
-For example, if initially
-
-$$
-\deg f_0<512,
-$$
-
-then the approximate sequence of degree bounds is
-
-$$
-512
-\longrightarrow
-256
-\longrightarrow
-128
-\longrightarrow
-64
-\longrightarrow
-32
-\longrightarrow
-16
-\longrightarrow
-8
-\longrightarrow
-4
-\longrightarrow
-2
-\longrightarrow
-1.
-$$
-
-Eventually, we arrive at a very small domain and a very small degree bound.
-
-This is the point of repeated folding.
-
-A problem that initially involves a huge evaluation domain is transformed into progressively smaller problems.
 
 ---
 
@@ -1654,13 +1468,13 @@ $$
 into
 
 $$
-f'
+f_1
 $$
 
 where
 
 $$
-\deg f'
+\deg f_1
 $$
 
 is roughly half the original degree.
@@ -1724,10 +1538,10 @@ $$
 in the form
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
-Find $f_0$ and $f_1$.
+Find $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$.
 
 ---
 
@@ -1736,7 +1550,7 @@ Find $f_0$ and $f_1$.
 Suppose
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
 Starting from
@@ -1754,7 +1568,7 @@ $$
 derive
 
 $$
-f_0(x^2)
+f_{\mathrm{even}}(x^2)
 =
 \frac{f(x)+f(-x)}2
 $$
@@ -1762,7 +1576,7 @@ $$
 and
 
 $$
-f_1(x^2)
+f_{\mathrm{odd}}(x^2)
 =
 \frac{f(x)-f(-x)}{2x}.
 $$
@@ -1777,12 +1591,12 @@ $$
 \deg f<16.
 $$
 
-What are the largest possible degrees of $f_0$ and $f_1$?
+What are the largest possible degrees of $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$?
 
 What is the largest possible degree of
 
 $$
-f'(Y)=f_0(Y)+\alpha f_1(Y)?
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y)?
 $$
 
 ---
@@ -1795,7 +1609,7 @@ $$
 f(X)=1+2X+3X^2+4X^3.
 $$
 
-Find $f_0$ and $f_1$.
+Find $f_{\mathrm{even}}$ and $f_{\mathrm{odd}}$.
 
 Then choose
 
@@ -1806,7 +1620,7 @@ $$
 and calculate the folded polynomial
 
 $$
-f'(Y)=f_0(Y)+5f_1(Y).
+f_1(Y)=f_{\mathrm{even}}(Y)+5f_{\mathrm{odd}}(Y).
 $$
 
 ---
@@ -1816,7 +1630,7 @@ $$
 Using the polynomial from Exercise 4, choose a nonzero $x$ and verify that
 
 $$
-f'(x^2)
+f_1(x^2)
 =
 \frac{f(x)+f(-x)}2
 +
@@ -1882,31 +1696,31 @@ $$
 Can you recover both
 
 $$
-f_0(x^2)
+f_{\mathrm{even}}(x^2)
 $$
 
 and
 
 $$
-f_1(x^2)?
+f_{\mathrm{odd}}(x^2)?
 $$
 
 Explain why the pair \(x,-x\) is important.
 
 ---
 
-### Exercise 9 — Why not discard $f_1$?
+### Exercise 9 — Why not discard $f_{\mathrm{odd}}$?
 
 We have
 
 $$
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 $$
 
 Why would defining the next polynomial simply as
 
 $$
-f'(Y)=f_0(Y)
+f_1(Y)=f_{\mathrm{even}}(Y)
 $$
 
 lose information?
@@ -1914,7 +1728,7 @@ lose information?
 What does
 
 $$
-f'(Y)=f_0(Y)+\alpha f_1(Y)
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y)
 $$
 
 do differently?
@@ -1930,7 +1744,7 @@ $$
 $$
 
 $$
-(f(x),f(-x))\longrightarrow f'(x^2),
+(f(x),f(-x))\longrightarrow f_1(x^2),
 $$
 
 and
@@ -1949,27 +1763,27 @@ The central algebraic fact of this chapter is that every polynomial can be decom
 
 $$
 \boxed{
-f(X)=f_0(X^2)+Xf_1(X^2).
+f(X)=f_{\mathrm{even}}(X^2)+Xf_{\mathrm{odd}}(X^2).
 }
 $$
 
 Evaluating at $x$ and $-x$ gives
 
 $$
-f(x)=f_0(x^2)+xf_1(x^2)
+f(x)=f_{\mathrm{even}}(x^2)+xf_{\mathrm{odd}}(x^2)
 $$
 
 and
 
 $$
-f(-x)=f_0(x^2)-xf_1(x^2).
+f(-x)=f_{\mathrm{even}}(x^2)-xf_{\mathrm{odd}}(x^2).
 $$
 
 Therefore,
 
 $$
 \boxed{
-f_0(x^2)
+f_{\mathrm{even}}(x^2)
 =
 \frac{f(x)+f(-x)}2
 }
@@ -1979,7 +1793,7 @@ and
 
 $$
 \boxed{
-f_1(x^2)
+f_{\mathrm{odd}}(x^2)
 =
 \frac{f(x)-f(-x)}{2x}.
 }
@@ -1995,7 +1809,7 @@ and combine the two components:
 
 $$
 \boxed{
-f'(Y)=f_0(Y)+\alpha f_1(Y).
+f_1(Y)=f_{\mathrm{even}}(Y)+\alpha f_{\mathrm{odd}}(Y).
 }
 $$
 
@@ -2003,7 +1817,7 @@ Consequently,
 
 $$
 \boxed{
-f'(x^2)
+f_1(x^2)
 =
 \frac{f(x)+f(-x)}2
 +
@@ -2023,7 +1837,7 @@ becomes one evaluation,
 
 $$
 \boxed{
-f'(x^2).
+f_1(x^2).
 }
 $$
 
@@ -2041,9 +1855,9 @@ Repeating this process gives
 
 $$
 \boxed{
-(f_0,D_0)
+(f_{\mathrm{even}},D_0)
 \to
-(f_1,D_1)
+(f_{\mathrm{odd}},D_1)
 \to
 (f_2,D_2)
 \to\cdots
