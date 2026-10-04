@@ -44,7 +44,7 @@ export default {
       pagination: true
     }
   },
-  ch5_evaluation_domain_for_fri: {
+  ch6_evaluation_domain_for_fri: {
     title:'Evaluation Domains for FRI',
     theme: {
       footer: true,
@@ -53,7 +53,7 @@ export default {
       pagination: true
     }
   },
-  ch6_fri_folding: {
+  ch7_fri_folding: {
     title:'The Algebra Behind FRI Folding',
     theme: {
       footer: true,
