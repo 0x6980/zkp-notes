@@ -1,132 +1,16 @@
 export default {
-  index: {
-    title:'Intro',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch1_codes_and_error_correcting_codes: {
-    title:'Codes and Error-Correcting Codes',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch2_linear_codes: {
-    title:'Linear Codes',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch3_reed_solomon_codes: {
-    title:'Reed-Solomon Coeds',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch4_rs_proximity: {
-    title:'Reed-Solomon Proximity',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch5_fri_main_challenge: {
-    title:'FRI Main Challenge',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch6_evaluation_domain_for_fri: {
-    title:'Evaluation Domains for FRI',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch7_fri_folding: {
-    title:'The Algebra Behind FRI Folding',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch8_fri_protocol: {
-    title:'The FRI Protocol (Interactive Version)',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch9_commitment: {
-    title:'Commitment Schemes in FRI',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch10_merkle_tree: {
-    title:'Merkle Trees in FRI',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch11_fiat_shamir: {
-    title:'Non-Interactive FRI via Fiat–Shamir',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch12_complexity: {
-    title:'Complexity Analysis of FRI',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  ch13_soundness: {
-    title:'Soundness Intuition of FRI',
-    theme: {
-      footer: true,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
-  unique_decoding: 'Unique Decoding',
-  fast_fourier_transform: 'Fast Fourier Transform',
-  arithmetization: 'Arithmetization',
-  fri_commitment: 'FRI Commitment',
+  index: 'Intro',
+  ch1_codes_and_error_correcting_codes: 'Codes and Error-Correcting Codes',
+  ch2_linear_codes: 'Linear Codes',
+  ch3_reed_solomon_codes: 'Reed-Solomon Coeds',
+  ch4_rs_proximity: 'Reed-Solomon Proximity',
+  ch5_fri_main_challenge: 'FRI Main Challenge',
+  ch6_evaluation_domain_for_fri: 'Evaluation Domains for FRI',
+  ch7_fri_folding: 'The Algebra Behind FRI Folding',
+  ch8_fri_protocol: 'The FRI Protocol (Interactive Version)',
+  ch9_commitment: 'Commitment Schemes in FRI',
+  ch10_merkle_tree: 'Merkle Trees in FRI',
+  ch11_fiat_shamir: 'Non-Interactive FRI via Fiat–Shamir',
+  ch12_complexity: 'Complexity Analysis of FRI',
+  ch13_soundness: 'Soundness Intuition of FRI',
 }

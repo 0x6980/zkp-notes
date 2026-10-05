@@ -3,6 +3,9 @@ export default {
     link: 'https://github.com/0x6980/zkp-notes'
   },
   docsRepositoryBase: 'https://github.com/0x6980/zkp-notes',
+  sidebar: {
+    defaultMenuCollapseLevel: 1
+  },
   logo: (
     <>
       <span className="mr-2 font-extrabold hidden md:inline">Zero Knowledge Proof</span>
