@@ -116,6 +116,15 @@ export default {
       pagination: true
     }
   },
+  ch13_soundness: {
+    title:'Soundness Intuition of FRI',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   unique_decoding: 'Unique Decoding',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
