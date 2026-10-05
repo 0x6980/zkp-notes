@@ -24,6 +24,9 @@ The product
 $$
 C(x) = c_0 + c_1x + c_2x^2 + \dots + c_{2d}x^{2d}
 $$
+$$
+
+$$
 would have degree $2d$ and the running time of this algorithm (using distributive property) will be $O(d^2)$, since each term in polynomial $A$ have to be multiply by all terms of polynomial $B$.
 
 ### Can We Do Better?
@@ -39,7 +42,7 @@ $$
 &\text{Product Points} : [(-2, 20), (-1, 5), (0, 4), (1, 5), (2, 20)]\\
 \end{aligned}
 $$
-**For better underestanding we should plot polynomials**
+**For better undrestanding we should plot polynomials**
 | $x$ | $A(x)$ | $B(x)$ | $A(x).B(x)$ |
 |--- |--- | ---|--- |
 | $-2$ | $2$  | $10$ | $2 \times 10 = 20$|
@@ -77,7 +80,7 @@ Where ${(x_0, A(x_0)), (x_1, A(x_1)), \cdots (x_d, A(x_d))}$ are value represent
 and ${(x_0, B(x_0)), (x_1, B(x_1)), \cdots (x_d, B(x_d))}$ are value representation of $B(x)$,
 and ${(x_0, C(x_0)), (x_1, C(x_1)), \cdots (x_d, C(x_d))}$ are value representation of $C(x)$ which is product of $A(x)$ and $B(x)$.
 
-There are several pieces of the puzzle we haven't figured out. What we are missing is really some sort of magic box that could take polynomials in the coefficient representation and covert them to the value representation then vice versa.
+There are several pieces of the puzzle we haven't figured out. What we are missing is really some sort of magic box that could take polynomials in the coefficient representation and convert them to the value representation then vice versa.
 $$
 \begin{CD}
    \text{Coeff of}\space A(x),\space B(x) @>\text{How?}>> \text{Value of}\space A(x),\space B(x) \\

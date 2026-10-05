@@ -158,8 +158,7 @@ $$
     \tilde{f}_v(\zeta, z) = \sum_{\sigma\in\{0,1\}^b}eq(\zeta, \sigma) · \tilde{f}_{\varGamma(v,\sigma)}(z)
 \end{align}
 $$
-**Proof.** Recall the fact that, two multilinear polynomials 
-$f, g : \mathbb{F}^m \rightarrow \mathbb{F}$ that agree on every input in $\{0, 1\}^m$ must also agree on every input in $\mathbb{F}^m$, and since both sides of the equation (1) are multilinear (in the variables $\zeta$ and z), it suffices to proof equation (1) for boolean-valued $\zeta\in\{0,1\}^b$ and $z\in(\{0,1\}^{b})^{n−i−1}$.
+**Proof.** Recall the fact that, two multilinear polynomials $f, g : \mathbb{F}^m \rightarrow \mathbb{F}$ that agree on every input in $\{0, 1\}^m$ must also agree on every input in $\mathbb{F}^m$, and since both sides of the equation (1) are multilinear (in the variables $\zeta$ and z), it suffices to proof equation (1) for boolean-valued $\zeta\in\{0,1\}^b$ and $z\in(\{0,1\}^{b})^{n−i−1}$.
 
 Now, since $eq(ζ, \sigma) = 0$, for all $\sigma\in\{0,1\}^{b}$ except for $\sigma=\zeta$, which is equal to 1, then the summation in this case:
 $$

@@ -1,13 +1,15 @@
-# FFT multiplication of polynomials
+# NTT
+In previous articles we talked about roots of unity, primitive roots of unity, existance and uniquness of a subgroup of order n and squaring the generator. we disscussed about efficient selection of points. 
 
-# Fast Fourier Transform
 Taking polynomials form the coefficient representation to the value representation which we will call **evaluation**.
 
-We have a degree $d$ polynomial
+Lets take a look at the problem
+# Evaluation
+We have a degree $n-1$ polynomial
 $$
-P(x) = p_0 + p_1x + p_2x^2 + \dots + p_dx^d
+P(x) = p_0 + p_1x + p_2x^2 + \dots + p_{n-1}x^{n-1}
 $$
-and we want to evaluate the polynomial at $n$ points, where $n \ge d + 1$. The most straightforward way to do this is pick $n$ random $x$ coordinates like $1, 2, \cdots, n$ and simply calculate the respective $y$ coordinate.
+and we want to evaluate the polynomial at $n$ points. The most straightforward way to do this is pick $n$ random $x$ coordinates like $1, 2, \cdots, n$ and simply calculate the respective $y$ coordinate.
 $$
 \begin{aligned}
 (1,P(1))&&& (1,p_0 + p_1.1 + p_2.1^2 + \dots + p_d.1^d)\\
@@ -16,10 +18,10 @@ $$
 (n, P(n))&&& (2,p_0 + p_1.n + p_2.n^2 + \dots + p_d.n^d)
 \end{aligned}
 $$
-After deconstruct, each evaluation will take $O(d)$ operations. making this method run in $O(nd)$ operations which implies $O(d^2)$ operations to evaluate all $n$ points. So, back we where started. Can we find a way to optimize this?
+After deconstruct, each evaluation will take $O(n)$ operations. making this method run in $O(nn)$ operations which implies $O(n^2)$ operations to evaluate all $n$ points. Can we find a way to optimize this?
 
 ## Can We Do Better?
-Instead of a general polynomial we wanted to instead just evaluate a simple polynomial $P(x) = x^2$ at 8 points. The question now is which points should we pick? Is there any set of points when knowing value of one point **immediately** implies the value of another? In fact, there is. If we pick the point $x=1$, we immediately know the value of the point $x=-1$. Similarly:
+Instead of a general polynomial, we wanted to evaluate a simple polynomial, such as $P(x) = x^2$, at 8 points. The question now is: Which points should we pick? Is there any set of points where knowing the value of one immediately determines another? In fact, there is. If we pick the point $x=1$, we immediately know the value of the point $x=-1$. Similarly:
 
 $$
 \begin{aligned}
@@ -31,33 +33,120 @@ $$
 $$
 Extending this idea the key property we want here is that our eight points should be **positive** and **negative** pairs. The reason this works is due to property of even functions where a function evaluated at $-x$ is going to equal the function evaluated at $+x$. $P(-x) = P(x)$.
 
-What about $P(x) = x^3$? Dose the same trick work?
+What about $P(x) = x^3$? Does the same trick work?
 It actually kind of does but one caveat. Each $+x$ value will have the same value as $-x$ value but with sign flipped. $P(-x) = -P(x)$.
     
 $$
 \begin{aligned}
-(1, 1) \space\space&\text{immediately know the value} \space\space (-1, -1)\\
-(2, 8) \space\space&\text{immediately know the value} \space\space (-2, -8)\\
-(3, 27) \space\space&\text{immediately know the value} \space\space (-3, -27)\\
-(4, 64) \space\space&\text{immediately know the value} \space\space (-4, -64)
+(1, 1) \quad&\text{immediately know the value}\quad (-1, -1)\\
+(2, 8) \quad&\text{immediately know the value} \quad (-2, -8)\\
+(3, 27) \quad&\text{immediately know the value} \quad (-3, -27)\\
+(4, 64) \quad&\text{immediately know the value} \quad (-4, -64)
 \end{aligned}
 $$
 So, in these two cases of odd and even degree single term polynomials **instead of evaluating 8 individual points we can actually get away with evaluating exactly 4 positive points**, which we immediately know the value of the respective negative points.
 
 ## Extend above Idea
-We can extend the above idea to more general polynomial. 
+We can extend the above idea to more general polynomials. 
 ### Split the Polynomial Into Even and Odd Terms
-#### Example 1
 Split the $P(x) = 3 + 4x + 5x^2 + 6x^3 + 7x^4 + 8x^5 + 9x^6 + 10x^7$ as below: 
 $$
 \begin{aligned}
 P(x) &= (3 + 5x^2 + 7x^4 + 9x^6) + (4x + 6x^3 + 8x^5 + 10x^7)\\
-     &= (3 + 5x^2 + 7x^4 + 9x^6) + x(4 + 6x^2 + 8x^4 + 10x^6)\space\space(\text{factor an $x$ in odd power part})\\
-     &= (3 + 5x^2 + 7(x^2)^2 + 9(x^2)^3) + x(4 + 6x^2 + 8(x^2)^2 + 10(x^2)^3)\\
-     &= (3 + 5y + 7y^2 + 9y^3) + x(4 + 6y + 8y^2 + 10y^3)\space\space(\text{$y=x^2$, meaning every where change $x^2$ to $y$})\\
-     &= P_{\mathrm{even}}(x^2) + xP_{\mathrm{odd}}(x^2)
+     &= (3 + 5x^2 + 7x^4 + 9x^6) + x(4 + 6x^2 + 8x^4 + 10x^6)\quad(\text{factor an $x$ in odd powers})\\
+     &= P_{\mathrm{even}}(x) + x\cdot P_{\mathrm{odd}}(x)
 \end{aligned}
 $$
+Now the new polynomials $P_{\mathrm{even}}(x) = 3 + 5x^2 + 7x^4 + 9x^6$ and $P_{\mathrm{odd}}(x) = 4 + 6x^2 + 8x^4 + 10x^6$ have even powers and therefore:
+$$
+\begin{aligned}
+     &P(x) = P_{\mathrm{even}}(x) + x\cdot P_{\mathrm{odd}}(x)\\
+     &P(-x) = P_{\mathrm{even}}(x) - x\cdot P_{\mathrm{odd}}(x)
+\end{aligned}
+$$
+Thus, for evaluating 8 point at $P(x)$, it is enough to evaluate $P_{\mathrm{even}}(x)$ and $P_{\mathrm{odd}}(x)$ at 4 positive points and then we can compute $P(x)$ and $P(-x)$ by puting the result in above equations.
+
+So, now we should evaluate $P_{\mathrm{even}}(x)$ and $P_{\mathrm{odd}}(x)$ at 4 positive points,This is just another evaluation problem. Lets do new variable change first, as follows:
+$$
+\begin{aligned}
+     P_{\mathrm{even}}(x) &= 3 + 5x^2 + 7x^4 + 9x^6\\
+     &= 3 + 5x^2 + 7(x^2)^2 + 9(x^2)^3
+     &\\
+     P_{\mathrm{odd}}(x) &= 4 + 6x^2 + 8x^4 + 10x^6\\
+     &= 4 + 6x^2 + 8(x^2)^2 + 10(x^2)^3
+\end{aligned}
+$$
+Now we substitute $x^2$ with a new variable $y$ and rewrite the polynomials:
+$$
+\begin{aligned}
+     &P_{\mathrm{even}}(x^2) = P_{\mathrm{even}}(y) = 3 + 5y + 7y^2 + 9y^3\quad\text{and}\\
+     &\\
+     &P_{\mathrm{odd}}(x^2) = P_{\mathrm{odd}}(y) = 4 + 6y + 8y^2 + 10y^3
+\end{aligned}
+$$
+Note that in this case, the initial points will be squared. Meaning we should evaluate $P_{\mathrm{even}}(y)$ and $P_{\mathrm{odd}}(y)$ at 4 points which are squared of 8 initial points. This works out nicely since our original points were positive and negative pairs. For example if choose $\{\pm 1, \pm 2, \pm 3, \pm 4\}$ as our initial 8 points then the square of that will be $\{1, 4, 9, 16\}$.
+
+
+### Generalization
+If we have
+$$
+P(x) = p_0 + p_1x + p_2x^2 + \dots + p_{n-1}x^{n-1}
+$$
+We want to evaluate at $n$ points $\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}$. We can split the polynomial into even and odd terms with smaller polynomials $P_e(x^2), P_o(x^2)$ with degree $\frac{n}{2}-1$.
+
+
+So how do we evaluate these polynomials with half the degree of our original polynomial?
+
+This is just another evaluation problem. But this time we need evaluate the polynomials at each of our original inputs squared. Evaluate $P_e(x^2), P_o(x^2)$ each at $x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2$. ($\frac{n}{2}$ points). This works out nicely since our original points were positive and negative pairs. So, if we originally had $n$ points, we now only end up having $\frac{n}{2}$ points. This is starting to smell like the start of a recursive algorithm
+
+### Bigger Picture
+We want to evaluate a polynomial $P(x): [p_0, p_1,\dots,p_{n-1}]$ at $n$ points $[\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}]$.
+
+We split the polynomial to odd and even degree components: 
+$$
+P(x) = P_e(x^2) + xP_o(x^2)
+$$
+Where we now have two simpler polynomials of degree $\frac{n}{2} -1$ and only need $\frac{n}{2}$ points to evaluate.
+1. Evaluate polynomial $P_e(x^2): [p_0, p_2, p_4,\dots,p_{n-2}]$ on points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$. Which is
+  $[P_e(x_1^2), P_e(x_2^2), P_e(x_4^2), \dots, P_e(x_{\frac{n}{2}}^2)]$.
+2. Evaluate polynomial $P_o(x^2): [p_1, p_3, p_5,\dots,p_{n-1}]$ on points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$. Which is $[P_o(x_1^2), P_o(x_2^2), P_o(x_4^2), \dots, P_o(x_{\frac{n}{2}}^2)]$.
+   
+Once we recursively evaluate these smaller polynomials we can then go through every point in our original set of $n$ points and calculate the respective values by utilizing the relationship between the positive and negative paired points.
+$$
+\begin{aligned}
+&P(x_i) = P_e(x_i^2) + x_iP_o(x_i^2)\\
+&P(-x_i) = P_e(x_i^2) - x_iP_o(x_i^2)\\
+&i = {1, 2, \dots, \frac{n}{2}}
+\end{aligned}
+$$
+This gives us the **value representation** of our original polynomial $P(x)$
+
+$$
+[P(x_1),P(-x_1), P(x_2),P(-x_2),\dots,P(x_{\frac{n}{2}}),P(-x_{\frac{n}{2}})]
+$$
+So, we have **$O(n \log n)$ Recursive Algorithm**. Since the two recursive sub problems have half the size of the original problem and take linear time to evaluate $n$ points. This would be huge improvement from our earlier quadratic running time, but there is one **major problem**. Can you spot the issue?
+
+### Major Problem
+In the next step of our example, we should evaluate $p_{\text{even}}(y)$ and $p_{\text{odd}}(y)$ at 4 points. We want to apply the same scheme (i.e. knowing $p_{\text{even}}(y)$ immediately gives us $p_{\text{even}}(-y)$) to these new polynomials.  
+
+The 4 points for this step must be the squared of our initial 8 points, meaning $\{1, 4, 9, 16\}$. However, all these points are positive, which breaks the recursion. Because the entire scheme relies on the fact that the polynomial will have positive and negative paired points for evaluation.
+
+The problem occurs at the recursive steps. The entire scheme relies on the fact that the polynomial will have positive and negative paired points for evaluation.
+$$
+[\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}] \space\space\space\space \text{are} \pm\space\text{paired.}
+$$
+This works at the top level but next level we are evaluating $\frac{n}{2}$ points where each point is squared value.
+$$
+[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2] \space\space\space\space \text{are not} \pm\space\text{paired.}
+$$
+These all end up being positive so the recursion breaks. **The natural question is can we make these new set of points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$, $\pm$ paired?**
+
+**Ingenious Idea behind FFT**: What possible set of initial $n$ points has this property?
+
+**The answer is using [multiplicative subgroup n-th roots of unity]()**.
+The points that we should choose are the multiplicative subgroup of $n$-th roots of unity!
+
+As you saw before in [Squaring the generator]() article, this is because, each time you square the set of points, the new set maintains $\pm$ paired points until it reduces to $\{1\}$.
 
 #### Example 2
 Split the polynomial $P(y) = 3 + 5y + 7y^2 + 9y^3$ into Even and Odd Parts
@@ -90,66 +179,17 @@ P(z) &= 3 + 7z\\
 $$
 Then $P_{\mathrm{even}} = 3$ and $P_{\mathrm{odd}} = 7$.
 
-### Generalization
-If we have
-$$
-P(x) = p_0 + p_1x + p_2x^2 + \dots + p_{n-1}x^{n-1}
-$$
-We want to evaluate at $n$ points $\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}$. We can split the polynomial into even and odd terms with smaller polynomials $P_e(x^2), P_o(x^2)$ with degree $\frac{n}{2}-1$. So how do we evaluate these polynomials with half the degree of our original polynomial?
-
-This is just another evaluation problem. But this time we need evaluate the polynomials at each of our original inputs squared. Evaluate $P_e(x^2), P_o(x^2)$ each at $x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2$. ($\frac{n}{2}$ points). This works out nicely since our original points were positive and negative pairs. So, if we originally had $n$ points, we now only end up having $\frac{n}{2}$ points. This is starting to smell like the start of a recursive algorithm
-
-### Bigger Picture
-We want to evaluate a polynomial $P(x): [p_0, p_1,\dots,p_{n-1}]$ at $n$ points $[\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}]$.
-
-We split the polynomial to odd and even degree components: 
-$$
-P(x) = P_e(x^2) + xP_o(x^2)
-$$
-Where we now have two simpler polynomials of degree $\frac{n}{2} -1$ and only need $\frac{n}{2}$ points to evaluate.
-1. Evaluate polynomial $P_e(x^2): [p_0, p_2, p_4,\dots,p_{n-2}]$ on points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$. Which is
-  $[P_e(x_1^2), P_e(x_2^2), P_e(x_4^2), \dots, P_e(x_{\frac{n}{2}}^2)]$.
-2. Evaluate polynomial $P_o(x^2): [p_1, p_3, p_5,\dots,p_{n-1}]$ on points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$. Which is $[P_o(x_1^2), P_o(x_2^2), P_o(x_4^2), \dots, P_o(x_{\frac{n}{2}}^2)]$.
-   
-Once we recursively evaluate these smaller polynomials we can then go through every point in our original set of $n$ points and calculate the respective values by utilizing the relationship between the positive and negative paired points.
-$$
-\begin{aligned}
-&P(x_i) = P_e(x_i^2) + x_iP_o(x_i^2)\\
-&P(-x_i) = P_e(x_i^2) - x_iP_o(x_i^2)\\
-&i = {1, 2, \dots, \frac{n}{2}}
-\end{aligned}
-$$
-This gives us the **value representation** of our original polynomial $P(x)$
-
-$$
-[P(x_1),P(-x_1), P(x_2),P(-x_2),\dots,P(x_{\frac{n}{2}}),P(-x_{\frac{n}{2}})]
-$$
-So, we have **$O(n \log n)$ Recursive Algorithm**. Since the two recursive sub problems have half the size of the original problem and take linear time to evaluate $n$ points. This would be huge improvement from our earlier quadratic running time, but there is one **major problem**. Can you spot the issue?
-### Major Problem
-The problem occurs at the recursive steps. The entire scheme relies on the fact that the polynomial will have positive and negative paired points for evaluation.
-$$
-[\pm x_1, \pm x_2,\dots, \pm x_{\frac{n}{2}}] \space\space\space\space \text{are} \pm\space\text{paired.}
-$$
-This works at the top level but next level we are evaluating $\frac{n}{2}$ points where each point is squared value.
-$$
-[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2] \space\space\space\space \text{are not} \pm\space\text{paired.}
-$$
-These all end up being positive so the recursion breaks. **The natural question is can we make these new set of points $[x_1^2, x_2^2,\dots, x_{\frac{n}{2}}^2]$, $\pm$ paired?**
-
-**Ingenious Idea behind FFT**: What possible set of initial $n$ points has this property?
-
-**The answer is using [multiplicative subgroup n-th roots of unity]()**.
-The points that we should choose are the multiplicative subgroup of $n$-th roots of unity!
-
 # FFT Formulation
 #### General Setup
-$P(x)$ is a polynomial of degree $n-1$:
+$P(x)$ is a polynomial of degree $n-1$ over finite field $\mathbb{F}_{q}$:
 $$
 P(x) = p_0 + p_1x + p_2x^2 + \dots + p_{n-1}x^{n-1}
 $$
-#### Field Overview
-All $p_i$ are from finite field $F_q$ and $n$ divides $q-1$.
-FFT evaluate $P(x)$ at the $n$-th roots of unity $H = \{1, \omega,\omega^2, \cdots,\omega^{n-1}\}$ which is a subgroup of order $n$. The $\omega$ called primitive $n$-th root of unity.
+#### Selection of initial n points
+NTT evaluate $P(x)$ at the $n$-th roots of unity. This subgroup of order n exists if and only if $n$ divides $q-1$. In this case $\omega$ will be a primitive n-th root of unity which generate this subgroup:
+$$
+\{1, \omega,\omega^2, \cdots,\omega^{n-1}\}
+$$
 
 ### Recursive Part
 #### Split the polynomial $P(x)$ into **even** and **odd** parts:
@@ -182,7 +222,7 @@ Let $P(z) = 3 +7z$ is a polynomial of degree 1 over field $F_{17}$. We want to c
 $P(z)$ is degree of 1, then we are looking for 2 points to evaluate this polynomial. So, we are looking for multiplicative subgroup 2-nd roots of unity in $F_{17}$.
 
 #### Field Overview:
-1. The multiplicative group $F^*_{17}$ has $17 - 1 = 16$ elements and is cyclic, $g = 3$ is the generator of this group.
+1. The multiplicative group $F^*_{17}$ has $17 - 1 = 16$ elements. Since 3^16 \equiv 1 and there is no m such that 3^m \equiv 1, $g = 3$ is the generator of this group.
 2. Since $n = 2$ divides $q-1 = 17 - 1 =16$, then we have a primitive 2-nd root of unity in $F_{17}$. So 2-nd roots of unity form a subgroup of order 2, generated by $\omega = g^{\frac{q-1}{n}} = g^{\frac{16}{2}} = g^8 = 3^8 = 16$.
 $$
 H_2 = \{16^0, 16^1\} = \{1, 16\} = \{1, -1\}\space (\text{2-nd roots of unity})
@@ -256,9 +296,7 @@ $$
 P(y) &= 3 + 5y + 7y^2 + 9y^3,\\
      &= (3 + 7y^2) + (5y + 9y^3)\\
      &= (3 + 7y^2) + y(5 + 9y^2)\space\space(\text{factor an $y$ in odd power part})\\
-     &= (3 + 7z) + y(5 + 9z)\space\space(\text{$y^2=z$, meaning every where change $y^2$ to $z$})\\
 &= P_{\mathrm{even}}(y^2) + yP_{\mathrm{odd}}(y^2)\\
-&= P_{\mathrm{even}}(z) + yP_{\mathrm{odd}}(z)
 \end{aligned}
 $$
 
@@ -338,7 +376,7 @@ Actually the points $\{(1, 7), (13, 12), (16, 0), (4, 14)\}$ represent the polyn
 
 ## Exercise: Polynomial of degree 7
 Suppose $P(x) = 3 + 4x + 5x^2 + 6x^3 + 7x^4 + 8x^5 + 9x^6 + 10x^7$ is polynomial of degree 7, where coefficients are elements in $F_{17}$. We want use FFT and covert this polynomial to **value representation**.
-
+     
 ### Step 1: Define Multiplicative Subgroup
 #### Subgroup of Roots of Unity
 The multiplicative group $F^*_{17}$ has 16 elements and is cyclic and $g =3$ is the generator (primitive root) of this 16-th roots of unity.
