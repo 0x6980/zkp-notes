@@ -98,6 +98,15 @@ export default {
       pagination: true
     }
   },
+  ch10_fiat_shamir: {
+    title:'Non-Interactive FRI via Fiat–Shamir',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   unique_decoding: 'Unique Decoding',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
