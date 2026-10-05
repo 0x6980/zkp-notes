@@ -1,36 +1,6 @@
-# Chapter 1 — Why Error-Correcting Codes?
+# Fast Reed-Solomon Interactive Oracle Proof of Proximity (FRI)
 
-* What is a code?
-* Why transmit codewords?
-* Noise
-* Redundancy
-* Error detection
-* Error correction
-* Hamming distance
-* Minimum distance
-
-This is essentially the chapter we already wrote.
-
-# Chapter 2 — Linear Codes
-
-Keep this relatively short.
-
-* Vectors over $\mathbb F_2$
-* Linear codes
-* Hamming weight
-* Minimum distance of a linear code $[n,k,d]$
-* Rate
-* Generator matrix — brief
-* Parity-check matrix — brief
-* Syndrome — optional
-
-The goal isn't to become experts in classical linear-code decoding.
-
-The goal is:
-
-Give students the algebraic language they need for RS codes.
-
-# Chapter 3 — Finite Fields
+I assume the reader knows — Finite Fields and Polynomials over Finite Fields
 
 This is essential for FRI.
 
@@ -47,10 +17,6 @@ Especially:
 
 $$ \omega^n=1. $$
 
-# Chapter 4 — Polynomials over Finite Fields
-
-Very important.
-
 * Degree
 * Roots
 * Fundamental root bound
@@ -65,9 +31,34 @@ $$
 \boxed{ \deg f<k \quad\Longrightarrow\quad f\text{ is determined by } k \text{ distinct evaluations}. }
 $$
 
-# Chapter 5 — Reed–Solomon Codes
+List of Content
 
-Now introduce RS properly.
+# Chapter 1 — Why Error-Correcting Codes?
+
+* What is a code?
+* Why transmit codewords?
+* Noise
+* Redundancy
+* Error detection
+* Error correction
+* Hamming distance
+* Minimum distance
+
+# Chapter 2 — Linear Codes
+
+* Vectors over $\mathbb F_2$
+* Linear codes
+* Hamming weight
+* Minimum distance of a linear code $[n,k,d]$
+* Rate
+
+The goal isn't to become experts in classical linear-code decoding.
+
+The goal is:
+
+Give students the algebraic language they need for RS codes.
+
+# Chapter 3 — Reed–Solomon Codes
 
 $$ 
 RS(D,d) = \{(f(x))_{x\in D}:\deg f<d\}. 
@@ -87,9 +78,7 @@ Then:
 * Error correction capacity
 * Proximity to RS
 
-This should be the RS chapter for FRI, rather than the classical-decoding-heavy version.
-
-# Chapter 6 — Reed–Solomon Proximity
+# Chapter 4 — Reed–Solomon Proximity
 
 This is where we start explicitly moving toward FRI.
 
@@ -103,14 +92,17 @@ This is where we start explicitly moving toward FRI.
 
 This chapter creates the motivation for FRI.
 
-# Chapter 7 — Evaluation Domains for FRI
+# Chapter 5 - FRI main challenge
+
+# Chapter 6 — Evaluation Domains for FRI
 * Multiplicative subgroups
 * Roots of unity
 * Cosets
 * Domains of size \(2^m\)
 * Pairing $x\leftrightarrow -x$
 * Why these domains are convenient
-* Chapter 8 — The Algebra Behind FRI Folding
+
+# Chapter 7 — The Algebra Behind FRI Folding
 
 Introduce
 
@@ -128,7 +120,7 @@ Then explain how the protocol uses a random challenge to combine these pieces in
 
 This is where students can finally see why FRI can repeatedly reduce the degree.
 
-Chapter 9 — The FRI Protocol
+# Chapter 8 — The FRI Protocol
 
 Only now introduce the actual protocol.
 
@@ -146,14 +138,8 @@ $$ \text{smaller RS problem}. $$
 
 Then the FRI protocol becomes much less mysterious.
 
-So the overall architecture is:
-
-Chapter 1: Why do we need error-correcting codes?
-Chapter 2: How can we give codes useful algebraic structure?
-Chapter 3: What mathematical universe do we need for that structure?
-Chapter 4: How do polynomials behave over that universe?
-Chapter 5: How do polynomial evaluations become a code? → Reed–Solomon
-Chapter 6: What does it mean for a function to be close to a Reed–Solomon codeword?
-Chapter 7: Why are special evaluation domains useful?
-Chapter 8: How does folding reduce the degree?
-Chapter 9: FRI.
+# Chapter 9 - Commitment Schemes in FRI
+# Chapter 10 - Merkle Trees in FRI
+# Chapter 11 - Non-Interactive FRI via Fiat–Shamir
+# Chapter 12 - Complexity Analysis of FRI
+# Chapter 13 - Soundness Intuition of FRI
