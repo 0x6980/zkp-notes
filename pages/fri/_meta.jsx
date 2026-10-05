@@ -71,6 +71,15 @@ export default {
       pagination: true
     }
   },
+  ch8_fri_protocol: {
+    title:'The FRI Protocol (Interactive Version)',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   unique_decoding: 'Unique Decoding',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
