@@ -80,6 +80,24 @@ export default {
       pagination: true
     }
   },
+  ch9_commitment: {
+    title:'Commitment Schemes in FRI',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
+  ch10_merkle_tree: {
+    title:'Merkle Trees in FRI',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
   unique_decoding: 'Unique Decoding',
   fast_fourier_transform: 'Fast Fourier Transform',
   arithmetization: 'Arithmetization',
