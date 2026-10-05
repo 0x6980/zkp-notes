@@ -33,6 +33,15 @@ export default {
         pagination: true
       }
     },
+    research: {
+      title: 'Research experiments',
+      theme: {
+        footer: false,
+        sidebar: true,
+        toc: false,
+        pagination: false
+      }
+    },
     rareskills: {
       title:'RareSkills',
       theme: {
