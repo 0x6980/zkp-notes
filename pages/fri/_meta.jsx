@@ -98,8 +98,17 @@ export default {
       pagination: true
     }
   },
-  ch10_fiat_shamir: {
+  ch11_fiat_shamir: {
     title:'Non-Interactive FRI via Fiat–Shamir',
+    theme: {
+      footer: true,
+      sidebar: true,
+      toc: false,
+      pagination: true
+    }
+  },
+  ch12_complexity: {
+    title:'Complexity Analysis of FRI',
     theme: {
       footer: true,
       sidebar: true,
