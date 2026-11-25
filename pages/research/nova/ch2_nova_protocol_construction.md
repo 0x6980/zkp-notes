@@ -44,7 +44,7 @@ For two committed relaxed R1CS instances $(\bar{E}_1, u_1, \bar{W}_1, x_1)$ and 
    * $E \leftarrow E_1 + r \cdot T + r^2 \cdot E_2$
    * $r_E \leftarrow r_{E,1} + r \cdot r_T + r^2 \cdot r_{E,2}$
    * $W \leftarrow W_1 + r \cdot W_2$
-   * $r_W \leftarrow r_{W,1} + r \cdot r_W_2$
+   * $r_W \leftarrow r_{W_1} + r \cdot r_{W_2}$
 
 ---
 
