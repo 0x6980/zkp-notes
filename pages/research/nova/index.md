@@ -1,6 +1,6 @@
 # Nova Paper: Research Summary Table
 
-**Source:** [Nova: Recursive Zero-Knowledge Arguments from Folding Schemes](https://eprint.iacr.org/2021/370?utm_source=chatgpt.com).
+**Source:** [Nova: Recursive Zero-Knowledge Arguments from Folding Schemes](https://eprint.iacr.org/2021/370).
 
 **Interpretation note:** Items below summarize claims and definitions in Nova article. The **My Research Ideas** row is my own analysis and is not presented as an explicit claim by the authors. Where the paper gives several complexity layers, they are kept separate rather than collapsed into one number.
 
