@@ -42,15 +42,7 @@ export default {
       pagination: false
     }
   },
-  rareskills: {
-    title:'RareSkills',
-    theme: {
-      footer: false,
-      sidebar: true,
-      toc: false,
-      pagination: true
-    }
-  },
+  rareskills:'RareSkills',
   papers: {
     title: 'Papers',
     theme: {
